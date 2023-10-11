@@ -1,0 +1,1670 @@
+{
+  "1": [
+    {
+      "homeTid": 29,
+      "awayTid": 8,
+      "day": 1,
+      "gid": 0
+    },
+    {
+      "homeTid": 1,
+      "awayTid": 25,
+      "day": 1,
+      "gid": 1
+    },
+    {
+      "homeTid": 3,
+      "awayTid": 26,
+      "day": 1,
+      "gid": 2
+    },
+    {
+      "homeTid": 6,
+      "awayTid": 20,
+      "day": 1,
+      "gid": 3
+    },
+    {
+      "homeTid": 10,
+      "awayTid": 27,
+      "day": 1,
+      "gid": 4
+    },
+    {
+      "homeTid": 30,
+      "awayTid": 0,
+      "day": 1,
+      "gid": 5
+    },
+    {
+      "homeTid": 13,
+      "awayTid": 28,
+      "day": 1,
+      "gid": 6
+    },
+    {
+      "homeTid": 31,
+      "awayTid": 17,
+      "day": 1,
+      "gid": 7
+    },
+    {
+      "homeTid": 4,
+      "awayTid": 24,
+      "day": 1,
+      "gid": 8
+    },
+    {
+      "homeTid": 12,
+      "awayTid": 14,
+      "day": 1,
+      "gid": 9
+    },
+    {
+      "homeTid": 15,
+      "awayTid": 7,
+      "day": 1,
+      "gid": 10
+    },
+    {
+      "homeTid": 21,
+      "awayTid": 19,
+      "day": 1,
+      "gid": 11
+    },
+    {
+      "homeTid": 22,
+      "awayTid": 11,
+      "day": 1,
+      "gid": 12
+    },
+    {
+      "homeTid": 23,
+      "awayTid": 9,
+      "day": 1,
+      "gid": 13
+    },
+    {
+      "homeTid": 18,
+      "awayTid": 5,
+      "day": 1,
+      "gid": 14
+    },
+    {
+      "homeTid": 16,
+      "awayTid": 2,
+      "day": 1,
+      "gid": 15
+    }
+  ],
+  "2": [
+    {
+      "homeTid": 31,
+      "awayTid": 23,
+      "day": 2,
+      "gid": 16
+    },
+    {
+      "homeTid": 5,
+      "awayTid": 6,
+      "day": 2,
+      "gid": 17
+    },
+    {
+      "homeTid": 7,
+      "awayTid": 12,
+      "day": 2,
+      "gid": 18
+    },
+    {
+      "homeTid": 13,
+      "awayTid": 18,
+      "day": 2,
+      "gid": 19
+    },
+    {
+      "homeTid": 19,
+      "awayTid": 3,
+      "day": 2,
+      "gid": 20
+    },
+    {
+      "homeTid": 24,
+      "awayTid": 21,
+      "day": 2,
+      "gid": 21
+    },
+    {
+      "homeTid": 25,
+      "awayTid": 27,
+      "day": 2,
+      "gid": 22
+    },
+    {
+      "homeTid": 26,
+      "awayTid": 16,
+      "day": 2,
+      "gid": 23
+    },
+    {
+      "homeTid": 4,
+      "awayTid": 22,
+      "day": 2,
+      "gid": 24
+    },
+    {
+      "homeTid": 14,
+      "awayTid": 9,
+      "day": 2,
+      "gid": 25
+    },
+    {
+      "homeTid": 0,
+      "awayTid": 20,
+      "day": 2,
+      "gid": 26
+    },
+    {
+      "homeTid": 29,
+      "awayTid": 1,
+      "day": 2,
+      "gid": 27
+    },
+    {
+      "homeTid": 17,
+      "awayTid": 8,
+      "day": 2,
+      "gid": 28
+    },
+    {
+      "homeTid": 28,
+      "awayTid": 30,
+      "day": 2,
+      "gid": 29
+    },
+    {
+      "homeTid": 2,
+      "awayTid": 15,
+      "day": 2,
+      "gid": 30
+    },
+    {
+      "homeTid": 11,
+      "awayTid": 10,
+      "day": 2,
+      "gid": 31
+    }
+  ],
+  "3": [
+    {
+      "homeTid": 12,
+      "awayTid": 4,
+      "day": 3,
+      "gid": 32
+    },
+    {
+      "homeTid": 3,
+      "awayTid": 31,
+      "day": 3,
+      "gid": 33
+    },
+    {
+      "homeTid": 7,
+      "awayTid": 5,
+      "day": 3,
+      "gid": 34
+    },
+    {
+      "homeTid": 10,
+      "awayTid": 2,
+      "day": 3,
+      "gid": 35
+    },
+    {
+      "homeTid": 30,
+      "awayTid": 13,
+      "day": 3,
+      "gid": 36
+    },
+    {
+      "homeTid": 15,
+      "awayTid": 17,
+      "day": 3,
+      "gid": 37
+    },
+    {
+      "homeTid": 21,
+      "awayTid": 22,
+      "day": 3,
+      "gid": 38
+    },
+    {
+      "homeTid": 23,
+      "awayTid": 1,
+      "day": 3,
+      "gid": 39
+    },
+    {
+      "homeTid": 26,
+      "awayTid": 6,
+      "day": 3,
+      "gid": 40
+    },
+    {
+      "homeTid": 14,
+      "awayTid": 0,
+      "day": 3,
+      "gid": 41
+    },
+    {
+      "homeTid": 9,
+      "awayTid": 24,
+      "day": 3,
+      "gid": 42
+    },
+    {
+      "homeTid": 16,
+      "awayTid": 19,
+      "day": 3,
+      "gid": 43
+    },
+    {
+      "homeTid": 18,
+      "awayTid": 29,
+      "day": 3,
+      "gid": 44
+    },
+    {
+      "homeTid": 20,
+      "awayTid": 28,
+      "day": 3,
+      "gid": 45
+    },
+    {
+      "homeTid": 27,
+      "awayTid": 11,
+      "day": 3,
+      "gid": 46
+    },
+    {
+      "homeTid": 8,
+      "awayTid": 25,
+      "day": 3,
+      "gid": 47
+    }
+  ],
+  "4": [
+    {
+      "homeTid": 6,
+      "awayTid": 14,
+      "day": 4,
+      "gid": 48
+    },
+    {
+      "homeTid": 1,
+      "awayTid": 31,
+      "day": 4,
+      "gid": 49
+    },
+    {
+      "homeTid": 3,
+      "awayTid": 12,
+      "day": 4,
+      "gid": 50
+    },
+    {
+      "homeTid": 5,
+      "awayTid": 10,
+      "day": 4,
+      "gid": 51
+    },
+    {
+      "homeTid": 8,
+      "awayTid": 4,
+      "day": 4,
+      "gid": 52
+    },
+    {
+      "homeTid": 19,
+      "awayTid": 13,
+      "day": 4,
+      "gid": 53
+    },
+    {
+      "homeTid": 20,
+      "awayTid": 7,
+      "day": 4,
+      "gid": 54
+    },
+    {
+      "homeTid": 22,
+      "awayTid": 23,
+      "day": 4,
+      "gid": 55
+    },
+    {
+      "homeTid": 24,
+      "awayTid": 30,
+      "day": 4,
+      "gid": 56
+    },
+    {
+      "homeTid": 25,
+      "awayTid": 15,
+      "day": 4,
+      "gid": 57
+    },
+    {
+      "homeTid": 18,
+      "awayTid": 0,
+      "day": 4,
+      "gid": 58
+    },
+    {
+      "homeTid": 27,
+      "awayTid": 28,
+      "day": 4,
+      "gid": 59
+    },
+    {
+      "homeTid": 9,
+      "awayTid": 2,
+      "day": 4,
+      "gid": 60
+    },
+    {
+      "homeTid": 11,
+      "awayTid": 26,
+      "day": 4,
+      "gid": 61
+    },
+    {
+      "homeTid": 21,
+      "awayTid": 29,
+      "day": 4,
+      "gid": 62
+    },
+    {
+      "homeTid": 17,
+      "awayTid": 16,
+      "day": 4,
+      "gid": 63
+    }
+  ],
+  "5": [
+    {
+      "homeTid": 28,
+      "awayTid": 18,
+      "day": 5,
+      "gid": 64
+    },
+    {
+      "homeTid": 1,
+      "awayTid": 24,
+      "day": 5,
+      "gid": 65
+    },
+    {
+      "homeTid": 6,
+      "awayTid": 11,
+      "day": 5,
+      "gid": 66
+    },
+    {
+      "homeTid": 20,
+      "awayTid": 10,
+      "day": 5,
+      "gid": 67
+    },
+    {
+      "homeTid": 26,
+      "awayTid": 9,
+      "day": 5,
+      "gid": 68
+    },
+    {
+      "homeTid": 29,
+      "awayTid": 19,
+      "day": 5,
+      "gid": 69
+    },
+    {
+      "homeTid": 31,
+      "awayTid": 22,
+      "day": 5,
+      "gid": 70
+    },
+    {
+      "homeTid": 4,
+      "awayTid": 25,
+      "day": 5,
+      "gid": 71
+    },
+    {
+      "homeTid": 14,
+      "awayTid": 30,
+      "day": 5,
+      "gid": 72
+    },
+    {
+      "homeTid": 12,
+      "awayTid": 21,
+      "day": 5,
+      "gid": 73
+    },
+    {
+      "homeTid": 16,
+      "awayTid": 5,
+      "day": 5,
+      "gid": 74
+    },
+    {
+      "homeTid": 17,
+      "awayTid": 7,
+      "day": 5,
+      "gid": 75
+    },
+    {
+      "homeTid": 8,
+      "awayTid": 23,
+      "day": 5,
+      "gid": 76
+    },
+    {
+      "homeTid": 0,
+      "awayTid": 27,
+      "day": 5,
+      "gid": 77
+    },
+    {
+      "homeTid": 15,
+      "awayTid": 3,
+      "day": 5,
+      "gid": 78
+    },
+    {
+      "homeTid": 2,
+      "awayTid": 13,
+      "day": 5,
+      "gid": 79
+    }
+  ],
+  "6": [
+    {
+      "homeTid": 25,
+      "awayTid": 29,
+      "day": 6,
+      "gid": 80
+    },
+    {
+      "homeTid": 14,
+      "awayTid": 19,
+      "day": 6,
+      "gid": 81
+    },
+    {
+      "homeTid": 5,
+      "awayTid": 11,
+      "day": 6,
+      "gid": 82
+    },
+    {
+      "homeTid": 10,
+      "awayTid": 6,
+      "day": 6,
+      "gid": 83
+    },
+    {
+      "homeTid": 13,
+      "awayTid": 12,
+      "day": 6,
+      "gid": 84
+    },
+    {
+      "homeTid": 23,
+      "awayTid": 18,
+      "day": 6,
+      "gid": 85
+    },
+    {
+      "homeTid": 31,
+      "awayTid": 15,
+      "day": 6,
+      "gid": 86
+    },
+    {
+      "homeTid": 4,
+      "awayTid": 20,
+      "day": 6,
+      "gid": 87
+    },
+    {
+      "homeTid": 2,
+      "awayTid": 17,
+      "day": 6,
+      "gid": 88
+    },
+    {
+      "homeTid": 7,
+      "awayTid": 0,
+      "day": 6,
+      "gid": 89
+    },
+    {
+      "homeTid": 9,
+      "awayTid": 16,
+      "day": 6,
+      "gid": 90
+    },
+    {
+      "homeTid": 21,
+      "awayTid": 8,
+      "day": 6,
+      "gid": 91
+    },
+    {
+      "homeTid": 26,
+      "awayTid": 28,
+      "day": 6,
+      "gid": 92
+    },
+    {
+      "homeTid": 30,
+      "awayTid": 3,
+      "day": 6,
+      "gid": 93
+    }
+  ],
+  "7": [
+    {
+      "homeTid": 7,
+      "awayTid": 9,
+      "day": 7,
+      "gid": 94
+    },
+    {
+      "homeTid": 11,
+      "awayTid": 31,
+      "day": 7,
+      "gid": 95
+    },
+    {
+      "homeTid": 30,
+      "awayTid": 15,
+      "day": 7,
+      "gid": 96
+    },
+    {
+      "homeTid": 19,
+      "awayTid": 1,
+      "day": 7,
+      "gid": 97
+    },
+    {
+      "homeTid": 23,
+      "awayTid": 4,
+      "day": 7,
+      "gid": 98
+    },
+    {
+      "homeTid": 2,
+      "awayTid": 6,
+      "day": 7,
+      "gid": 99
+    },
+    {
+      "homeTid": 16,
+      "awayTid": 25,
+      "day": 7,
+      "gid": 100
+    },
+    {
+      "homeTid": 18,
+      "awayTid": 10,
+      "day": 7,
+      "gid": 101
+    },
+    {
+      "homeTid": 0,
+      "awayTid": 12,
+      "day": 7,
+      "gid": 102
+    },
+    {
+      "homeTid": 29,
+      "awayTid": 5,
+      "day": 7,
+      "gid": 103
+    },
+    {
+      "homeTid": 27,
+      "awayTid": 13,
+      "day": 7,
+      "gid": 104
+    },
+    {
+      "homeTid": 28,
+      "awayTid": 22,
+      "day": 7,
+      "gid": 105
+    },
+    {
+      "homeTid": 21,
+      "awayTid": 24,
+      "day": 7,
+      "gid": 106
+    }
+  ],
+  "8": [
+    {
+      "homeTid": 0,
+      "awayTid": 11,
+      "day": 8,
+      "gid": 107
+    },
+    {
+      "homeTid": 1,
+      "awayTid": 4,
+      "day": 8,
+      "gid": 108
+    },
+    {
+      "homeTid": 3,
+      "awayTid": 19,
+      "day": 8,
+      "gid": 109
+    },
+    {
+      "homeTid": 5,
+      "awayTid": 27,
+      "day": 8,
+      "gid": 110
+    },
+    {
+      "homeTid": 7,
+      "awayTid": 26,
+      "day": 8,
+      "gid": 111
+    },
+    {
+      "homeTid": 10,
+      "awayTid": 25,
+      "day": 8,
+      "gid": 112
+    },
+    {
+      "homeTid": 13,
+      "awayTid": 30,
+      "day": 8,
+      "gid": 113
+    },
+    {
+      "homeTid": 24,
+      "awayTid": 6,
+      "day": 8,
+      "gid": 114
+    },
+    {
+      "homeTid": 12,
+      "awayTid": 18,
+      "day": 8,
+      "gid": 115
+    },
+    {
+      "homeTid": 17,
+      "awayTid": 21,
+      "day": 8,
+      "gid": 116
+    },
+    {
+      "homeTid": 28,
+      "awayTid": 14,
+      "day": 8,
+      "gid": 117
+    },
+    {
+      "homeTid": 9,
+      "awayTid": 31,
+      "day": 8,
+      "gid": 118
+    },
+    {
+      "homeTid": 22,
+      "awayTid": 29,
+      "day": 8,
+      "gid": 119
+    },
+    {
+      "homeTid": 20,
+      "awayTid": 8,
+      "day": 8,
+      "gid": 120
+    },
+    {
+      "homeTid": 15,
+      "awayTid": 23,
+      "day": 8,
+      "gid": 121
+    }
+  ],
+  "9": [
+    {
+      "homeTid": 13,
+      "awayTid": 24,
+      "day": 10,
+      "gid": 123
+    },
+    {
+      "homeTid": 6,
+      "awayTid": 7,
+      "day": 10,
+      "gid": 124
+    },
+    {
+      "homeTid": 8,
+      "awayTid": 9,
+      "day": 10,
+      "gid": 125
+    },
+    {
+      "homeTid": 19,
+      "awayTid": 12,
+      "day": 10,
+      "gid": 126
+    },
+    {
+      "homeTid": 22,
+      "awayTid": 1,
+      "day": 10,
+      "gid": 127
+    },
+    {
+      "homeTid": 23,
+      "awayTid": 16,
+      "day": 10,
+      "gid": 128
+    },
+    {
+      "homeTid": 4,
+      "awayTid": 21,
+      "day": 10,
+      "gid": 129
+    },
+    {
+      "homeTid": 14,
+      "awayTid": 3,
+      "day": 10,
+      "gid": 130
+    },
+    {
+      "homeTid": 2,
+      "awayTid": 20,
+      "day": 10,
+      "gid": 131
+    },
+    {
+      "homeTid": 25,
+      "awayTid": 17,
+      "day": 10,
+      "gid": 132
+    },
+    {
+      "homeTid": 15,
+      "awayTid": 11,
+      "day": 10,
+      "gid": 133
+    },
+    {
+      "homeTid": 27,
+      "awayTid": 0,
+      "day": 10,
+      "gid": 134
+    },
+    {
+      "homeTid": 18,
+      "awayTid": 30,
+      "day": 10,
+      "gid": 135
+    },
+    {
+      "homeTid": 26,
+      "awayTid": 5,
+      "day": 10,
+      "gid": 136
+    }
+  ],
+  "10": [
+    {
+      "homeTid": 19,
+      "awayTid": 2,
+      "day": 11,
+      "gid": 137
+    },
+    {
+      "homeTid": 8,
+      "awayTid": 1,
+      "day": 11,
+      "gid": 138
+    },
+    {
+      "homeTid": 30,
+      "awayTid": 22,
+      "day": 11,
+      "gid": 139
+    },
+    {
+      "homeTid": 13,
+      "awayTid": 14,
+      "day": 11,
+      "gid": 140
+    },
+    {
+      "homeTid": 21,
+      "awayTid": 7,
+      "day": 11,
+      "gid": 141
+    },
+    {
+      "homeTid": 24,
+      "awayTid": 3,
+      "day": 11,
+      "gid": 142
+    },
+    {
+      "homeTid": 26,
+      "awayTid": 10,
+      "day": 11,
+      "gid": 143
+    },
+    {
+      "homeTid": 31,
+      "awayTid": 29,
+      "day": 11,
+      "gid": 144
+    },
+    {
+      "homeTid": 0,
+      "awayTid": 4,
+      "day": 11,
+      "gid": 145
+    },
+    {
+      "homeTid": 17,
+      "awayTid": 20,
+      "day": 11,
+      "gid": 146
+    },
+    {
+      "homeTid": 9,
+      "awayTid": 25,
+      "day": 11,
+      "gid": 147
+    },
+    {
+      "homeTid": 11,
+      "awayTid": 28,
+      "day": 11,
+      "gid": 148
+    },
+    {
+      "homeTid": 16,
+      "awayTid": 15,
+      "day": 11,
+      "gid": 149
+    },
+    {
+      "homeTid": 27,
+      "awayTid": 18,
+      "day": 11,
+      "gid": 150
+    }
+  ],
+  "11": [
+    {
+      "homeTid": 1,
+      "awayTid": 21,
+      "day": 12,
+      "gid": 151
+    },
+    {
+      "homeTid": 3,
+      "awayTid": 13,
+      "day": 12,
+      "gid": 152
+    },
+    {
+      "homeTid": 5,
+      "awayTid": 2,
+      "day": 12,
+      "gid": 153
+    },
+    {
+      "homeTid": 7,
+      "awayTid": 10,
+      "day": 12,
+      "gid": 154
+    },
+    {
+      "homeTid": 30,
+      "awayTid": 12,
+      "day": 12,
+      "gid": 155
+    },
+    {
+      "homeTid": 20,
+      "awayTid": 11,
+      "day": 12,
+      "gid": 156
+    },
+    {
+      "homeTid": 24,
+      "awayTid": 19,
+      "day": 12,
+      "gid": 157
+    },
+    {
+      "homeTid": 25,
+      "awayTid": 22,
+      "day": 12,
+      "gid": 158
+    },
+    {
+      "homeTid": 4,
+      "awayTid": 31,
+      "day": 12,
+      "gid": 159
+    },
+    {
+      "homeTid": 14,
+      "awayTid": 27,
+      "day": 12,
+      "gid": 160
+    },
+    {
+      "homeTid": 16,
+      "awayTid": 6,
+      "day": 12,
+      "gid": 161
+    },
+    {
+      "homeTid": 15,
+      "awayTid": 8,
+      "day": 12,
+      "gid": 162
+    },
+    {
+      "homeTid": 28,
+      "awayTid": 0,
+      "day": 12,
+      "gid": 163
+    },
+    {
+      "homeTid": 17,
+      "awayTid": 26,
+      "day": 12,
+      "gid": 164
+    },
+    {
+      "homeTid": 29,
+      "awayTid": 23,
+      "day": 12,
+      "gid": 165
+    }
+  ],
+  "12": [
+    {
+      "homeTid": 10,
+      "awayTid": 5,
+      "day": 13,
+      "gid": 166
+    },
+    {
+      "homeTid": 8,
+      "awayTid": 16,
+      "day": 13,
+      "gid": 167
+    },
+    {
+      "homeTid": 22,
+      "awayTid": 3,
+      "day": 13,
+      "gid": 168
+    },
+    {
+      "homeTid": 6,
+      "awayTid": 26,
+      "day": 13,
+      "gid": 169
+    },
+    {
+      "homeTid": 13,
+      "awayTid": 29,
+      "day": 13,
+      "gid": 170
+    },
+    {
+      "homeTid": 19,
+      "awayTid": 4,
+      "day": 13,
+      "gid": 171
+    },
+    {
+      "homeTid": 21,
+      "awayTid": 30,
+      "day": 13,
+      "gid": 172
+    },
+    {
+      "homeTid": 23,
+      "awayTid": 25,
+      "day": 13,
+      "gid": 173
+    },
+    {
+      "homeTid": 14,
+      "awayTid": 1,
+      "day": 13,
+      "gid": 174
+    },
+    {
+      "homeTid": 12,
+      "awayTid": 24,
+      "day": 13,
+      "gid": 175
+    },
+    {
+      "homeTid": 9,
+      "awayTid": 17,
+      "day": 13,
+      "gid": 176
+    },
+    {
+      "homeTid": 11,
+      "awayTid": 18,
+      "day": 13,
+      "gid": 177
+    },
+    {
+      "homeTid": 27,
+      "awayTid": 20,
+      "day": 13,
+      "gid": 178
+    },
+    {
+      "homeTid": 2,
+      "awayTid": 7,
+      "day": 13,
+      "gid": 179
+    },
+    {
+      "homeTid": 31,
+      "awayTid": 28,
+      "day": 13,
+      "gid": 180
+    }
+  ],
+  "13": [
+    {
+      "homeTid": 22,
+      "awayTid": 8,
+      "day": 14,
+      "gid": 181
+    },
+    {
+      "homeTid": 1,
+      "awayTid": 29,
+      "day": 14,
+      "gid": 182
+    },
+    {
+      "homeTid": 5,
+      "awayTid": 0,
+      "day": 14,
+      "gid": 183
+    },
+    {
+      "homeTid": 6,
+      "awayTid": 17,
+      "day": 14,
+      "gid": 184
+    },
+    {
+      "homeTid": 10,
+      "awayTid": 20,
+      "day": 14,
+      "gid": 185
+    },
+    {
+      "homeTid": 19,
+      "awayTid": 23,
+      "day": 14,
+      "gid": 186
+    },
+    {
+      "homeTid": 24,
+      "awayTid": 25,
+      "day": 14,
+      "gid": 187
+    },
+    {
+      "homeTid": 12,
+      "awayTid": 13,
+      "day": 14,
+      "gid": 188
+    },
+    {
+      "homeTid": 16,
+      "awayTid": 31,
+      "day": 14,
+      "gid": 189
+    },
+    {
+      "homeTid": 18,
+      "awayTid": 14,
+      "day": 14,
+      "gid": 190
+    },
+    {
+      "homeTid": 26,
+      "awayTid": 2,
+      "day": 14,
+      "gid": 191
+    },
+    {
+      "homeTid": 28,
+      "awayTid": 27,
+      "day": 14,
+      "gid": 192
+    },
+    {
+      "homeTid": 15,
+      "awayTid": 9,
+      "day": 14,
+      "gid": 193
+    },
+    {
+      "homeTid": 3,
+      "awayTid": 21,
+      "day": 14,
+      "gid": 194
+    }
+  ],
+  "14": [
+    {
+      "homeTid": 20,
+      "awayTid": 26,
+      "day": 15,
+      "gid": 195
+    },
+    {
+      "homeTid": 7,
+      "awayTid": 2,
+      "day": 15,
+      "gid": 196
+    },
+    {
+      "homeTid": 30,
+      "awayTid": 14,
+      "day": 15,
+      "gid": 197
+    },
+    {
+      "homeTid": 15,
+      "awayTid": 16,
+      "day": 15,
+      "gid": 198
+    },
+    {
+      "homeTid": 24,
+      "awayTid": 22,
+      "day": 15,
+      "gid": 199
+    },
+    {
+      "homeTid": 31,
+      "awayTid": 8,
+      "day": 15,
+      "gid": 200
+    },
+    {
+      "homeTid": 4,
+      "awayTid": 1,
+      "day": 15,
+      "gid": 201
+    },
+    {
+      "homeTid": 12,
+      "awayTid": 28,
+      "day": 15,
+      "gid": 202
+    },
+    {
+      "homeTid": 9,
+      "awayTid": 10,
+      "day": 15,
+      "gid": 203
+    },
+    {
+      "homeTid": 17,
+      "awayTid": 23,
+      "day": 15,
+      "gid": 204
+    },
+    {
+      "homeTid": 6,
+      "awayTid": 27,
+      "day": 15,
+      "gid": 205
+    },
+    {
+      "homeTid": 29,
+      "awayTid": 3,
+      "day": 15,
+      "gid": 206
+    },
+    {
+      "homeTid": 11,
+      "awayTid": 5,
+      "day": 15,
+      "gid": 207
+    },
+    {
+      "homeTid": 0,
+      "awayTid": 18,
+      "day": 15,
+      "gid": 208
+    }
+  ],
+  "15": [
+    {
+      "homeTid": 17,
+      "awayTid": 15,
+      "day": 16,
+      "gid": 209
+    },
+    {
+      "homeTid": 13,
+      "awayTid": 21,
+      "day": 16,
+      "gid": 210
+    },
+    {
+      "homeTid": 3,
+      "awayTid": 4,
+      "day": 16,
+      "gid": 211
+    },
+    {
+      "homeTid": 10,
+      "awayTid": 0,
+      "day": 16,
+      "gid": 212
+    },
+    {
+      "homeTid": 19,
+      "awayTid": 24,
+      "day": 16,
+      "gid": 213
+    },
+    {
+      "homeTid": 23,
+      "awayTid": 8,
+      "day": 16,
+      "gid": 214
+    },
+    {
+      "homeTid": 26,
+      "awayTid": 30,
+      "day": 16,
+      "gid": 215
+    },
+    {
+      "homeTid": 14,
+      "awayTid": 12,
+      "day": 16,
+      "gid": 216
+    },
+    {
+      "homeTid": 9,
+      "awayTid": 6,
+      "day": 16,
+      "gid": 217
+    },
+    {
+      "homeTid": 27,
+      "awayTid": 1,
+      "day": 16,
+      "gid": 218
+    },
+    {
+      "homeTid": 2,
+      "awayTid": 11,
+      "day": 16,
+      "gid": 219
+    },
+    {
+      "homeTid": 29,
+      "awayTid": 22,
+      "day": 16,
+      "gid": 220
+    },
+    {
+      "homeTid": 7,
+      "awayTid": 16,
+      "day": 16,
+      "gid": 221
+    },
+    {
+      "homeTid": 5,
+      "awayTid": 20,
+      "day": 16,
+      "gid": 222
+    },
+    {
+      "homeTid": 18,
+      "awayTid": 28,
+      "day": 16,
+      "gid": 223
+    },
+    {
+      "homeTid": 25,
+      "awayTid": 31,
+      "day": 16,
+      "gid": 224
+    }
+  ],
+  "16": [
+    {
+      "homeTid": 30,
+      "awayTid": 27,
+      "day": 17,
+      "gid": 225
+    },
+    {
+      "homeTid": 11,
+      "awayTid": 7,
+      "day": 17,
+      "gid": 226
+    },
+    {
+      "homeTid": 0,
+      "awayTid": 13,
+      "day": 17,
+      "gid": 227
+    },
+    {
+      "homeTid": 1,
+      "awayTid": 10,
+      "day": 17,
+      "gid": 228
+    },
+    {
+      "homeTid": 6,
+      "awayTid": 2,
+      "day": 17,
+      "gid": 229
+    },
+    {
+      "homeTid": 20,
+      "awayTid": 18,
+      "day": 17,
+      "gid": 230
+    },
+    {
+      "homeTid": 21,
+      "awayTid": 3,
+      "day": 17,
+      "gid": 231
+    },
+    {
+      "homeTid": 24,
+      "awayTid": 14,
+      "day": 17,
+      "gid": 232
+    },
+    {
+      "homeTid": 25,
+      "awayTid": 23,
+      "day": 17,
+      "gid": 233
+    },
+    {
+      "homeTid": 4,
+      "awayTid": 29,
+      "day": 17,
+      "gid": 234
+    },
+    {
+      "homeTid": 12,
+      "awayTid": 17,
+      "day": 17,
+      "gid": 235
+    },
+    {
+      "homeTid": 28,
+      "awayTid": 5,
+      "day": 17,
+      "gid": 236
+    },
+    {
+      "homeTid": 15,
+      "awayTid": 26,
+      "day": 17,
+      "gid": 237
+    },
+    {
+      "homeTid": 16,
+      "awayTid": 9,
+      "day": 17,
+      "gid": 238
+    },
+    {
+      "homeTid": 8,
+      "awayTid": 31,
+      "day": 17,
+      "gid": 239
+    },
+    {
+      "homeTid": 22,
+      "awayTid": 19,
+      "day": 17,
+      "gid": 240
+    }
+  ],
+  "17": [
+    {
+      "homeTid": 3,
+      "awayTid": 1,
+      "day": 18,
+      "gid": 241
+    },
+    {
+      "homeTid": 5,
+      "awayTid": 23,
+      "day": 18,
+      "gid": 242
+    },
+    {
+      "homeTid": 6,
+      "awayTid": 15,
+      "day": 18,
+      "gid": 243
+    },
+    {
+      "homeTid": 30,
+      "awayTid": 19,
+      "day": 18,
+      "gid": 244
+    },
+    {
+      "homeTid": 13,
+      "awayTid": 16,
+      "day": 18,
+      "gid": 245
+    },
+    {
+      "homeTid": 21,
+      "awayTid": 14,
+      "day": 18,
+      "gid": 246
+    },
+    {
+      "homeTid": 22,
+      "awayTid": 4,
+      "day": 18,
+      "gid": 247
+    },
+    {
+      "homeTid": 24,
+      "awayTid": 29,
+      "day": 18,
+      "gid": 248
+    },
+    {
+      "homeTid": 31,
+      "awayTid": 25,
+      "day": 18,
+      "gid": 249
+    },
+    {
+      "homeTid": 17,
+      "awayTid": 9,
+      "day": 18,
+      "gid": 250
+    },
+    {
+      "homeTid": 27,
+      "awayTid": 12,
+      "day": 18,
+      "gid": 251
+    },
+    {
+      "homeTid": 8,
+      "awayTid": 0,
+      "day": 18,
+      "gid": 252
+    },
+    {
+      "homeTid": 28,
+      "awayTid": 10,
+      "day": 18,
+      "gid": 253
+    },
+    {
+      "homeTid": 2,
+      "awayTid": 18,
+      "day": 18,
+      "gid": 254
+    },
+    {
+      "homeTid": 11,
+      "awayTid": 20,
+      "day": 18,
+      "gid": 255
+    },
+    {
+      "homeTid": 26,
+      "awayTid": 7,
+      "day": 18,
+      "gid": 256
+    }
+  ],
+  "18": [
+    {
+      "homeTid": 1,
+      "awayTid": 22,
+      "day": 19,
+      "gid": 257
+    },
+    {
+      "homeTid": 3,
+      "awayTid": 24,
+      "day": 19,
+      "gid": 258
+    },
+    {
+      "homeTid": 7,
+      "awayTid": 6,
+      "day": 19,
+      "gid": 259
+    },
+    {
+      "homeTid": 10,
+      "awayTid": 11,
+      "day": 19,
+      "gid": 260
+    },
+    {
+      "homeTid": 19,
+      "awayTid": 21,
+      "day": 19,
+      "gid": 261
+    },
+    {
+      "homeTid": 20,
+      "awayTid": 5,
+      "day": 19,
+      "gid": 262
+    },
+    {
+      "homeTid": 23,
+      "awayTid": 31,
+      "day": 19,
+      "gid": 263
+    },
+    {
+      "homeTid": 25,
+      "awayTid": 8,
+      "day": 19,
+      "gid": 264
+    },
+    {
+      "homeTid": 29,
+      "awayTid": 4,
+      "day": 19,
+      "gid": 265
+    },
+    {
+      "homeTid": 14,
+      "awayTid": 13,
+      "day": 19,
+      "gid": 266
+    },
+    {
+      "homeTid": 2,
+      "awayTid": 26,
+      "day": 19,
+      "gid": 267
+    },
+    {
+      "homeTid": 12,
+      "awayTid": 30,
+      "day": 19,
+      "gid": 268
+    },
+    {
+      "homeTid": 9,
+      "awayTid": 15,
+      "day": 19,
+      "gid": 269
+    },
+    {
+      "homeTid": 16,
+      "awayTid": 17,
+      "day": 19,
+      "gid": 270
+    },
+    {
+      "homeTid": 18,
+      "awayTid": 27,
+      "day": 19,
+      "gid": 271
+    },
+    {
+      "homeTid": 0,
+      "awayTid": 28,
+      "day": 19,
+      "gid": 272
+    }
+  ]
+}

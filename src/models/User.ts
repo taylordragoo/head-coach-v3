@@ -1,0 +1,33 @@
+import { Model } from '@vuex-orm/core'
+import Team from '@/models/Team'
+import World from '@/models/World';
+
+export default class User extends Model {
+    static entity = 'user'
+
+    static fields () {
+        return {
+            id: this.attr(null),
+            first: this.string(''),
+            last: this.string(''),
+            age: this.number(0),
+            exp: this.string(''),
+            skill: this.string(''),
+            team: this.belongsTo(Team, 'team_id'),
+            team_id: this.attr(''),
+            world: this.hasOne(World, 'user_id')
+        }
+    }
+
+    get full_name () {
+        return `${this.first} ${this.last}`
+    }
+
+    get team_obj() {
+        return Team.find(this.team_id);
+    }
+
+    get team_league() {
+        return this.team_obj.league;
+    }
+}
