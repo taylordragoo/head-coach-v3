@@ -5,7 +5,7 @@ import UserService from '@/service/UserService';
 import WorldService from '@/service/WorldService';
 import LeagueService from '@/service/LeagueService';
 import TeamService from '@/service/TeamService';
-import ChampionService from '@/service/ChampionService';
+import MailService from '@/service/MailService';
 
 export {
     UserService,
@@ -14,5 +14,6 @@ export {
     TeamService,
     PlayerService,
     StoreService,
-    CareerService
+    CareerService,
+    MailService
 }

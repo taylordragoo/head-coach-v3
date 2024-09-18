@@ -5,6 +5,7 @@ export default class Season extends Model {
 
     static fields () {
         return {
+            id: this.attr(null),
             tid: this.attr(null),
             cid: this.attr(null),
             did: this.attr(null),

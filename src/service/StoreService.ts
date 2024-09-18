@@ -1,5 +1,7 @@
 import VuexORM, { Database } from '@vuex-orm/core';
 import Vuex from 'vuex';
+import createPersistedState from 'vuex-persistedstate'
+import VuexPersistence from 'vuex-persist'
 import User from '@/models/User';
 import World from '@/models/World';
 import League from '@/models/League';
@@ -12,6 +14,7 @@ import Born from "@/models/Born";
 import College from "@/models/College";
 import Conference from "@/models/Conference";
 import Division from "@/models/Division";
+import DepthChart from "@/models/DepthChart";
 import Contract from "@/models/Contract";
 import Draft from "@/models/Draft";
 import Ratings from "@/models/Ratings";
@@ -27,6 +30,10 @@ import Potentials from "@/models/Potentials";
 import Skill from "@/models/Skill";
 import Phase from "@/models/Phase";
 import Season from "@/models/Season";
+import Staff from "@/models/Staff";
+import StaffContract from '@/models/StaffContract';
+import localForage from 'localforage';
+import {clone} from 'pouchdb-utils';
 
 class StoreService {
     private static instance: StoreService;
@@ -35,33 +42,36 @@ class StoreService {
 
     private constructor() {
         this.database = new Database();
-        this.database.register(League);
-        this.database.register(World);
         this.database.register(User);
-        this.database.register(Team);
         this.database.register(Player);
-        this.database.register(TrainingSchedule);
-        this.database.register(Activity);
+        this.database.register(Team);
         this.database.register(Match);
-        this.database.register(Born);
-        this.database.register(College);
-        this.database.register(Conference);
-        this.database.register(Contract);
+        this.database.register(Award);
+        this.database.register(Transaction);
         this.database.register(Draft);
-        this.database.register(Ratings);
         this.database.register(Health);
-        this.database.register(Injury);
-        this.database.register(Relative);
+        this.database.register(Born);
+        this.database.register(Ratings);
+        this.database.register(College);
         this.database.register(Salary);
         this.database.register(Stat);
-        this.database.register(Transaction);
-        this.database.register(Award);
-        this.database.register(Division);
+        this.database.register(Injury);
+        this.database.register(Contract);
+        this.database.register(StaffContract);
+        this.database.register(Relative);
         this.database.register(Overalls);
         this.database.register(Potentials);
         this.database.register(Skill);
         this.database.register(Phase);
+        this.database.register(TrainingSchedule);
+        this.database.register(Activity);
+        this.database.register(Conference);
+        this.database.register(Division);
         this.database.register(Season);
+        this.database.register(Staff);
+        this.database.register(League);
+        this.database.register(World);
+        this.database.register(DepthChart);
 
         this.store = new Vuex.Store({
             actions: {
@@ -74,7 +84,14 @@ class StoreService {
                     this.dispatch('entities/deleteAll')
                 }
             },
-            plugins: [VuexORM.install(this.database)],
+            plugins: [
+                VuexORM.install(this.database),
+                new VuexPersistence({
+                    storage: localForage,
+                    asyncStorage: true,
+                    reducer: (state) => clone(state),
+                }).plugin
+            ],
         });
     }
 

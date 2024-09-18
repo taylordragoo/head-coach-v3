@@ -1,5 +1,7 @@
+import {Dexie} from "dexie";
 import DatabaseController from "@/controllers/DatabaseController";
 import WorldController from "@/controllers/WorldController";
+import TeamService from "@/service/TeamService";
 import User from '@/models/User';
 import World from '@/models/World';
 import League from '@/models/League';
@@ -11,6 +13,7 @@ import Activity from "@/models/Activity";
 import Born from "@/models/Born";
 import College from "@/models/College";
 import Conference from "@/models/Conference";
+import DepthChart from "@/models/DepthChart";
 import Division from "@/models/Division";
 import Contract from "@/models/Contract";
 import Draft from "@/models/Draft";
@@ -26,35 +29,15 @@ import Overalls from "@/models/Overalls";
 import Potentials from "@/models/Potentials";
 import Skill from "@/models/Skill";
 import Phase from "@/models/Phase";
-import {Dexie} from "dexie";
-import { DEFAULT_SCHEDULE, PHASE } from "@/data/constants";
+import Season from "@/models/Season";
+import Staff from "@/models/Staff";
+import StaffContract from "@/models/StaffContract";
+import { DEFAULT_SCHEDULE, PHASE, getModelConfig, tableNames } from "@/data/constants";
 
 class CareerService {
     private static instance: CareerService;
-    public tableNames: string[] = [
-        'user',
-        'world',
-        'players',
-        'teams',
-        'leagues',
-        'matches',
-        'awards',
-        'transactions',
-        'draft',
-        'health',
-        'born',
-        'ratings',
-        'college',
-        'salaries',
-        'stats',
-        'injuries',
-        'contracts',
-        'relatives',
-        'overalls',
-        'potentials',
-        'skills',
-        'phases',
-    ];
+    private teamService = new TeamService();
+    public modelConfig = getModelConfig();
 
     private constructor() {}
 
@@ -66,12 +49,11 @@ class CareerService {
         return CareerService.instance;
     }
 
-    public async handleCareerData(request, db): Promise<any> {
+    public async handleCareerData(request: any, db: Dexie): Promise<any> {
         try {
-            for (const tableName of this.tableNames) {
+            for (const tableName of tableNames) {
                 const table = db.table(tableName);
                 const data = request[tableName];
-                // await this.handleTableOperation(table, data);
             }
         } catch (err) {
             console.log(`Error: ${err}`);
@@ -81,49 +63,33 @@ class CareerService {
     };
 
     public handleGetDefaultData: any = () => {
-
         const teams: Team[] = Team.all().map(team => {
-            return {
-                ...team,
+            const newTeam = new Team();
+            Object.assign(newTeam, team, {
                 budget: {
-                    scouting: { ...team.budget.scouting },
-                    coaching: { ...team.budget.coaching },
-                    health: { ...team.budget.health },
-                    facilities: { ...team.budget.facilities },
+                    scouting: { amount: team.budget.scouting.amount, rank: team.budget.scouting.rank },
+                    coaching: { amount: team.budget.coaching.amount, rank: team.budget.coaching.rank },
+                    health: { amount: team.budget.health.amount, rank: team.budget.health.rank },
+                    facilities: { amount: team.budget.facilities.amount, rank: team.budget.facilities.rank },
                 },
                 coach: { ...team.coach },
-            };
+            });
+            return newTeam;
         });
 
-        return {
+        const defaultData: any = {
             type: "default",
             db_name: 'default',
-            world: World.all(),
-            players: Player.all(),
             teams: teams,
-            leagues: League.all(),
-            matches: Match.all(),
-            training_schedules: TrainingSchedule.all(),
-            activities: Activity.all(),
-            born: Born.all(),
-            college: College.all(),
-            conference: Conference.all(),
-            division: Division.all(),
-            contracts: Contract.all(),
-            draft: Draft.all(),
-            ratings: Ratings.all(),
-            health: Health.all(),
-            injuries: Injury.all(),
-            relatives: Relative.all(),
-            salaries: Salary.all(),
-            stats: Stat.all(),
-            transactions: Transaction.all(),
-            awards: Award.all(),
-            overalls: Overalls.all(),
-            potentials: Potentials.all(),
-            skills: Skill.all(),
-            phases: Phase.all()
         };
+
+        for (const tableName of Object.keys(this.modelConfig)) {
+            if (tableName !== 'teams' && tableName !== 'season') {
+                defaultData[tableName] = this.modelConfig[tableName].all();
+            }
+        }
+
+        return defaultData;
     }
 
     public async handleLoadSelectedCareer(name: string): Promise<void> {
@@ -139,53 +105,29 @@ class CareerService {
         }
     }
 
-
-    public async handleInsertVuexData(request): Promise<void>{
+    public async handleInsertVuexData(request: any): Promise<void>{
         try {
-            // insert data into vuex-orm store
-            await User.insert({ data: request.user })
-            await World.insert({ data: request.world })
-            await League.insert({ data: request.leagues })
-            await Team.insert({ data: request.teams })
-            await Player.insert({ data: request.players })
-            await Match.insert({ data: request.matches })
-            await Born.insert({ data: request.born })
-            await College.insert({ data: request.college })
-            await Contract.insert({ data: request.contracts })
-            await Draft.insert({ data: request.draft })
-            await Ratings.insert({ data: request.ratings })
-            await Health.insert({ data: request.health })
-            await Salary.insert({ data: request.salaries })
-            await Overalls.insert({ data: request.overalls })
-            await Potentials.insert({ data: request.potentials })
-
-            // await TrainingSchedule.insert({ data: request.training_schedules })
-            // await Activity.insert({ data: request.activities })
-            // await Conference.insert({ data: request.conference })
-            // await Division.insert({ data: request.division })
-            // await Injury.insert({ data: request.injuries })
-            // await Relative.insert({ data: request.relatives })
-            // await Stat.insert({ data: request.stats })
-            // await Transaction.insert({ data: request.transactions })
-            // await Award.insert({ data: request.awards })
-            // await Skill.insert({ data: request.skills })
-            // await Phase.insert({ data: request.phases })
-
+            for (const tableName of Object.keys(this.modelConfig)) {
+                if (request[tableName] && request[tableName].length > 0) {
+                    console.log(`Populate DB: ${tableName}`);
+                    await this.modelConfig[tableName].insert({ data: request[tableName] });
+                }
+            }
         } catch (err) {
             console.log(`Error: ${err}`);
         }
         return;
     }
 
-    public async handleDeleteCareer(db): Promise<void> {
+    public async handleDeleteCareer(db: string): Promise<void> {
         const dbc: DatabaseController = DatabaseController.getInstance();
         await dbc.deleteDatabase(db);
     }
 
-    public async handleCreateNewCareer(request): Promise<any> {
+    public async handleCreateNewCareer(request: any): Promise<any> {
         const dbc: DatabaseController = DatabaseController.getInstance();
-        // if(await this.handleDbExistence(request))
-        // return await this.handleCareerData(request, db);
+        if(await dbc.databaseService.handleDbExistence(request))
+        return await this.handleCareerData(request, dbc.databaseService.db);
     }
 
     public async handleSaveCareer(): Promise<void> {
@@ -202,17 +144,44 @@ class CareerService {
         return wc.createWorld();
     }
 
-    public handleContinueCareer(): void {
-        this.handleUpdateDailyState();
+    public async handleContinueCareer(): Promise<void> {
+        await this.handleUpdateDailyState();
         console.log("Continue Career");
     }
 
-    public handleUpdateDailyState(): void {
+    /**
+     * Handle the update of daily state by setting phase based on week, fetching all ratings and storing them in a Map,
+     * getting all teams, creating an array of promises for each team's performance evaluation, waiting for all team
+     * performance evaluations to complete, and logging the performance of each team.
+     *
+     * @return {Promise<void>} Promise that resolves once the daily state update is handled
+     */
+    public async handleUpdateDailyState(): Promise<void> {
         this.handleSetPhaseBasedOnWeek();
-        // Additional Daily Logic
-        console.log("Update Daily State");
+    
+        // Fetch all ratings and store them in a Map
+        const ratings = Ratings.all();
+        const ratingsMap = new Map(ratings.map(rating => [rating.pid, rating]));
+
+        const teams = Team.all();
+
+        // Create an array of promises for each team's performance evaluation
+        const teamPerformancePromises = teams.map((team: Team) => 
+            this.teamService.evaluateTeamPerformance(team.id, ratingsMap)
+        );
+
+        // Wait for all team performance evaluations to complete
+        const teamPerformances = await Promise.all(teamPerformancePromises);
+
+        // Log the performance of each team
+        teams.forEach((team: Team, index: number) => {
+            console.log(`Team ${team.name} performance: ${teamPerformances[index]}`);
+        });
     }
 
+    /**
+     * Handle setting the phase based on the current week.
+     */ 
     public handleSetPhaseBasedOnWeek(): void {
         console.log("Set Phase Based On Week");
         const worlds = World.all();

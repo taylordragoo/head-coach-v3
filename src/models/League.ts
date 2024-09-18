@@ -4,7 +4,7 @@ import Match from '@/models/Match';
 import { DEFAULT_SCHEDULE } from '@/data/constants';
 
 export default class League extends Model {
-    static entity: string = 'league'
+    static entity = 'league'
 
     static fields () {
         return {
@@ -20,13 +20,18 @@ export default class League extends Model {
         }
     }
 
+    id!: number
+    abbrev!: string | null
+    name!: string | null
+    country!: string | null
+    wid!: number | null
+    phase!: number | null
+    tier!: number | null
+    teams!: Team[] | null
+    matches!: Match[] | null
+
     get phase_name() {
-
-        let phase = null;
-        // Find the matching phase in DEFAULT_SCHEDULE
-        phase = DEFAULT_SCHEDULE.find(p => p.id === this.phase);
-
-        // If there is a matching phase, return its name. Otherwise, return 'Unknown'.
-        return phase ? phase.display_name : 'Unknown';
+        let phase_data = DEFAULT_SCHEDULE.find(p => p.id === this.phase);
+        return phase_data ? phase_data.display_name : 'Unknown';
     }
 }

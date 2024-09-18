@@ -1,6 +1,6 @@
 import { Model } from '@vuex-orm/core'
 
-export default class Overalls extends Model {
+class Overalls extends Model {
     static entity = 'overalls'
 
     static fields () {
@@ -20,4 +20,20 @@ export default class Overalls extends Model {
             P: this.number(null)
         }
     }
+
+    id!: number
+    rating_id!: number
+    QB!: number
+    RB!: number
+    WR!: number
+    TE!: number
+    OL!: number
+    DL!: number
+    LB!: number
+    CB!: number
+    S!: number
+    K!: number
+    P!: number
 }
+
+export default Overalls

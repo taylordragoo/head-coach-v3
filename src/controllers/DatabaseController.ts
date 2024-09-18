@@ -49,16 +49,20 @@ class DatabaseController {
         return this.databaseService.handleSaveCareer();
     }
 
+    public saveDefaultDatabase() {
+        return this.databaseService.handleSaveDefaultDatabase();
+    }
+
     public openExistingDatabase(name: string) {
         return this.databaseService.handleOpenExistingDatabase(name);
     }
 
-    public closeDatabase() {
+    public closeDatabase(db: Dexie) {
         this.databaseService.handleCloseDatabase(db);
     }
 
     public getDatabase() {
-        return this.handleGetDatabase();
+        return this.databaseService.handleGetAllDatabases();
     }
 
     public getCareerDataFromDatabase(db: Dexie) {

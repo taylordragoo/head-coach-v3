@@ -1,26 +1,9 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-import { initFlowbite } from 'flowbite'
-import {onMounted} from "vue";
-import MainMenu from "../pages/MainMenu.vue";
-
-// initialize components based on data attribute selectors
-onMounted(() => {
-  setTimeout(() => initFlowbite(), 250);
-})
-
-export default defineComponent({
-  name: "Layout",
-  components: {MainMenu}
-})
-</script>
-
 <template>
-  <div class="flex flex-col">
-    <MainMenu />
+  <div class="p-0">
+    <router-view />
   </div>
 </template>
-
-<style scoped>
-
-</style>
+<script setup>
+import MainMenu from '@/pages/MainMenu.vue'
+import Dashboard from '@/pages/Dashboard.vue'
+</script>

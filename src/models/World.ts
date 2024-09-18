@@ -15,6 +15,12 @@ export default class World extends Model {
         }
     }
 
+    id!: number
+    date!: string
+    season!: number
+    user_id!: number
+    leagues!: League[]
+
     get currentWeek() {
         // Use moment.js to get the week of the year. By default, weeks start on Sunday.
         return moment(this.date).week();

@@ -20,4 +20,9 @@ export default class PlayerController {
         this.playerService.handleCreatePlayers()
     }
 
+    generate() {
+        let player = {}
+        this.playerService.handleGeneratePlayer(player)
+    }
+
 }

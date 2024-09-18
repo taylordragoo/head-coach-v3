@@ -1,10 +1,24 @@
-import devtools from '@vue/devtools'
+import './assets/style.css'
+import 'primeicons/primeicons.css'
+
+import PrimeVue from 'primevue/config';
+import {PrimeIcons} from "@primevue/core/api";
 import App from './App.vue'
+import Aura from '@primevue/themes/aura';
+import StyleClass from 'primevue/styleclass';
+import router from './router/index';
 
-import './assets/main.postcss'
+const app = createApp(App)
 
-if (process.env.NODE_ENV === 'development') {
-  devtools.connect('http://localhost', 8098)
-}
+app.use(PrimeVue, {
+  theme: {
+    preset: Aura
+  },
+  plugins: [StyleClass]
+});
 
-createApp(App).mount('#app')
+app.use(router)
+app.use(PrimeIcons);
+app.directive('styleclass', StyleClass);
+
+app.mount('#app')

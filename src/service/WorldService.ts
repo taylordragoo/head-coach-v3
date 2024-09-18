@@ -20,13 +20,7 @@ export default class WorldService {
     }
 
     handleCreateNewWorld() {
-        // console.log(data.colleges);
-        // College.insert({
-        //     data: data.colleges
-        // });
-
         for(let i = 0; i < data.colleges.length; i++) {
-            console.log(data.colleges[i]);
             College.insert({
                 data: data.colleges[i]
             });
@@ -42,8 +36,8 @@ export default class WorldService {
             }
         });
 
-        this.leagueController.createDefaultLeagues();
-
-        return;
+        let message = this.leagueController.createDefaultLeagues();
+        console.log(message);
+        return message;
     }
 }

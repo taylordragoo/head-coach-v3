@@ -1,14 +1,19 @@
 import League from '@/models/League';
 import Team from "@/models/Team";
+import TeamService from '@/service/TeamService';
 import Match from "@/models/Match";
 import schedule from '../data/schedule.json';
+import team_data from '@/data/teams.json';
 import { DEFAULT_CONFS, DEFAULT_DIVS } from "@/data/constants";
 import _ from 'lodash';
 
 export default class LeagueService {
     private static instance: LeagueService;
+    public teamService: TeamService;
 
-    constructor() {}
+    constructor() {
+        this.teamService = TeamService.getInstance();
+    }
 
     public static getInstance(): LeagueService {
         if (!LeagueService.instance) {
@@ -18,7 +23,7 @@ export default class LeagueService {
         return LeagueService.instance;
     }
 
-    handleCreateDefaultLeagues()
+    async handleCreateDefaultLeagues()
     {
         League.insert({
             data: {
@@ -33,7 +38,8 @@ export default class LeagueService {
             },
         })
 
-        return "Default leagues created"
+        await this.teamService.handleCreateNewTeams(team_data.teams);
+        return "Default league and teams created";
     }
 
     generateSchedule(leagueId) {

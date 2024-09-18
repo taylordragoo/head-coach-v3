@@ -3,7 +3,7 @@ import {
 } from '@/service/index';
 
 class WorldController {
-    public instance: WorldController;
+    public static instance: WorldController;
     public worldService: WorldService;
 
     constructor() {

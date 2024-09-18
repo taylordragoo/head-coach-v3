@@ -20,10 +20,8 @@ export default class TeamController {
         return TeamController.instance;
     }
 
-    create() {
-        this.teamService.handleCreateNewTeams(team_data.teams)
-        this.playerController.create();
-
+    async create() {
+        await this.teamService.handleCreateNewTeams(team_data.teams);
     }
 
     read() {

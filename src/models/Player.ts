@@ -35,6 +35,10 @@ export default class Player extends Model {
             value_no_pot: this.attr(0),
             value_fuzz: this.attr(0),
             value_no_pot_fuzz: this.attr(0),
+            position: this.attr(''),
+            position_archetype: this.attr(''),
+            mental_archetype: this.attr(''),
+            base_rating: this.attr(0),
 
             // Relationships
             born: this.hasOne(Born, 'pid'),
@@ -50,5 +54,50 @@ export default class Player extends Model {
             transactions: this.hasMany(Transaction, 'pid'),
             awards: this.hasMany(Award, 'pid'),
         }
+    }
+
+    id!: number;
+    pid!: number;
+    team_id!: number;
+    first_name!: string;
+    last_name!: string;
+    img_url!: string;
+    height!: number;
+    weight!: number;
+    college_id!: number;
+    days_until_can_trade!: number;
+    retired_year!: number;
+    roster_order!: number;
+    years_free_agent!: number;
+    value!: number;
+    value_no_pot!: number;
+    value_fuzz!: number;
+    value_no_pot_fuzz!: number;
+    position!: string;
+    position_archetype!: string;
+    mental_archetype!: string;
+    
+    base_rating!: number;
+
+    born!: Born;
+    college!: College;
+    contract!: Contract;
+    draft!: Draft;
+    ratings!: Ratings;
+    health!: Health;
+    injuries!: Injury[];
+    relatives!: Relative[];
+    salaries!: Salary[];
+    stats!: Stat[];
+    transactions!: Transaction[];
+    awards!: Award[];
+
+    get full_name () {
+        return `${this.first_name} ${this.last_name}`
+    }
+
+    get player_exp () {
+        let draft = Draft.query().where('pid', this.pid).first();
+        return draft ? (2024 - draft.year) : 0;
     }
 }

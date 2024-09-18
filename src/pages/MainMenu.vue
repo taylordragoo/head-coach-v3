@@ -1,61 +1,58 @@
 <template>
-  <div class="min-h-screen bg-gray-900 flex items-center">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl">
-      <div class="grid space-y-8 lg:grid-cols-2 lg:gap-12 lg:space-y-0">
-        <div>
-          <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Head Coach 2024</h2>
-          <p class="mb-4 text-gray-500 sm:text-xl dark:text-gray-400">Welcome to the ultimate American Football management simulation. As the head coach, you'll strategize, make crucial decisions, and lead your team to victory. Are you ready to take the field?</p>
+  <div class="bg-surface-900 min-h-screen flex items-center px-6 md:px-12 lg:px-24">
+    <div class="flex flex-row items-center">
+      <div class="w-full lg:w-6/12 p-6 ml-20">
+        <div class="flex inline-flex">
+          <h1 class="text-8xl font-bold text-white mt-2 mb-4">
+              PRO GM
+          </h1>
+          <h1 class="text-8xl font-bold text-white mt-0 mb-4 ml-4">
+              <span class="text-yellow-500 dark:text-yellow-400 underline">25</span>
+          </h1>
         </div>
-        <div>
-          <button type="button" @click="goToDashboard" class="flex justify-between items-center p-4 mb-6 bg-white rounded-lg border-l-8 shadow dark:bg-gray-800 dark:hover:bg-gray-700 border-primary-600 dark:border-primary-500 hover:bg-gray-50">
-            <div>
-              <span class="block mb-1 text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Begin the journey</span>
-              <span class="text-xl font-semibold text-primary-600 dark:text-primary-500">New</span>
-            </div>
-            <svg class="w-6 h-6 text-primary-600 dark:text-primary-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-          </button>
-          <a href="#" class="flex justify-between items-center p-4 mb-6 bg-white rounded-lg border-l-8 border-purple-600 shadow dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-purple-500 hover:bg-gray-50">
-            <div>
-              <span class="block mb-1 text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Load your last save</span>
-              <span class="text-xl font-semibold text-purple-600 dark:text-purple-500">Continue</span>
-            </div>
-            <svg class="w-6 h-6 text-purple-600 dark:text-purple-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-          </a>
-          <a href="#" class="flex justify-between items-center p-4 mb-6 bg-white rounded-lg border-l-8 border-teal-600 shadow dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-teal-500 hover:bg-gray-50">
-            <div>
-              <span class="block mb-1 text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Adjust game settings</span>
-              <span class="text-xl font-semibold text-teal-600 dark:text-teal-500">Settings</span>
-            </div>
-            <svg class="w-6 h-6 text-teal-600 dark:text-teal-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-          </a>
-          <a href="#" class="flex justify-between items-center p-4 mb-6 bg-white rounded-lg border-l-8 border-red-500 shadow dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-red-500 hover:bg-gray-50">
-            <div>
-              <span class="block mb-1 text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Exit the game</span>
-              <span class="text-xl font-semibold text-purple-600 dark:text-red-500">Quit</span>
-            </div>
-            <svg class="w-6 h-6 text-purple-600 dark:text-red-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-          </a>
+        <p class="text-3xl text-gray-400 mt-0 mb-8">Arcu cursus euismod quis viverra nibh cras. Amet justo donec enim diam vulputate ut.</p>
+        <ul class="list-none p-0 m-0">
+            <li class="mb-4 flex items-center"><i class="pi pi-compass text-yellow-500 text-xl mr-2" /><span class="text-gray-400 leading-normal">Senectus et netus et malesuada fames.</span></li>
+            <li class="mb-4 flex items-center"><i class="pi pi-map text-yellow-500 text-xl mr-2" /><span class="text-gray-400 leading-normal">Orci a scelerisque purus semper eget.</span></li>
+            <li class="mb-4 flex items-center"><i class="pi pi-calendar text-yellow-500 text-xl mr-2" /><span class="text-gray-400 leading-normal">Aenean sed adipiscing diam donec adipiscing tristique.</span></li>
+        </ul>
+      </div>
+      <div class="w-full lg:w-6/12 p-6">
+        <div class="text-center">
+          <div class='row'>
+              <Button type="button" @click='openContinue' label="Continue" style="width:20rem" class="mb-2" />
+          </div>
+          <div class='row'>
+              <Button type="button" @click="openNew" label="New" style="width:20rem" class="mb-2"/>
+          </div>
+          <div class='row'>
+              <Button type="button" @click="openEditor" label="Editor" style="width:20rem" class="mb-2"/>
+          </div>
+          <div class='row'>
+              <Button type="button" label="Settings" style="width:20rem" class="mb-2"/>
+          </div>
+          <div class='row'>
+              <Button @click="closeApp" type="button" label="Quit" style="width:20rem" class="mb-2"/>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import Vue from 'vue'
+<script>
+import Button from 'primevue/button';
 import { useRouter } from 'vue-router'
 
-export default defineComponent({
+export default {
   name: 'MainMenu',
+  components: {
+    Button
+  },
   methods: {
     goToDashboard() {
       console.log('go to dashboard')
       this.$router.push({ name: 'Dashboard' });
     }
   }
-});
+};
 </script>
-
-<style scoped>
-
-</style>

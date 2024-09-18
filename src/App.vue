@@ -1,7 +1,9 @@
-<script setup lang="ts">
+<script setup>
 import Layout from './layout/Layout.vue'
 </script>
 
 <template>
-  <Layout class="dark" />
+  <main>
+    <Layout />
+  </main>
 </template>

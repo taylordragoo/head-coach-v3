@@ -14,4 +14,13 @@ export default class Draft extends Model {
             orig_team_id: this.number(null),
         }
     }
+
+    id!: number
+    pid!: number
+    round!: number
+    pick!: number
+    year!: number
+    pot!: number
+    ovr!: number
+    orig_team_id!: number
 }
