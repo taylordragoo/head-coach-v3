@@ -5,6 +5,7 @@ import Player from '@/models/Player';
 import League from "@/models/League";
 import Staff from '@/models/Staff';
 import Contract from '@/models/Contract';
+import DepthChart from '@/models/DepthChart';
 
 export default class Team extends Model {
     static entity: string = 'team'
@@ -46,6 +47,7 @@ export default class Team extends Model {
             // Data
             seasons: this.hasMany(Season, 'tid'),
             stats: this.hasMany(Stat, 'tid'),
+            depthChart: this.hasMany(DepthChart, 'team_id'),
             
             // Players
             players: this.hasMany(Player, 'team_id'),

@@ -2,22 +2,7 @@
   "compilerOptions": {
     "composite": true,
     "module": "esnext",
-    "moduleResolution": "node",
-    "paths": {
-      "vue": ["./node_modules/vue/dist/vue.esm-bundler.js"]
-    },
-    "strict": true,
-    "jsx": "preserve",
-    "allowJs": true,
-    "noImplicitAny": false,
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "lib": ["esnext", "dom"],
-    "skipLibCheck": true
+    "moduleResolution": "node"
   },
-  "include": ["vite.config.ts"],
-  "exclude": ["node_modules", "dist", "public"]
+  "include": ["vite.config.ts"]
 }

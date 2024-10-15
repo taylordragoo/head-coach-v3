@@ -11,6 +11,7 @@ import Transaction from "@/models/Transaction";
 import Relative from "@/models/Relative";
 import Award from "@/models/Award";
 import Health from "@/models/Health";
+import Position from '@/models/Position';
 
 export default class Player extends Model {
     static entity: string = 'player';
@@ -35,12 +36,12 @@ export default class Player extends Model {
             value_no_pot: this.attr(0),
             value_fuzz: this.attr(0),
             value_no_pot_fuzz: this.attr(0),
-            position: this.attr(''),
             position_archetype: this.attr(''),
             mental_archetype: this.attr(''),
             base_rating: this.attr(0),
 
             // Relationships
+            position: this.hasMany(Position, 'player_id'),
             born: this.hasOne(Born, 'pid'),
             college: this.belongsTo(College, 'college_id'),
             contract: this.hasOne(Contract, 'pid'),
@@ -73,12 +74,12 @@ export default class Player extends Model {
     value_no_pot!: number;
     value_fuzz!: number;
     value_no_pot_fuzz!: number;
-    position!: string;
     position_archetype!: string;
     mental_archetype!: string;
     
     base_rating!: number;
 
+    position!: Position[];
     born!: Born;
     college!: College;
     contract!: Contract;

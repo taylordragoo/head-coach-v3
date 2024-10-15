@@ -1,14 +1,14 @@
-import IPlayer from '@/interfaces/Player';
+import Player from '@/models/Player';
 import Ratings from '@/models/Ratings';
 import IRating from '@/interfaces/IRating';
 import Overalls from '@/models/Overalls';
 import Potentials from '@/models/Potentials';
-import faker from 'faker';
+import * as faker from 'faker';
 import data from '@/data/colleges.json';
 import players from '@/data/players.json';
 import profiles from '@/data/profiles.json';
 import Utilities from '@/utils/utilities';
-import { MIN_POSITION_COUNTS, MAX_POSITION_COUNTS, POSITIONS, POSITION_ARCHETYPES, TECHNICAL_ARCHETYPES, MENTAL_ARCHETYPES } from '@/data/constants';
+import { MIN_POSITION_COUNTS, MAX_POSITION_COUNTS, POSITIONS, POSITION_ARCHETYPES, TECHNICAL_ARCHETYPES, MENTAL_ARCHETYPES, POSITION_MAPPING } from '@/data/constants';
 
 // Set general Min/Max Height and Weight for all players
 // Determine position based on ratings
@@ -22,6 +22,13 @@ import { MIN_POSITION_COUNTS, MAX_POSITION_COUNTS, POSITIONS, POSITION_ARCHETYPE
 // Generate Draft data for player
 // Generate value and value fuzz
 // Generate contract for player
+// 0 = 20 = 40
+// 50 = 30 = 50
+// 100 = 40 = 60
+// 150 = 50 = 70
+// 200 = 60 = 80
+// 250 = 70 = 90
+// 300 = 80 = 100
 
 export default class PlayerService {
     private static instance: PlayerService;
@@ -36,124 +43,54 @@ export default class PlayerService {
         return PlayerService.instance;
     }
 
-    handleGeneratePlayer(p: any) {
-        let player: IPlayer = {}
+    async handleGeneratePlayer(p: any) {
+        // let player: IPlayer = {}
+        let player = new Player();
         player.team_id = p.team_id;
         let name = this.generatePlayerName();
         player.first_name = name.first_name;
         player.last_name = name.last_name;
         player.ratings = this.generateRatings(p);
+        player.position = [
+            {
+                position: p.pos
+            }
+        ];
 
         return player;
     }
 
     generateRatings(p: any) {
-        let ratings = new Ratings;
         const pos = p.pos;
+        let rawRatings: any = {};
+        let ratings: any = {};
 
-        let rawRatings: IRating = {
-            position: '',
-            position_archetype: '',
-            mental_archetype: '',
-            carrying: this.initialRating(),
-			catching: this.initialRating(),
-			kick_accuracy: this.initialRating(),
-			kick_power: this.initialRating(),
-			man_coverage: this.initialRating(),
-			pass_blocking: this.initialRating(),
-			play_action: this.initialRating(),
-			punt_accuracy: this.initialRating(),
-			punt_power: this.initialRating(),
-			route_running: this.initialRating(),
-			run_blocking: this.initialRating(),
-			shed_block: this.initialRating(),
-			tackle: this.initialRating(),
-			throw_accuracy_deep: this.initialRating(),
-			throw_accuracy_mid: this.initialRating(),
-			throw_accuracy_short: this.initialRating(),
-			throw_on_the_run: this.initialRating(),
-			throw_power: this.initialRating(),
-			zone_coverage: this.initialRating(),
-			aggresion: this.initialRating(),
-			aniticipation: this.initialRating(),
-			bravery: this.initialRating(),
-			composure: this.initialRating(),
-			concentration: this.initialRating(),
-			decisions: this.initialRating(),
-			determination: this.initialRating(),
-			flair: this.initialRating(),
-			leadership: this.initialRating(),
-			off_the_ball: this.initialRating(),
-			positioning: this.initialRating(),
-			teamwork: this.initialRating(),
-			vision: this.initialRating(),
-			work_rate: this.initialRating(),
-			speed: this.initialRating(),
-			acceleration: this.initialRating(),
-			agility: this.initialRating(),
-			strength: this.initialRating(),
-			vertical: this.initialRating(),
-			stamina: this.initialRating(),
+        rawRatings.overall = 0;
+        rawRatings.potential = 0;
+        rawRatings.fuzz = 0;
+        rawRatings.position = '';
+        rawRatings.position_archetype = '';
+        rawRatings.mental_archetype = '';
+
+        for (let key in Ratings.fields()) {
+            if (typeof (Ratings.fields() as any)[key].value === 'number') {
+                rawRatings[key] = this.initialRating();
+            }
         }
-
+    
         const position_archetype = this.getArchetypeByPosition(pos);
         const mental_archetype = this.getMentalArchetype();
         const ratingsToBoost = this.getRatingsBoostByPosition(mental_archetype, position_archetype);
-
+    
         rawRatings.position = pos;
         rawRatings.position_archetype = position_archetype;
         rawRatings.mental_archetype = mental_archetype;
         rawRatings = this.boundRatingsByPosition(rawRatings, pos, mental_archetype, position_archetype, ratingsToBoost);
 
-        // @ts-ignore
-        ratings = {
-            position: pos,
-            position_archetype: position_archetype,
-            mental_archetype: mental_archetype,
-            // Technical
-			carrying: rawRatings.carrying,
-			catching: rawRatings.catching,
-			kick_accuracy: rawRatings.kick_accuracy,
-			kick_power: rawRatings.kick_power,
-			man_coverage: rawRatings.man_coverage,
-			pass_blocking: rawRatings.pass_blocking,
-			play_action: rawRatings.play_action,
-			punt_accuracy: rawRatings.punt_accuracy,
-			punt_power: rawRatings.punt_power,
-			route_running: rawRatings.route_running,
-			run_blocking: rawRatings.run_blocking,
-			shed_block: rawRatings.shed_block,
-			tackle: rawRatings.tackle,
-			throw_accuracy_deep: rawRatings.throw_accuracy_deep,
-			throw_accuracy_mid: rawRatings.throw_accuracy_mid,
-			throw_accuracy_short: rawRatings.throw_accuracy_short,
-			throw_on_the_run: rawRatings.throw_on_the_run,
-			throw_power: rawRatings.throw_power,
-			zone_coverage: rawRatings.zone_coverage,
-            // Mental
-			aggresion: rawRatings.aggresion,
-			aniticipation: rawRatings.aniticipation,
-			bravery: rawRatings.bravery,
-			composure: rawRatings.composure,
-			concentration: rawRatings.concentration,
-			decisions: rawRatings.decisions,
-			determination: rawRatings.determination,
-			flair: rawRatings.flair,
-			leadership: rawRatings.leadership,
-			off_the_ball: rawRatings.off_the_ball,
-			positioning: rawRatings.positioning,
-			teamwork: rawRatings.teamwork,
-			vision: rawRatings.vision,
-			work_rate: rawRatings.work_rate,
-            // Physical
-			speed: rawRatings.speed,
-			acceleration: rawRatings.acceleration,
-			agility: rawRatings.agility,
-			strength: rawRatings.strength,
-			vertical: rawRatings.vertical,
-			stamina: rawRatings.stamina
+        for (let key in rawRatings) {
+            ratings[key] = rawRatings[key];
         }
-
+    
         return ratings;
     }
     
@@ -191,12 +128,12 @@ export default class PlayerService {
     }
     
     initialRating() {
-        return this.limitRating(Utilities.truncGauss(10, 20, 10, 40));
+        return this.limitRating(Utilities.truncGauss(30, 30, 0, 120));
     }
 
     limitRating(rating: number) {
-        if (rating > 100) {
-            return 100;
+        if (rating > 300) {
+            return 300;
         }
         if (rating < 0) {
             return 0;
@@ -215,93 +152,99 @@ export default class PlayerService {
         }
     }
 
-    boundRatingsByPosition(rawRatings: IRating, pos: string, position_archetype: string, mental_archetype: string, ratingsToBoost: object) {
+    boundRatingsByPosition(rawRatings: Ratings, pos: string, position_archetype: string, mental_archetype: string, ratingsToBoost: object) {
         for (const rating of Utilities.keys(ratingsToBoost)) {
             const factor = ratingsToBoost[rating];
             if (factor !== undefined) {
                 rawRatings[rating] = this.limitRating(
-                    (rawRatings[rating] += factor * Utilities.truncGauss(10, 20, 10, 30)),
+                    (rawRatings[rating] += factor * Utilities.truncGauss(30, 60, 30, 90)),
                 );
             }
         }
     
         if (pos !== "K" && pos !== "P" && Math.random() < 0.95) {
-            rawRatings.kick_power = Utilities.randInt(0, 10);
-            rawRatings.kick_accuracy = Utilities.randInt(0, 10);
-            rawRatings.punt_power = Utilities.randInt(0, 10);
-            rawRatings.punt_accuracy = Utilities.randInt(0, 10);
+            rawRatings.kick_power = Utilities.randInt(0, 30);
+            rawRatings.kick_accuracy = Utilities.randInt(0, 30);
+            rawRatings.punt_power = Utilities.randInt(0, 30);
+            rawRatings.punt_accuracy = Utilities.randInt(0, 30);
         }
 
         if (pos === "QB") {
-            rawRatings.throw_power = Utilities.bound(rawRatings.throw_power, 30, Infinity);
-            rawRatings.throw_accuracy_short = Utilities.bound(rawRatings.throw_accuracy_short, 20, Infinity);
-            rawRatings.vision = Utilities.bound(rawRatings.vision, 50, Infinity);
+            rawRatings.throw_power = Utilities.bound(rawRatings.throw_power, 90, Infinity);
+            rawRatings.throw_accuracy_short = Utilities.bound(rawRatings.throw_accuracy_short, 60, Infinity);
+            rawRatings.vision = Utilities.bound(rawRatings.vision, 150, Infinity);
 
-            let mid_max = rawRatings.throw_accuracy_short - Utilities.randInt(1, 10);
-            let mid_min = mid_max - Utilities.randInt(1, 10);
+            let mid_max = rawRatings.throw_accuracy_short - Utilities.randInt(0, 30);
+            let mid_min = mid_max - Utilities.randInt(0, 30);
             if (mid_max < mid_min ) {
-                mid_max = mid_min + Utilities.randInt(1, 10);
+                mid_max = mid_min + Utilities.randInt(0, 30);
             }
             rawRatings.throw_accuracy_mid = Utilities.bound(rawRatings.throw_accuracy_mid, mid_min, mid_max);
 
-            let deep_max = rawRatings.throw_accuracy_mid - Utilities.randInt(1, 10);
-            let deep_min = deep_max - Utilities.randInt(1, 10);
+            let deep_max = rawRatings.throw_accuracy_mid - Utilities.randInt(0, 30);
+            let deep_min = deep_max - Utilities.randInt(0, 30);
             if (deep_max < deep_min ) {
-                deep_max = deep_min + Utilities.randInt(5, 20);
+                deep_max = deep_min + Utilities.randInt(15, 60);
             }
             rawRatings.throw_accuracy_deep = Utilities.bound(rawRatings.throw_accuracy_deep, deep_min, deep_max);
         }
     
         if (pos === "RB") {
-            rawRatings.agility = Utilities.bound(rawRatings.agility, 50, Infinity);
-            rawRatings.speed = Utilities.bound(rawRatings.speed, 50, Infinity);
-            rawRatings.acceleration = Utilities.bound(rawRatings.acceleration, 50, Infinity);
+            rawRatings.agility = Utilities.bound(rawRatings.agility, 150, Infinity);
+            rawRatings.speed = Utilities.bound(rawRatings.speed, 150, Infinity);
+            rawRatings.acceleration = Utilities.bound(rawRatings.acceleration, 150, Infinity);
         }
     
         if (pos === "WR") {
-            rawRatings.route_running = Utilities.bound(rawRatings.route_running, 50, Infinity);
-            rawRatings.catching = Utilities.bound(rawRatings.catching, 50, Infinity);
+            rawRatings.short_route_running = Utilities.bound(rawRatings.short_route_running, 150, Infinity);
+            rawRatings.medium_route_running = Utilities.bound(rawRatings.medium_route_running, 150, Infinity);
+            rawRatings.deep_route_running = Utilities.bound(rawRatings.deep_route_running, 150, Infinity);
+            rawRatings.catching = Utilities.bound(rawRatings.catching, 150, Infinity);
         }
     
         if (pos === "TE") {
-            rawRatings.strength = Utilities.bound(rawRatings.strength, 40, Infinity);
-            rawRatings.run_blocking = Utilities.bound(rawRatings.run_blocking, 30, Infinity);
+            rawRatings.strength = Utilities.bound(rawRatings.strength, 120, Infinity);
+            rawRatings.run_blocking = Utilities.bound(rawRatings.run_blocking, 90, Infinity);
         }
     
         if (pos === "OT" || pos === "OG" || pos === "C") {
-            rawRatings.strength = Utilities.bound(rawRatings.strength, 60, Infinity);
-            rawRatings.run_blocking = Utilities.bound(rawRatings.run_blocking, 40, Infinity);
-            rawRatings.pass_blocking = Utilities.bound(rawRatings.pass_blocking, 40, Infinity);
+            rawRatings.strength = Utilities.bound(rawRatings.strength, 180, Infinity);
+            rawRatings.run_blocking = Utilities.bound(rawRatings.run_blocking, 120, Infinity);
+            rawRatings.pass_blocking = Utilities.bound(rawRatings.pass_blocking, 120, Infinity);
+            rawRatings.pass_block_power = Utilities.bound(rawRatings.pass_block_power, 120, Infinity);
+            rawRatings.run_block_power = Utilities.bound(rawRatings.run_block_power, 120, Infinity);
+            rawRatings.pass_block_finesse = Utilities.bound(rawRatings.pass_block_finesse, 120, Infinity);
+            rawRatings.run_block_finesse = Utilities.bound(rawRatings.run_block_finesse, 120, Infinity);
         }
     
         if (pos === "DE") {
-            rawRatings.strength= Utilities.bound(rawRatings.strength, 60, Infinity);
-            rawRatings.tackle = Utilities.bound(rawRatings.tackle, 40, Infinity);
-            rawRatings.shed_block = Utilities.bound(rawRatings.shed_block, 40, Infinity);
+            rawRatings.strength= Utilities.bound(rawRatings.strength, 180, Infinity);
+            rawRatings.tackle = Utilities.bound(rawRatings.tackle, 120, Infinity);
+            rawRatings.shed_block = Utilities.bound(rawRatings.shed_block, 120, Infinity);
         }
 
         if (pos === "DT") {
-            rawRatings.strength= Utilities.bound(rawRatings.strength, 60, Infinity);
-            rawRatings.tackle = Utilities.bound(rawRatings.tackle, 40, Infinity);
-            rawRatings.shed_block = Utilities.bound(rawRatings.shed_block, 40, Infinity);
+            rawRatings.strength= Utilities.bound(rawRatings.strength, 180, Infinity);
+            rawRatings.tackle = Utilities.bound(rawRatings.tackle, 120, Infinity);
+            rawRatings.shed_block = Utilities.bound(rawRatings.shed_block, 120, Infinity);
         }
     
         if (pos === "OLB") {
-            rawRatings.tackle = Utilities.bound(rawRatings.tackle, 50, Infinity);
-            rawRatings.strength= Utilities.bound(rawRatings.strength, 40, Infinity);
+            rawRatings.tackle = Utilities.bound(rawRatings.tackle, 150, Infinity);
+            rawRatings.strength= Utilities.bound(rawRatings.strength, 120, Infinity);
         }
 
         if (pos === "MLB") {
-            rawRatings.tackle = Utilities.bound(rawRatings.tackle, 50, Infinity);
-            rawRatings.strength= Utilities.bound(rawRatings.strength, 40, Infinity);
+            rawRatings.tackle = Utilities.bound(rawRatings.tackle, 150, Infinity);
+            rawRatings.strength= Utilities.bound(rawRatings.strength, 120, Infinity);
         }
     
         if (pos === "CB") {
-            rawRatings.speed = Utilities.bound(rawRatings.speed, 60, Infinity);
+            rawRatings.speed = Utilities.bound(rawRatings.speed, 180, Infinity);
         }
     
         if (pos === "S") {
-            rawRatings.speed = Utilities.bound(rawRatings.speed, 50, Infinity);
+            rawRatings.speed = Utilities.bound(rawRatings.speed, 150, Infinity);
         }
 
         return rawRatings;

@@ -32,6 +32,7 @@ import Phase from "@/models/Phase";
 import Season from "@/models/Season";
 import Staff from "@/models/Staff";
 import StaffContract from '@/models/StaffContract';
+import Position from '@/models/Position';
 import localForage from 'localforage';
 import {clone} from 'pouchdb-utils';
 
@@ -72,6 +73,7 @@ class StoreService {
         this.database.register(League);
         this.database.register(World);
         this.database.register(DepthChart);
+        this.database.register(Position);
 
         this.store = new Vuex.Store({
             actions: {

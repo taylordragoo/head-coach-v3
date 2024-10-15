@@ -28,6 +28,7 @@ import Phase from "@/models/Phase";
 import Season from "@/models/Season";
 import Staff from "@/models/Staff";
 import StaffContract from "@/models/StaffContract";
+import Position from '@/models/Position';
 
 export function getModelConfig() {
     return {
@@ -60,7 +61,8 @@ export function getModelConfig() {
         staff: Staff,
         leagues: League,
         world: World,
-        depthChart: DepthChart
+        depthChart: DepthChart,
+        position: Position
     }
 }
 
@@ -94,7 +96,8 @@ export const tableNames: string[] = [
     'staff',
     'world',
     'leagues',
-    'depthChart'
+    'depthChart',
+    'position'
 ];
 
 export const DIFFICULTY = {
@@ -289,7 +292,10 @@ export const POSITIONS = [
 export const DEPTH_CHART_POSITIONS = [
     "QB",
     "RB",
+    "FB",
     "WR",
+    "WR2",
+    "WR3",
     "TE",
     "LT",
     "LG",
@@ -300,14 +306,35 @@ export const DEPTH_CHART_POSITIONS = [
     "RE",
     "DT",
     "LOLB",
-    "MLB",
+    "MLB1",
+    "MLB2",
     "ROLB",
-    "CB",
+    "CB1",
+    "CB2",
+    "CB3",
     "FS",
     "SS",
     "K",
     "P"
 ];
+
+export const POSITION_MAPPING = {
+    "QB": ["QB"],
+    "RB": ["RB", "FB", "WR", "WR2", "WR3"],
+    "WR": ["WR", "WR2", "WR3"],
+    "TE": ["TE"],
+    "OT": ["LT", "RT"],
+    "OG": ["LG", "RG"],
+    "C": ["C"],
+    "DE": ["LE", "RE"],
+    "DT": ["DT"],
+    "OLB": ["LOLB", "ROLB"],
+    "MLB": ["MLB1", "MLB2"],
+    "CB": ["CB1", "CB2", "CB3"],
+    "S": ["FS", "SS"],
+    "K": ["K"],
+    "P": ["P"],
+};
 
 export const OFF_POSITIONS = [
     "QB",
@@ -392,7 +419,61 @@ export const RATINGS = [
     "kick_power",
 ];
 
-export const POSITION_ARCHETYPES = {
+export const RATINGS_DISPLAY_NAMES = {
+    "speed": "Speed",
+    "acceleration": "Acceleration",
+    "agility": "Agility",
+    "strength": "Strength",
+    "vertical": "Vertical",
+    "stamina": "Stamina",
+    "carrying": "Carrying",
+    "catching": "Catching",
+    "route_running": "Route Running",
+    "throw_power": "Throw Power",
+    "throw_accuracy_deep": "Throw Accuracy Deep",
+    "throw_accuracy_mid": "Throw Accuracy Mid",
+    "throw_accuracy_short": "Throw Accuracy Short",
+    "throw_on_the_run": "Throw On The Run",
+    "play_action": "Play Action",
+    "pass_blocking": "Pass Blocking",
+    "run_blocking": "Run Blocking",
+    "shed_block": "Shed Block",
+    "tackle": "Tackle",
+    "man_coverage": "Man Coverage",
+    "zone_coverage": "Zone Coverage",
+    "punt_accuracy": "Punt Accuracy",
+    "punt_power": "Punt Power",
+    "kick_accuracy": "Kick Accuracy",
+    "kick_power": "Kick Power"
+};
+
+export const POSITION_ARCHETYPES_DISPLAY_NAMES = {
+    "field_general": "Field General",
+    "scrambler": "Scrambler",
+    "improviser": "Improviser",
+    "eluvisve": "Eluvisve",
+    "power": "Power",
+    "receiving": "Receiving",
+    "deep_threat": "Deep Threat",
+    "slot": "Slot",
+    "playmaker": "Playmaker",
+    "physical": "Physical",
+    "vertical": "Vertical",
+    "posession": "Posession",
+    "blocking": "Blocking",
+    "agile": "Agile",
+    "pass_protector": "Pass Protector",
+    "speed_rusher": "Speed Rusher",
+    "power_rusher": "Power Rusher",
+    "run_stopper": "Run Stopper",
+    "pass_coverage": "Pass Coverage",
+    "defensive_leader": "Defensive Leader",
+    "zone": "Zone Coverage",
+    "man": "Man Coverage",
+    "hybrid": "Hybrid Support"
+};
+
+export const POSITION_ARCHETYPES: Record<string, string[]> = {
     "QB": [
         "field_general",
         "scrambler",
@@ -468,7 +549,7 @@ export const POSITION_ARCHETYPES = {
     ]
 }
 
-export const TECHNICAL_ARCHETYPES = {
+export const TECHNICAL_ARCHETYPES: {[key: string]: {[key: string]: number}} = {
     "field_general": {
         carrying: 0.25,
         catching: -1,
@@ -826,12 +907,16 @@ export const TECHNICAL_ARCHETYPES = {
         kick_accuracy: -1,
         kick_power: -1,
         man_coverage: -1,
-        pass_blocking: 2, // Increased as agile linemen need to be good at pass protection
+        pass_blocking: 2, // Increased as pass protectors need to be good at pass protection
+        pass_block_power: 2,
+        pass_block_finesse: 2,
         play_action: -1,
         punt_accuracy: -1,
         punt_power: -1,
         route_running: -1,
-        run_blocking: 1.5, // Slightly increased as agile linemen often have to block on the move
+        run_blocking: 2, // Slightly decreased as pass protectors might not need to be as good at run blocking
+        run_block_power: 2,
+        run_block_finesse: 2,
         shed_block: -1,
         tackle: 0.25,
         throw_accuracy_deep: -1,
@@ -853,12 +938,16 @@ export const TECHNICAL_ARCHETYPES = {
         kick_accuracy: -1,
         kick_power: -1,
         man_coverage: -1,
-        pass_blocking: 0.75, // Slightly decreased as run blockers might not need to be as good at pass protection
+        pass_blocking: 2, // Increased as pass protectors need to be good at pass protection
+        pass_block_power: 2,
+        pass_block_finesse: 2,
         play_action: -1,
         punt_accuracy: -1,
         punt_power: -1,
         route_running: -1,
-        run_blocking: 2, // Increased as run blockers need to be good at run blocking
+        run_blocking: 2,
+        run_block_power: 2,
+        run_block_finesse: 2,
         shed_block: -1,
         tackle: 0.25,
         throw_accuracy_deep: -1,
@@ -881,11 +970,15 @@ export const TECHNICAL_ARCHETYPES = {
         kick_power: -1,
         man_coverage: -1,
         pass_blocking: 2, // Increased as pass protectors need to be good at pass protection
+        pass_block_power: 2,
+        pass_block_finesse: 2,
         play_action: -1,
         punt_accuracy: -1,
         punt_power: -1,
         route_running: -1,
-        run_blocking: 0.75, // Slightly decreased as pass protectors might not need to be as good at run blocking
+        run_blocking: 1.5, // Slightly decreased as pass protectors might not need to be as good at run blocking
+        run_block_power: 1.5,
+        run_block_finesse: 1.5,
         shed_block: -1,
         tackle: 0.25,
         throw_accuracy_deep: -1,
@@ -1119,7 +1212,23 @@ export const TECHNICAL_ARCHETYPES = {
     }
 }
 
-export const MENTAL_ARCHETYPES = {
+export const RAW_MENTAL_ARCHETYPES = [
+    "leader",
+    "competitor",
+    "strategist",
+    "teamPlayer",
+    "disruptor"
+]
+
+export const MENTAL_ARCHETYPES_DISPLAY_NAMES = {
+    "leader": "Leader",
+    "competitor": "Competitor",
+    "strategist": "Strategist",
+    "teamPlayer": "Team Player",
+    "disruptor": "Disruptor"
+}
+
+export const MENTAL_ARCHETYPES: {[key: string]: {[key: string]: number}} = {
     "leader": {
         aggression: 0.5,
         anticipation: 1,

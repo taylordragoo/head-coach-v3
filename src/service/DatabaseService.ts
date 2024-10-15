@@ -68,8 +68,16 @@ class DatabaseService {
     }
 
     async initialize() {
-        await this.initDB(this.dbTemplate);
+        console.log("Initialize function called");
+        try {
+            console.log("Initialize DB: " + this.dbTemplate.name);
+            this.initDB(this.dbTemplate);
+        } catch (error) {
+            console.error("Error in initDB: ", error);
+            return;
+        }
         const count = await this.dbTemplate.world.count();
+        console.log("Count: " + count);
         if (count === 0) {
             const data = await this.generateData();
             console.log("Initialize: " + data);
@@ -78,7 +86,46 @@ class DatabaseService {
             }
             return data;
         } else {
+            console.log("Initialize 2: ");
             return await this.handleGetCareerDataFromDatabase(this.dbTemplate);
+        }
+    }
+
+    async initDB(db: Dexie) {
+        const schema = {};
+        Object.keys(this.modelConfig).forEach(modelName => {
+            console.log("Init Table: " + modelName);
+            schema[modelName] = 'id';
+        });
+        console.log(schema);
+        await db.version(1).stores(schema);
+        console.log("Opening DB: " + db.name);
+        console.log("Database is open: ", db.isOpen());
+    }
+
+    async populateDB(request) {
+        console.log(request);
+        for (const tableName of Object.keys(this.modelConfig)) {
+            try {
+                console.log("Populate DB: " + tableName);
+                if (request[tableName] && request[tableName].length > 0) {
+                    await this.handleBulkPutOperation(this.dbTemplate.table(tableName), request[tableName], tableName);
+                }
+            } catch (error) {
+                console.error(`Error in populate db operation for ${tableName}: `, error);
+            }
+        }
+    }
+
+    async handleBulkPutOperation(dbTable: any, items: any, modelName: string) {
+        console.log(`Bulk Put: ${modelName}`);
+        console.log("Number of items: ", items.length);
+        console.log("First item: ", items[0]);
+        try {
+            await dbTable.bulkPut(items);
+            console.log(`Bulk put operation successful for ${modelName}`);
+        } catch (error) {
+            console.error(`Error in bulk put operation for ${modelName}: `, error);
         }
     }
 
@@ -114,19 +161,6 @@ class DatabaseService {
         await this.handleSaveCareer();
     
         await this.handleCloseDatabase(this.dbTemplate);
-    }
-
-    async initDB(db: Dexie) {
-        const schema = {};
-        Object.keys(this.modelConfig).forEach(modelName => {
-            console.log("Init DB: " + modelName);
-            schema[modelName] = 'id';
-        });
-    
-        db.version(1).stores(schema);
-        await db.open().catch((error) => {
-            console.error("Failed to open db: ", error);
-        });
     }
 
     async copyDB(dbFrom: Dexie, dbTo) {
@@ -283,20 +317,6 @@ class DatabaseService {
             console.error("Failed to get career data from db: ", error);
         }
     }
-    
-    async populateDB(request) {
-        console.log(request);
-        for (const tableName of Object.keys(this.modelConfig)) {
-            try {
-                console.log("Populate DB: " + tableName);
-                if (request[tableName] && request[tableName].length > 0) {
-                    await this.handleBulkPutOperation(this.dbTemplate.table(tableName), request[tableName], tableName);
-                }
-            } catch (error) {
-                console.error(`Error in populate db operation for ${tableName}: `, error);
-            }
-        }
-    }
 
     public async handleCloseDatabase(db: Dexie) {
         if(this.handleDbStatus(db)) {
@@ -338,27 +358,16 @@ class DatabaseService {
         }
     }
 
-    public async handleTableOperation(table, data) {
+    public async handleTableOperation(table: any, data: any) {
         if (table) {
             const operation = Array.isArray(data) ? table.bulkPut : table.put;
-            await operation(data).then(function(lastKey) {
+            await operation(data).then(function(lastKey: any) {
                 console.log(`Last ${table.name}'s id was: ${lastKey ?? 'N/A'}`);
             }).catch(Dexie.BulkError, function(e) {
                 console.error(`Some ${table.name}s did not succeed. However, ${100000 - e.failures.length} ${table.name}s was added successfully`);
             });
         }
     };
-
-    async handleBulkPutOperation(db, items, modelName) {
-        console.log(items)
-        try {
-            console.log(`Bulk Put: ${modelName}`);
-            await db.bulkPut(items);
-            console.log(`Bulk put operation successful for ${modelName}`);
-        } catch (error) {
-            console.error(`Error in bulk put operation for ${modelName}: `, error);
-        }
-    }
 }
 
 export default DatabaseService;

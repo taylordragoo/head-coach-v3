@@ -1,0 +1,113 @@
+# Steps on creating a new default database and returning data to frontend
+1. FRONTEND => DatabaseController.initDefaultDatabase()
+2. DatabaseController.initDefaultDatabase() => DatabaseService.initialize()
+3. DatabaseService.initialize() => checks if the default database exists and if not => DatabaseService.generateData()
+4. DatabaseService.generateData() => CareerController.createDefaultData()
+5. CareerController.createDefaultData() => CareerService.handleCreateDefaultWorld()
+6. CareerService.handleCreateDefaultWorld() => WorldController.createWorld()
+7. WorldController.createWorld() => WorldService.handleCreateNewWorld()
+8. WorldService.handleCreateNewWorld() => creates World and College Vuex data => LeagueController.createDefaultLeagues()
+9. LeagueController.createDefaultLeagues() => LeagueService.handleCreateDefaultLeagues()
+10. LeagueService.handleCreateDefaultLeagues() => creates default League Vuex data => TeamService.handleCreateNewTeams()
+11. TeamService.handleCreateNewTeams() => creates Team/Staff Vuex data => PlayerService.handleGeneratePlayer().
+12. PlayerService.handleGeneratePlayer() => creates player Vuex data for each team => return chain:
+    - TeamService.handleCreateNewTeams()
+    - LeagueService.handleCreateDefaultLeagues()
+    - WorldService.handleCreateNewWorld()
+    - WorldController.createWorld()
+    - CareerService.handleCreateDefaultWorld()
+    - CareerController.createDefaultData()
+14. CareerController.createDefaultData() => CareerService.handleGetDefaultData() => return chain:
+    - CareerController.createDefaultData()
+    - DatabaseService.generateData()
+    - DatabaseService.initialize()
+14. DatabaseService.initialize() => DatabaseService.populateDB()
+15. DatabaseService.populateDB() => DatabaseService.handleBulkPutOperation()
+16. DatabaseService.handleBulkPutOperation() => saves Vuex data to IndexedDB => return chain:
+    - DatabaseService.populateDB()
+    - DatabaseService.initialize()
+    - DatabaseController.initDefaultDatabase()
+    - FRONTEND receives the data
+
+
+***** Steps on loading default DB & then creating new career save *****
+1. FRONTEND => DatabaseController.initDefaultDatabase().
+2. DatabaseController.initDefaultDatabase() => DatabaseService.initialize().
+3. DatabaseService.initialize() => checks if the default database exists, assuming default db exists => DatabaseService.initialize()
+4. DatabaseService.initialize() => DatabaseService.handleGetCareerDataFromDatabase()
+5. DatabaseService.handleGetCareerDataFromDatabase() => returns default leagues/teams/players from the default database
+6. Return chain is as follows:
+    - DatabaseService.handleGetCareerDataFromDatabase()
+    - DatabaseService.initialize()
+    - DatabaseController.initDefaultDatabase()
+    - FRONTEND receives the data
+6. Player fills out and submits new game form => DatabaseController.createNewDatabase()
+7. DatabaseController.createNewDatabase() => DatabaseService.newGame()
+8. DatabaseService.newGame() => DatabaseService.initDB()
+9. DatabaseService.initDB() => opens DB and then returns it => DatabaseService.copyDB()
+9. DatabaseService.copyDB() => copy the data from the default db to our new career save db => DatabaseService.handleSaveCareer()
+10. DatabaseService.handleSaveCareer() to save the new career DB to indexeddb => DatabaseService.handleCloseDatabase()
+11. DatabaseService.handleCloseDatabase() => close default db
+12. FRONTEND redirects player to HOME for new game
+
+verycreativejj1234
+
+{
+  "$id": "$uid182",
+  "id": "$uid182",
+  "team_id": 1,
+  "first_name": "Paul",
+  "last_name": "Leuschke",
+  "role": "Head Coach",
+  "contract": null,
+  "leadership": 10,
+  "adaptability": 18,
+  "ambition": 10,
+  "discipline": 14,
+  "motivation": 16,
+  "rookie_player_management": 14,
+  "veteran_player_management": 11,
+  "player_ability_analysis": 11,
+  "player_potential_analysis": 19,
+  "staff_ability_analysis": 19,
+  "contract_negotiations": 16,
+  "data_analysis": 10,
+  "offensive_technical": 14,
+  "defensive_technical": 10,
+  "throwing_technical": 15,
+  "kicking_technical": 13,
+  "punting_technical": 14,
+  "tackling_technical": 16,
+  "blocking_technical": 19,
+  "coverage_technical": 10,
+  "hands_technical": 15,
+  "routes_technical": 15,
+  "play_calling_ability": 12,
+  "gameplan": 10,
+  "athletic_training": 1,
+  "medical_training": 3
+}
+
+NFL things:
+Draft
+Free Agency(restricted and unrestricted)
+Trades
+Contract Negotiations
+Fan Opinions
+Market Size
+Scouting
+Injury
+Player Morale
+Retirements
+Coaching Carousel
+Sponsorships
+Training Camp
+Offseason Workouts
+Holdouts
+Franchise Tags
+League News
+Email/Text Messaging other humans
+Sports Shows drama
+Facilities Management
+Weather
+Player Training/Progressio

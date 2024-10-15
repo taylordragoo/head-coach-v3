@@ -1,5 +1,6 @@
 import { PlayerController } from '@/controllers/index';
 import TeamService from '@/service/TeamService';
+import DepthChart from '@/models/DepthChart';
 import team_data from '@/data/teams.json';
 
 export default class TeamController {
@@ -34,5 +35,9 @@ export default class TeamController {
 
     delete() {
 
+    }
+
+    async updateTeamDepthChart(arr: DepthChart[]) {
+        this.teamService.handleUpdateTeamDepthChart(arr);
     }
 }

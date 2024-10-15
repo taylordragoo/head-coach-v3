@@ -4,13 +4,14 @@ import Player from '@/models/Player';
 import Ratings from '@/models/Ratings';
 import Overalls from '@/models/Overalls';
 import Potentials from '@/models/Potentials';
-import faker from 'faker';
+import DepthChart from '@/models/DepthChart';
+import * as faker from 'faker';
 import ITeam from '@/interfaces/ITeam';
 import utils from '@/utils/utilities';
 import PlayerService from '@/service/PlayerService';
 import team_data from '@/data/teams.json';
 import old_players from '@/data/players.json';
-import { MIN_POSITION_COUNTS, MAX_POSITION_COUNTS, POSITIONS, POSITION_ARCHETYPES, TECHNICAL_ARCHETYPES, MENTAL_ARCHETYPES } from '@/data/constants';
+import { MIN_POSITION_COUNTS, MAX_POSITION_COUNTS, POSITIONS, POSITION_MAPPING } from '@/data/constants';
 
 export default class TeamService {
     private static instance: TeamService;
@@ -29,17 +30,25 @@ export default class TeamService {
     {
         const _teams = await Promise.all(teams.map(team => this.handleGenerateTeam(team)));
 
+        // this.debugGeneratedPlayers(_teams);
         await Team.insert({
             data: _teams
         })
+
+        let all_teams = Team.query().with('players.ratings').get();
+
+        // Set depth chart for each team
+        for (let team of all_teams) {
+            await this.handleSetInitialTeamDepthChart(team);
+        }
         
         return "Teams created"
     }
 
     async handleGenerateTeam(data: any) {
-        console.log(data);
+        // console.log(data);
         let ps = PlayerService.getInstance();
-        let agingYears, draftYear, n, players, profile, profiles;
+        let agingYears, draftYear, n, players;
         const staff = this.generateStaffForTeam(data.tid + 1);
         players = [];
 
@@ -65,25 +74,24 @@ export default class TeamService {
                 adj2 += 1;
             }
 
-            let player = ps.handleGeneratePlayer({
+            let player = await ps.handleGeneratePlayer({
                 team_id: data.tid + 1,
                 age: (2024 - draftYear) + 21,
                 draftYear: draftYear,
                 pos: position
             });
 
-            player.position = player.ratings.position;
+            // player.position = player.ratings.position;
             player.position_archetype = player.ratings.position_archetype;
             player.mental_archetype = player.ratings.mental_archetype;
 
             // Increment the count for the player's position
-            currentPositionCounts[player.position]++;
+            currentPositionCounts[player.ratings.position]++;
 
+            // console.log(player);
             players.push(player);
             
         }
-
-        console.log(players);
 
         return {
             id: data.tid + 1,
@@ -726,34 +734,64 @@ export default class TeamService {
         return averagePlayerRating;
     }
 
+    async handleSetInitialTeamDepthChart(team: ITeam) {
+        let depthChart = [];
+    
+        // Sort players by position
+        let sortedPlayers = team.players.sort((a, b) => {
+            // If players have the same position, sort by overall rating
+            if (a.ratings.position === b.ratings.position) {
+                return b.ratings.overall_rating - a.ratings.overall_rating;
+            }
+            // Otherwise, sort by position
+            return a.ratings.position.localeCompare(b.ratings.position);
+        });
+    
+        // Create depth chart
+        for (let player of sortedPlayers) {
+            let playerPositions = POSITION_MAPPING[player.ratings.position];
+            playerPositions.forEach(position => {
+                depthChart.push({
+                    team_id: team.id,
+                    player_id: player.id,
+                    position: position,
+                    rank: team.players.filter(p => POSITION_MAPPING[p.ratings.position].includes(position)).indexOf(player) + 1
+                });
+            });
+        }
+    
+        // Save depth chart to the database
+        await DepthChart.insertOrUpdate({ data: depthChart });
+    }
+
+    async handleUpdateTeamDepthChart(arr: DepthChart[]) {
+        console.log(arr);
+        await DepthChart.insertOrUpdate({ data: arr });
+    }
+
     debugGeneratedPlayers(teams: Team[]) {
         let allPlayers = teams.flatMap(team => team.players);
         let qbs: Player[] = allPlayers.filter(p => p.ratings.position === 'QB');
         qbs = qbs.sort((a, b) => b.ratings.throw_power - a.ratings.throw_power);
 
         let qb_ratings: Ratings[] = qbs.map(player => ({
-            overall: Math.round((player.ratings.throw_power + player.ratings.throw_accuracy_deep + player.ratings.throw_accuracy_mid + player.ratings.throw_accuracy_short) / 4),
-            throw_power: player.ratings.throw_power,
-            throw_accuracy_deep: player.ratings.throw_accuracy_deep,
-            throw_accuracy_mid: player.ratings.throw_accuracy_mid,
-            throw_accuracy_short: player.ratings.throw_accuracy_short
+            overall: Math.round(40 + (
+                (
+                    (player.ratings.throw_power * 0.3) + 
+                    (player.ratings.throw_accuracy_deep * 0.3) + 
+                    (player.ratings.throw_accuracy_mid * 0.25) + 
+                    (player.ratings.throw_accuracy_short * 0.2)
+                ) / 300) * 60
+            ),
+            throw_power: Math.round(40 + ((player.ratings.throw_power / 300) * 60)),
+            throw_accuracy_deep: Math.round(40 + ((player.ratings.throw_accuracy_deep / 300) * 60)),
+            throw_accuracy_mid: Math.round(40 + ((player.ratings.throw_accuracy_mid / 300) * 60)),
+            throw_accuracy_short: Math.round(40 + ((player.ratings.throw_accuracy_short / 300) * 60))
         }));
 
         qb_ratings = qb_ratings.sort((a, b) => b.overall - a.overall);
 
-        // console.log("Deep-Mid: " + qb_ratings.filter(p => (p.throw_accuracy_mid - p.throw_accuracy_deep) > 20).length);
-        // console.log("Mid-Short: " + qb_ratings.filter(p => p.throw_accuracy_mid == p.throw_accuracy_short).length);
-        // console.log("Deep-Short: " + qb_ratings.filter(p => p.throw_accuracy_deep == p.throw_accuracy_short).length);
-        // console.log("All-Three: " + qb_ratings.filter(p => p.throw_accuracy_mid == p.throw_accuracy_short && p.throw_accuracy_short == p.throw_accuracy_deep).length);
-
-        // console.log(allPlayers);
-
-        // console.log(old_players.players.flatMap(p => p.ratings).filter(r => r.pos === 'QB').map(t => ({
-        //     average: Math.round((t.thp + t.tha + t.thv) / 3),
-        //     thp: t.thp,
-        //     tha: t.tha,
-        //     thv: t.thv
-        // })).sort((a, b) => b.average - a.average));
+        console.log(qb_ratings);
 
         teams.forEach((team, index) => {
             let positionCounts = {};
@@ -763,8 +801,8 @@ export default class TeamService {
             }
         
             team.players.forEach(player => {
-                positionCounts[player.position].count++;
-                positionCounts[player.position].players.push(player);
+                positionCounts[player.ratings.position].count++;
+                positionCounts[player.ratings.position].players.push(player);
                 totalPlayers++; // Increment total players count
             });
         

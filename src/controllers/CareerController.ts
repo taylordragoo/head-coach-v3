@@ -26,7 +26,7 @@ class CareerController {
         return this.careerService.handleLoadSelectedCareer(name);
     }
 
-    public asyncsaveCareer: any = async () => {
+    public saveCareer: any = async () => {
         await this.careerService.handleSaveCareer();
     }
 

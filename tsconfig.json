@@ -1,26 +1,25 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "useDefineForClassFields": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "paths": {
-      "@/*": ["./src/*"],
-      "vue": ["./node_modules/vue/dist/vue.esm-bundler.js"]
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["src/*"]
+      },
+      "target": "esnext",
+      "useDefineForClassFields": false,
+      "module": "esnext",
+      "moduleResolution": "bundler",
+      "strict": true,
+      "jsx": "preserve",
+      "sourceMap": true,
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "lib": ["esnext", "dom"],
+      "skipLibCheck": true
     },
-    "strict": false,
-    "jsx": "preserve",
-    "allowJs": true,
-    "noImplicitAny": false,
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "lib": ["esnext", "dom"],
-    "skipLibCheck": true
-  },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
-  "references": [{ "path": "./tsconfig.node.json" }],
-  "exclude": ["node_modules", "dist", "public"]
-}
+    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
+    "references": [{ "path": "./tsconfig.node.json" }],
+    "exclude": ["node_modules", "dist", "public"]
+  }
+  
