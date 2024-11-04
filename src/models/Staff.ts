@@ -1,12 +1,12 @@
-import { Model } from '@vuex-orm/core'
+import { Model } from 'pinia-orm'
 import StaffContract from '@/models/StaffContract';
 
 export default class Staff extends Model {
-    static entity = 'staff'
+    static entity: string = 'staff'
 
     static fields() {
         return {
-            id: this.attr(null),
+            id: this.uid(),
             first_name: this.attr(''),
             last_name: this.attr(''),
             team_id: this.attr(0),
@@ -51,4 +51,40 @@ export default class Staff extends Model {
             medical_training: this.attr(0),
         }
     }
+
+    static piniaOptions = {
+        persist: true
+    }
+
+    declare id: number
+    declare first_name: string
+    declare last_name: string
+    declare team_id: number
+    declare role: string
+    declare contract: StaffContract
+    declare birth_year: number
+    declare leadership: number
+    declare adaptability: number
+    declare ambition: number
+    declare discipline: number
+    declare motivation: number
+    declare rookie_player_management: number
+    declare veteran_player_management: number
+    declare contract_negotiations: number
+    declare play_calling_ability: number
+    declare gameplan: number
+    declare data_analysis: number
+    declare player_ability_analysis: number
+    declare player_potential_analysis: number
+    declare staff_ability_analysis: number
+    declare offensive_technical: number
+    declare defensive_technical: number
+    declare throwing_technical: number
+    declare hands_technical: number
+    declare routes_technical: number
+    declare blocking_technical: number
+    declare tackling_technical: number
+    declare coverage_technical: number
+    declare dancing_training: number
+    declare medical_training: number
 }

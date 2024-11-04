@@ -1,4 +1,4 @@
-import { Model } from '@vuex-orm/core'
+import { Model } from 'pinia-orm'
 
 export default class Transaction extends Model {
     static entity = 'transaction'
@@ -10,4 +10,13 @@ export default class Transaction extends Model {
             year: this.number(null)
         }
     }
+
+    static piniaOptions = {
+        persist: true
+    }
+
+    declare id: number
+    declare pid: number
+    declare tid: number
+    declare year: number
 }

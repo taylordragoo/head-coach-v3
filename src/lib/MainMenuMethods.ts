@@ -10,6 +10,7 @@ const databaseController = DatabaseController.getInstance()
 
 export const handleGetDefaultTeamsAndLeagues = async () => {
     const data = await databaseController.initDefaultDatabase();
+    console.log(data);
     const leagues = data.leagues;
     const teams = data.teams;
     const players = data.players
@@ -33,7 +34,7 @@ export const handleAssignTeamsToLeagues = (leagues: League[], teams: Team[], pla
             league.teams?.push(team);
             let teamPlayers = players.filter(player => player.team_id === team.id);
             for (let player of teamPlayers) {
-                team.players.push(player);
+                team.players?.push(player);
             }
         }
     }
@@ -79,9 +80,9 @@ export const handleCreateNewCareer = (obj: any) => {
         first: obj.first,
         last: obj.last,
         age: obj.age,
-        exp: obj.exp.label,
-        skill: obj.skill.skill,
-        team_id: obj.team.id
+        exp: obj.exp,
+        skill: obj.skill,
+        team_id: obj.team_id
     }
     setTimeout(() => {
         databaseController.createNewDatabase(create_user)

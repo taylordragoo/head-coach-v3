@@ -98,10 +98,6 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue';
-import { FileService } from '@/service/FileService';
-import { useStore } from 'vuex';
-import { useLayout } from '@/layout/composables/layout';
 import World from "../../models/World";
 import League from "../../models/League";
 import User from "../../models/User";

@@ -1,3 +1,4 @@
+import { useRepo, Model } from 'pinia-orm'
 import User from '@/models/User';
 import World from '@/models/World';
 import League from '@/models/League';
@@ -7,6 +8,7 @@ import Match from "@/models/Match";
 import TrainingSchedule from "@/models/TrainingSchedule";
 import Activity from "@/models/Activity";
 import Born from "@/models/Born";
+import Budget from '@/models/Budget';
 import College from "@/models/College";
 import Conference from "@/models/Conference";
 import DepthChart from "@/models/DepthChart";
@@ -32,37 +34,75 @@ import Position from '@/models/Position';
 
 export function getModelConfig() {
     return {
-        user: User,
-        players: Player,
-        teams: Team,
-        matches: Match,
-        awards: Award,
-        transactions: Transaction,
-        draft: Draft,
-        health: Health,
-        born: Born,
-        ratings: Ratings,
-        college: College,
-        salaries: Salary,
-        stats: Stat,
-        injuries: Injury,
-        contracts: Contract,
-        staff_contracts: StaffContract,
-        relatives: Relative,
-        overalls: Overalls,
-        potentials: Potentials,
-        skills: Skill,
-        phases: Phase,
-        training_schedules: TrainingSchedule,
-        activities: Activity,
-        conference: Conference,
-        division: Division,
-        season: Season,
-        staff: Staff,
-        leagues: League,
-        world: World,
-        depthChart: DepthChart,
-        position: Position
+        'user': User,
+        'players': Player,
+        'teams': Team,
+        'matches': Match,
+        'awards': Award,
+        'transactions': Transaction,
+        'draft': Draft,
+        'health': Health,
+        'born': Born,
+        'ratings': Ratings,
+        'college': College,
+        'salaries': Salary,
+        'stats': Stat,
+        'injuries': Injury,
+        'contracts': Contract,
+        'staff_contracts': StaffContract,
+        'relatives': Relative,
+        'overalls': Overalls,
+        'potentials': Potentials,
+        'skills': Skill,
+        'phases': Phase,
+        'training_schedules': TrainingSchedule,
+        'activities': Activity,
+        'conference': Conference,
+        'division': Division,
+        'season': Season,
+        'staff': Staff,
+        'leagues': League,
+        'world': World,
+        'depthChart': DepthChart,
+        'position': Position,
+        'budget': Budget
+    }
+}
+
+export function getModelRepo(): any {
+    return {
+        'user': useRepo(User),
+        'players': useRepo(Player),
+        'teams': useRepo(Team),
+        'matches': useRepo(Match),
+        'awards': useRepo(Award),
+        'transactions': useRepo(Transaction),
+        'draft': useRepo(Draft),
+        'health': useRepo(Health),
+        'born': useRepo(Born),
+        'ratings': useRepo(Ratings),
+        'college': useRepo(College),
+        'salaries': useRepo(Salary),
+        'stats': useRepo(Stat),
+        'injuries': useRepo(Injury),
+        'contracts': useRepo(Contract),
+        'staff_contracts': useRepo(StaffContract),
+        'relatives': useRepo(Relative),
+        'overalls': useRepo(Overalls),
+        'potentials': useRepo(Potentials),
+        'skills': useRepo(Skill),
+        'phases': useRepo(Phase),
+        'training_schedules': useRepo(TrainingSchedule),
+        'activities': useRepo(Activity),
+        'conference': useRepo(Conference),
+        'division': useRepo(Division),
+        'season': useRepo(Season),
+        'staff': useRepo(Staff),
+        'leagues': useRepo(League),
+        'world': useRepo(World),
+        'depthChart': useRepo(DepthChart),
+        'position': useRepo(Position),
+        'budget': useRepo(Budget)
     }
 }
 
@@ -287,6 +327,9 @@ export const POSITIONS = [
     "S",
     "K",
     "P",
+    "OL",
+    "DL",
+    "LB",
 ];
 
 export const DEPTH_CHART_POSITIONS = [
@@ -320,7 +363,7 @@ export const DEPTH_CHART_POSITIONS = [
 
 export const POSITION_MAPPING = {
     "QB": ["QB"],
-    "RB": ["RB", "FB", "WR", "WR2", "WR3"],
+    "RB": ["RB", "FB"],
     "WR": ["WR", "WR2", "WR3"],
     "TE": ["TE"],
     "OT": ["LT", "RT"],
@@ -447,7 +490,7 @@ export const RATINGS_DISPLAY_NAMES = {
     "kick_power": "Kick Power"
 };
 
-export const POSITION_ARCHETYPES_DISPLAY_NAMES = {
+export const POSITION_ARCHETYPES_DISPLAY_NAMES: { [key: string]: string; } = {
     "field_general": "Field General",
     "scrambler": "Scrambler",
     "improviser": "Improviser",
@@ -546,7 +589,22 @@ export const POSITION_ARCHETYPES: Record<string, string[]> = {
     ],
     "P": [
         "physical"
-    ]
+    ],
+    "OL": [
+        "agile",
+        "power",
+        "pass_protector"
+    ],
+    "DL": [
+        "speed_rusher",
+        "power_rusher",
+        "run_stopper"
+    ],
+    "LB": [
+        "defensive_leader",
+        "pass_coverage",
+        "run_stopper"
+    ],
 }
 
 export const TECHNICAL_ARCHETYPES: {[key: string]: {[key: string]: number}} = {
@@ -1220,7 +1278,7 @@ export const RAW_MENTAL_ARCHETYPES = [
     "disruptor"
 ]
 
-export const MENTAL_ARCHETYPES_DISPLAY_NAMES = {
+export const MENTAL_ARCHETYPES_DISPLAY_NAMES: { [key: string]: string; } = {
     "leader": "Leader",
     "competitor": "Competitor",
     "strategist": "Strategist",

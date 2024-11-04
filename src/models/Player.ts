@@ -1,4 +1,4 @@
-import { Model } from '@vuex-orm/core';
+import { Model } from 'pinia-orm'
 import Salary from "@/models/Salary";
 import Stat from "@/models/Stat";
 import Injury from "@/models/Injury";
@@ -12,6 +12,7 @@ import Relative from "@/models/Relative";
 import Award from "@/models/Award";
 import Health from "@/models/Health";
 import Position from '@/models/Position';
+import { getModelRepo } from '@/data/constants';
 
 export default class Player extends Model {
     static entity: string = 'player';
@@ -19,7 +20,7 @@ export default class Player extends Model {
     static fields() {
         return {
             // Attributes
-            id: this.attr(null),
+            id: this.attr(0),
             pid: this.attr(0),
             team_id: this.attr(0),
             first_name: this.attr(''),
@@ -44,9 +45,9 @@ export default class Player extends Model {
             position: this.hasMany(Position, 'player_id'),
             born: this.hasOne(Born, 'pid'),
             college: this.belongsTo(College, 'college_id'),
-            contract: this.hasOne(Contract, 'pid'),
+            contract: this.hasOne(Contract, 'player_id'),
             draft: this.hasOne(Draft, 'pid'),
-            ratings: this.hasOne(Ratings, 'pid'),
+            ratings: this.hasMany(Ratings, 'pid'),
             health: this.hasOne(Health, 'pid'),
             injuries: this.hasMany(Injury, 'pid'),
             relatives: this.hasMany(Relative, 'pid'),
@@ -57,48 +58,52 @@ export default class Player extends Model {
         }
     }
 
-    id!: number;
-    pid!: number;
-    team_id!: number;
-    first_name!: string;
-    last_name!: string;
-    img_url!: string;
-    height!: number;
-    weight!: number;
-    college_id!: number;
-    days_until_can_trade!: number;
-    retired_year!: number;
-    roster_order!: number;
-    years_free_agent!: number;
-    value!: number;
-    value_no_pot!: number;
-    value_fuzz!: number;
-    value_no_pot_fuzz!: number;
-    position_archetype!: string;
-    mental_archetype!: string;
+    static piniaOptions = {
+        persist: true
+    }
     
-    base_rating!: number;
+    declare id: number;
+    declare pid: number;
+    declare team_id: number;
+    declare first_name: string;
+    declare last_name: string;
+    declare img_url: string;
+    declare height: number;
+    declare weight: number;
+    declare college_id: number;
+    declare days_until_can_trade: number;
+    declare retired_year: number;
+    declare roster_order: number;
+    declare years_free_agent: number;
+    declare value: number;
+    declare value_no_pot: number;
+    declare value_fuzz: number;
+    declare value_no_pot_fuzz: number;
+    declare position_archetype: string;
+    declare mental_archetype: string;
+    declare base_rating: number;
 
-    position!: Position[];
-    born!: Born;
-    college!: College;
-    contract!: Contract;
-    draft!: Draft;
-    ratings!: Ratings;
-    health!: Health;
-    injuries!: Injury[];
-    relatives!: Relative[];
-    salaries!: Salary[];
-    stats!: Stat[];
-    transactions!: Transaction[];
-    awards!: Award[];
+    declare position: Position[];
+    declare born: Born;
+    declare college: College;
+    declare contract: Contract;
+    declare draft: Draft;
+    declare ratings: Ratings;
+    declare health: Health;
+    declare injuries: Injury[];
+    declare relatives: Relative[];
+    declare salaries: Salary[];
+    declare stats: Stat[];
+    declare transactions: Transaction[];
+    declare awards: Award[];
 
     get full_name () {
         return `${this.first_name} ${this.last_name}`
     }
 
     get player_exp () {
-        let draft = Draft.query().where('pid', this.pid).first();
+        let modelRepo = getModelRepo();
+        let draft = modelRepo.draft.query().where('pid', this.pid).first();
         return draft ? (2024 - draft.year) : 0;
     }
 }

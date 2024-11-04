@@ -201,7 +201,7 @@ export default {
         this.initializeData()
     },
     mounted() {
-        this.$store.dispatch('resetState')
+        // this.$store.dispatch('resetState')
     },
     watch: {
         value1() {
@@ -217,6 +217,7 @@ export default {
             const data = await handleGetDefaultTeamsAndLeagues();
             this.leagues = data.leagues
             this.teams = data.teams
+            this.leagues[0].teams = this.teams
             this.players = data.players
             this.treeTableValue = data.treeTableValue
             this.databases = data.databases

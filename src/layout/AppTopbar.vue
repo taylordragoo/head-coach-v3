@@ -1,8 +1,9 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
+import { useRepo } from 'pinia-orm'
 import moment from 'moment';
 import AppBreadcrumb from './AppBreadcrumb.vue';
 import World from "../models/World";
@@ -13,38 +14,12 @@ import Player from "../models/Player";
 import Staff from "../models/Staff";
 import { CareerController } from "@/controllers";
 
-
 const { layoutState, isDarkTheme, onMenuToggle, onConfigSidebarToggle } = useLayout();
-
+const value1 = ref(0);
+const loadingDialog = ref(false);
+const interval = ref(null);
 const router = useRouter();
-
-const goBack = () => {
-    router.go(-1); // Go back in history
-};
-
-const goForward = () => {
-    router.go(1); // Go forward in history
-};
-
 const careerController = CareerController.getInstance();
-
-const user = computed(() => {
-    return User.query().with('team', (query) => {
-        query.with('players', (query) => {
-            query.with('ratings.overalls|potentials');
-        })
-    }).first();
-})
-
-const world = computed(() => {
-    return World.query().with('leagues.teams.players.*').first()
-})
-
-const league_phase = computed(() => {
-    const league = League.query().where('id', user?.value.team?.lid).first();
-    return league?.phase_name || 'Unknown';
-});
-
 const notificationsBars = [
     {
         id: 'inbox',
@@ -60,9 +35,6 @@ const notificationsBars = [
         label: 'Archived'
     }
 ];
-
-const selectedNotificationBar = ref(notificationsBars?.[0].id ?? 'inbox');
-
 const notifications = [
     {
         id: 'inbox',
@@ -129,16 +101,85 @@ const notifications = [
         ]
     }
 ];
-
+const selectedNotificationBar = ref(notificationsBars?.[0].id ?? 'inbox');
 function toggleSearchBar() {
     layoutState.searchBarActive = !layoutState.searchBarActive;
 }
-
 function showRightMenu() {
     layoutState.rightMenuVisible = !layoutState.rightMenuVisible;
 }
 
+const goBack = () => {
+    router.go(-1);
+};
+const goForward = () => {
+    router.go(1);
+};
+const user = computed(() => {
+    const userRepo = useRepo(User);
+    return userRepo.query().with('team', (query) => {
+        query.with('players', (query) => {
+            query.with('ratings');
+        })
+    }).first();
+})
+const world = computed(() => {
+    const worldRepo = useRepo(World);
+    return worldRepo.query().with('leagues', (query) => {
+        query.with('teams', (query) => {
+            query
+                .with('head_coach')
+                .with('offensive_coordinator')
+                .with('defensive_coordinator')
+                .with('qb_coach')
+                .with('rb_coach')
+                .with('te_coach')
+                .with('wr_coach')
+                .with('oline_coach')
+                .with('dline_coach')
+                .with('linebacker_coach')
+                .with('secondary_coach')
+                .with('special_teams_coach')
+                .with('strength_coach')
+                .with('coach')
+                .with('owner')
+                .with('president')
+                .with('chief_executive_officer')
+                .with('general_manager')
+                .with('director_pro_scouting')
+                .with('director_college_scouting')
+                .with('scout')
+                .with('sports_medicine_director')
+                .with('doctor')
+                .with('trainer')
+                .with('budget')
+                .with('depthChart')
+                .with('players', (query) => {
+                    query.with('ratings')
+                        .with('position')
+                        .with('contract')
+                        .with('born')
+                        .with('injuries')
+                        .with('health')
+                        .with('draft')
+                })
+        });
+    }).first()
+})
+watch(value1, (newValue) => {
+  if(newValue > 100) {
+    endProgress();
+    loadingDialog.value = false;
+    console.log("Loading over");
+  }
+});
+const league_phase = computed(() => {
+    const leagueRepo = useRepo(League);
+    const league = leagueRepo.query().where('id', 0).first();
+    return league?.phase_name || 'Unknown';
+});
 const onTopbarContMenuButtonClick = async (event) => {
+    openContinue();
     continueToTomorrow(world.value.date);
     setTimeout(() => {
         careerController.continueCareer();
@@ -147,15 +188,9 @@ const onTopbarContMenuButtonClick = async (event) => {
 const continueToTomorrow = (date) => {
     console.log(date);
     const new_date = getHumanDate(getTomorrow(date))
-
-    World.update({
-        where: (world) => {
-            return world.id === 0
-        },
-        data: {
-            date: new_date
-        }
-    })
+    console.log(new_date);
+    const worldRepo = useRepo(World);
+    worldRepo.where('id', 0).update({date: new_date});
 }
 const getHumanDate = (date) => {
     return moment(date).format('MM/DD/YYYY');
@@ -165,11 +200,34 @@ const getTomorrow = (date) => {
     return new_date;
 }
 const openContinue = () => {
-    this.loadingDialog = true;
-    const players = Player.query().where('tid', 0).get();
-    this.restartTimer();
+    loadingDialog.value = true;
+    restartTimer();
 }
-
+const restartTimer = () => {
+    clearInterval(interval.value);
+    value1.value = 0;
+    setTimeout(() => {
+        startProgress();
+    }, 100);
+}
+const startProgress = () => {
+    interval.value = setInterval(() => {
+        let newValue = value1.value + Math.floor(Math.random() * 10) + 1;
+        value1.value = newValue;
+        console.log(value1.value);
+    }, 500);
+}
+const endProgress = () => {
+    console.log('ending loading')
+    clearInterval(interval.value);
+    interval.value = null;
+    setTimeout(() => {
+        hideDialog()
+    }, 500);
+}
+const hideDialog = () => {
+    loadingDialog.value = false;
+}
 const saveData = () => {
     careerController.saveCareer();
 }
@@ -290,7 +348,6 @@ const saveData = () => {
 
                 <li>
                     <div class="flex items-center gap-2">
-                        <!-- <img class="w-13 h-13 rounded-lg object-cover border border-surface-200 dark:border-surface-800" :src="item.image" alt="Order Image" /> -->
                         <div class="flex-1">
                             <div class="label-small text-left text-surface-950 dark:text-surface-0">{{ league_phase }}</div>
                             <time class="mt-1 body-xsmall">{{ world?.date }}</time>
@@ -334,5 +391,15 @@ const saveData = () => {
 
             </ul>
         </div>
+        <Dialog v-model:visible="loadingDialog" :style="{width: '800px'}" :draggable="false" :closable="false" :modal="true" class='p-fluid bg-white'>
+            <div class="justify-content-center">
+                <h5>Loading...</h5>
+                <div class="grid">
+                    <div class="col">
+                        <ProgressBar :value="value1" show-progress variant="success" mode="determinate" :showValue="false"> Percent Complete: {{value1}}% </ProgressBar>
+                    </div>
+                </div>
+            </div>
+        </Dialog>
     </div>
 </template>

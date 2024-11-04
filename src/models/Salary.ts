@@ -1,4 +1,4 @@
-import { Model } from '@vuex-orm/core'
+import { Model } from 'pinia-orm'
 
 export default class Salary extends Model {
     static entity = 'salaries'
@@ -10,4 +10,13 @@ export default class Salary extends Model {
             season: this.number(null)
         }
     }
+
+    static piniaOptions = {
+        persist: true
+    }
+
+    declare id: number
+    declare player_id: number
+    declare amount: number
+    declare season: number
 }

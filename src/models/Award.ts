@@ -1,4 +1,4 @@
-import { Model } from '@vuex-orm/core'
+import { Model } from 'pinia-orm'
 
 export default class Award extends Model {
 	static entity = 'awards'
@@ -10,4 +10,13 @@ export default class Award extends Model {
 			year: this.string(''),
 		}
 	}
+
+    static piniaOptions = {
+        persist: true
+    }
+
+    declare id: number
+    declare pid: number
+    declare name: string
+    declare year: string
 }

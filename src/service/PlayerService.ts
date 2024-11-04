@@ -1,37 +1,12 @@
-import Player from '@/models/Player';
-import Ratings from '@/models/Ratings';
-import IRating from '@/interfaces/IRating';
-import Overalls from '@/models/Overalls';
-import Potentials from '@/models/Potentials';
 import * as faker from 'faker';
-import data from '@/data/colleges.json';
-import players from '@/data/players.json';
-import profiles from '@/data/profiles.json';
+import players from '@/data/newPlayers.json';
+import colleges from '@/data/colleges.json';
 import Utilities from '@/utils/utilities';
-import { MIN_POSITION_COUNTS, MAX_POSITION_COUNTS, POSITIONS, POSITION_ARCHETYPES, TECHNICAL_ARCHETYPES, MENTAL_ARCHETYPES, POSITION_MAPPING } from '@/data/constants';
-
-// Set general Min/Max Height and Weight for all players
-// Determine position based on ratings
-// Adjust actual Min/Max height and weight based on position
-// Generate height and weight based on adjusted Min/Max using:
-// player.height = Math.round(random.randInt(-2, 2) + player.ratings[0].stamina * (maxHgt - minHgt) / 100 + minHgt);
-// player.weight = Math.round(random.randInt(-20, 20) + (player.ratings[0].stamina + 0.5 * p.ratings[0].stre) * (maxWeight - minWeight) / 150 + minWeight);
-// Set nationality to USA
-// Set Age and Location
-// Determine player name based on nationality
-// Generate Draft data for player
-// Generate value and value fuzz
-// Generate contract for player
-// 0 = 20 = 40
-// 50 = 30 = 50
-// 100 = 40 = 60
-// 150 = 50 = 70
-// 200 = 60 = 80
-// 250 = 70 = 90
-// 300 = 80 = 100
+import { MIN_POSITION_COUNTS, MAX_POSITION_COUNTS, POSITIONS, POSITION_ARCHETYPES, TECHNICAL_ARCHETYPES, MENTAL_ARCHETYPES, POSITION_MAPPING, getModelRepo } from '@/data/constants';
 
 export default class PlayerService {
     private static instance: PlayerService;
+    public modelRepo = getModelRepo();
 
     constructor() {}
 
@@ -43,21 +18,161 @@ export default class PlayerService {
         return PlayerService.instance;
     }
 
-    async handleGeneratePlayer(p: any) {
-        // let player: IPlayer = {}
-        let player = new Player();
-        player.team_id = p.team_id;
-        let name = this.generatePlayerName();
-        player.first_name = name.first_name;
-        player.last_name = name.last_name;
-        player.ratings = this.generateRatings(p);
-        player.position = [
-            {
-                position: p.pos
-            }
-        ];
+    handleCreatePlayers() {
+        const _players = players.players.map(player => {
+            return this.handleGeneratePlayer(player);
+        })
+    }
 
-        return player;
+    async handleGeneratePlayer(p: any) {
+        let college = colleges.colleges.find((c) => c.region === p.college) || {"tid": 0, "id": 0, "did": 1, "region": "Duke", "name": "Blue Devils", "abbrev": "DUKE", "pop": 320, "city": "Durham ", "state": "NC", "latitude": 35.988, "longitude": -78.907};
+        let player = {
+            id: p.pid,
+            pid: p.pid,
+            team_id: p.tid >= 0 ? (p.tid + 1) : p.tid,
+            first_name: p.firstName,
+            last_name: p.lastName,
+            height: p.hgt,
+            weight: p.weight,
+            value: p.value,
+            value_no_pot: p.valueNoPot,
+            value_fuzz: p.valueFuzz,
+            value_no_pot_fuzz: p.valueNoPotFuzz,
+            college_id: college.id
+        }
+        player = await this.modelRepo.players.save(player);
+        let health = {
+            pid: p.pid,
+            status: p.injury.type
+        }
+        health = await this.modelRepo.health.save(health);
+        let born = {
+            pid: p.pid,
+            year: p.born.year,
+            location: p.born.loc
+        }
+        born = await this.modelRepo.born.save(born);
+        let contract = {
+            player_id: p.pid,
+            amount: p.contract.amount,
+            expires: p.contract.exp
+        }
+        contract = await this.modelRepo.contracts.save(contract);
+        let draft = {
+            pid: p.pid,
+            round: p.draft.round,
+            pick: p.draft.pick,
+            year: p.draft.year,
+            pot: p.draft.pot,
+            ovr: p.draft.ovr,
+            orig_team_id: p.draft.tid
+        }
+        draft = await this.modelRepo.draft.save(draft);
+        let ratings = p.ratings.map((rating: any) => ({
+            pid: p.pid,
+            position: rating.pos,
+            // fuzz: rating.fuzz,
+            // overall: rating.ovr,
+            // potential: rating.pot,
+            season: rating.season,
+            position_archetype: this.getArchetypeByPosition(rating.pos),
+            mental_archetype: this.getMentalArchetype(),
+            // Mental
+            // aggresion: this.initialRating(),
+            // aniticipation: this.initialRating(),
+            // bravery: this.initialRating(),
+            // composure: this.initialRating(),
+            // concentration: this.initialRating(),
+            // decisions: this.initialRating(),
+            // determination: this.initialRating(),
+            // flair: this.initialRating(),
+            // leadership: this.initialRating(),
+            // off_the_ball: this.initialRating(),
+            // positioning: this.initialRating(),
+            // teamwork: this.initialRating(),
+            // vision: this.initialRating(),
+            // work_rate: this.initialRating(),
+            // Physical
+            speed: rating.spd,
+            acceleration: rating.spd,
+            // agility: rating.elu,
+            strength: rating.stre,
+            // vertical: rating.elu,
+            stamina: rating.endu,
+            // Throwing
+            throw_power: rating.thp,
+            throw_accuracy_short: rating.tha,
+            // throw_accuracy_mid: rating.tha,
+            // throw_accuracy_deep: rating.tha,
+            // throw_on_the_run: rating.thv,
+            play_action: rating.thv,
+            // Ballcarrier
+            carrying: rating.bsc,
+            break_tackle: rating.elu,
+            // stiff_arm: rating.elu,
+            // spin_move: rating.elu,
+            // trucking: rating.elu,
+            // juking: rating.elu,
+            // Receiving
+            short_route_running: rating.rtr,
+            // medium_route_running: rating.rtr,
+            // deep_route_running: rating.rtr,
+            catching: rating.hnd,
+            release: rating.rtr,
+            // catch_in_traffic: rating.rtr,
+            // Blocking
+            run_blocking: rating.rbk,
+            pass_blocking: rating.pbk,
+            // run_block_power: rating.rbk,
+            // pass_block_power: rating.pbk,
+            // run_block_finesse: rating.rbk,
+            // pass_block_finesse: rating.pbk,
+            // Defensive
+            shed_block: rating.rns,
+            tackle: rating.tck,
+            // hit_power: rating.prs,
+            // play_recognition: rating.tck,
+            // pursuit: rating.tck,
+            man_coverage: rating.pcv,
+            zone_coverage: rating.pcv,
+            press: rating.prs,
+            // Kicking
+            kick_power: rating.kpw,
+            kick_accuracy: rating.kac,
+            punt_power: rating.ppw,
+            punt_accuracy: rating.pac,
+            // overalls: {
+            //     QB: rating.ovrs.QB,
+            //     RB: rating.ovrs.RB,
+            //     WR: rating.ovrs.WR,
+            //     TE: rating.ovrs.TE,
+            //     OL: rating.ovrs.OL,
+            //     DL: rating.ovrs.DL,
+            //     LB: rating.ovrs.LB,
+            //     CB: rating.ovrs.CB,
+            //     S: rating.ovrs.S,
+            //     K: rating.ovrs.K,
+            //     P: rating.ovrs.P
+            // },
+            // potentials: {
+            //     QB: rating.pots.QB,
+            //     RB: rating.pots.RB,
+            //     WR: rating.pots.WR,
+            //     TE: rating.pots.TE,
+            //     OL: rating.pots.OL,
+            //     DL: rating.pots.DL,
+            //     LB: rating.pots.LB,
+            //     CB: rating.pots.CB,
+            //     S: rating.pots.S,
+            //     K: rating.pots.K,
+            //     P: rating.pots.P
+            // }
+        }));
+        ratings = await this.modelRepo.ratings.save(ratings);
+        // let salaries = p.salaries[0];
+        // salaries = await this.modelRepo.salaries.save(salaries);
+
+        return this.modelRepo.players.find(p.pid);
     }
 
     generateRatings(p: any) {
@@ -65,24 +180,26 @@ export default class PlayerService {
         let rawRatings: any = {};
         let ratings: any = {};
 
-        rawRatings.overall = 0;
-        rawRatings.potential = 0;
-        rawRatings.fuzz = 0;
-        rawRatings.position = '';
+        // rawRatings.overall = 0;
+        // rawRatings.potential = 0;
+        // rawRatings.fuzz = 0;
+        // rawRatings.position = '';
         rawRatings.position_archetype = '';
         rawRatings.mental_archetype = '';
 
-        for (let key in Ratings.fields()) {
-            if (typeof (Ratings.fields() as any)[key].value === 'number') {
-                rawRatings[key] = this.initialRating();
-            }
-        }
+        const excludedAttributes = ['id', 'pid', 'position', 'position_archetype', 'mental_archetype'];
+
+        // for (let key in Ratings.fields()) {
+        //     if (!excludedAttributes.includes(key)) {
+        //         rawRatings[key] = this.initialRating();
+        //     }
+        // }
     
         const position_archetype = this.getArchetypeByPosition(pos);
         const mental_archetype = this.getMentalArchetype();
         const ratingsToBoost = this.getRatingsBoostByPosition(mental_archetype, position_archetype);
     
-        rawRatings.position = pos;
+        // rawRatings.position = pos;
         rawRatings.position_archetype = position_archetype;
         rawRatings.mental_archetype = mental_archetype;
         rawRatings = this.boundRatingsByPosition(rawRatings, pos, mental_archetype, position_archetype, ratingsToBoost);
@@ -100,7 +217,6 @@ export default class PlayerService {
         let cumsum = 0;
 
         for (let i = 0; i < POSITIONS.length; i++) {
-            // @ts-ignore
             cumsum += MAX_POSITION_COUNTS[POSITIONS[i]];
 
             if (rand < cumsum) {
@@ -128,12 +244,13 @@ export default class PlayerService {
     }
     
     initialRating() {
-        return this.limitRating(Utilities.truncGauss(30, 30, 0, 120));
+        const rating = this.limitRating(Utilities.truncGauss(10, 10, 0, 40));
+        return rating;
     }
 
     limitRating(rating: number) {
-        if (rating > 300) {
-            return 300;
+        if (rating > 100) {
+            return 100;
         }
         if (rating < 0) {
             return 0;

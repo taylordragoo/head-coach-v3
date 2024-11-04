@@ -1,4 +1,4 @@
-import { Model } from '@vuex-orm/core'
+import { Model } from 'pinia-orm'
 
 export default class Skill extends Model {
 	static entity = 'skills'
@@ -9,4 +9,12 @@ export default class Skill extends Model {
 			name: this.string(''),
 		}
 	}
+
+    static piniaOptions = {
+        persist: true
+    }
+
+    declare id: number
+    declare pid: number
+    declare name: string
 }

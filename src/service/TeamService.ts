@@ -1,22 +1,29 @@
+import { useRepo } from 'pinia-orm'
 import Team from '@/models/Team';
 import League from '@/models/League';
 import Player from '@/models/Player';
+import Staff from '@/models/Staff';
 import Ratings from '@/models/Ratings';
 import Overalls from '@/models/Overalls';
 import Potentials from '@/models/Potentials';
 import DepthChart from '@/models/DepthChart';
+import Budget from '@/models/Budget';
 import * as faker from 'faker';
 import ITeam from '@/interfaces/ITeam';
 import utils from '@/utils/utilities';
 import PlayerService from '@/service/PlayerService';
 import team_data from '@/data/teams.json';
-import old_players from '@/data/players.json';
-import { MIN_POSITION_COUNTS, MAX_POSITION_COUNTS, POSITIONS, POSITION_MAPPING } from '@/data/constants';
+import player_data from '@/data/newPlayers.json';
+import { MIN_POSITION_COUNTS, MAX_POSITION_COUNTS, POSITIONS, POSITION_MAPPING, getModelRepo } from '@/data/constants';
 
 export default class TeamService {
     private static instance: TeamService;
+    public playerService: PlayerService;
+    public modelRepo = getModelRepo();
 
-    constructor() {}
+    constructor() {
+        this.playerService = PlayerService.getInstance();
+    }
 
     public static getInstance(): TeamService {
         if (!TeamService.instance) {
@@ -30,68 +37,35 @@ export default class TeamService {
     {
         const _teams = await Promise.all(teams.map(team => this.handleGenerateTeam(team)));
 
-        // this.debugGeneratedPlayers(_teams);
-        await Team.insert({
-            data: _teams
-        })
+        let p: Player[] = player_data.players;
+        const _players: Player[] = await Promise.all(p.map(player => {
+            return this.playerService.handleGeneratePlayer(player);
+        }));
 
-        let all_teams = Team.query().with('players.ratings').get();
-
-        // Set depth chart for each team
-        for (let team of all_teams) {
-            await this.handleSetInitialTeamDepthChart(team);
-        }
+        await this.modelRepo.teams.save(_teams)
         
-        return "Teams created"
+        let all_teams = this.modelRepo.teams.with('players', (query) => {
+            query.with('ratings');
+        }).get();
+
+        console.log(all_teams)
+        
+        // const playersRepo = useRepo(Player);
+        // await playersRepo.save(_players);
+
+        // for (let team of all_teams) {
+        //     await this.handleSetInitialTeamDepthChart(team);
+        // }
+        
+        return "Teams and Players created"
     }
 
     async handleGenerateTeam(data: any) {
-        // console.log(data);
-        let ps = PlayerService.getInstance();
-        let agingYears, draftYear, n, players;
         const staff = this.generateStaffForTeam(data.tid + 1);
-        players = [];
+        const staffArray = Object.values(staff);
+        await this.modelRepo.staff.save(staffArray)
 
-        // Initialize currentPositionCounts
-        let currentPositionCounts = {};
-        for (let position of POSITIONS) {
-            currentPositionCounts[position] = 0;
-        }
-        
-        for(n = 0; n < 90; n++) {
-            agingYears = utils.randInt(0, 10);
-            draftYear = 2024 - 1 - agingYears;
-            let position = this.getPosition(currentPositionCounts);
-
-            let adj2 = 0;
-            if(agingYears > 5) {
-                adj2 += 10;
-            }
-            if(agingYears > 8) {
-                adj2 += 1;
-            }
-            if(agingYears > 12) {
-                adj2 += 1;
-            }
-
-            let player = await ps.handleGeneratePlayer({
-                team_id: data.tid + 1,
-                age: (2024 - draftYear) + 21,
-                draftYear: draftYear,
-                pos: position
-            });
-
-            // player.position = player.ratings.position;
-            player.position_archetype = player.ratings.position_archetype;
-            player.mental_archetype = player.ratings.mental_archetype;
-
-            // Increment the count for the player's position
-            currentPositionCounts[player.ratings.position]++;
-
-            // console.log(player);
-            players.push(player);
-            
-        }
+        this.generateBudgetForTeam(data.tid + 1, data);
 
         return {
             id: data.tid + 1,
@@ -104,54 +78,35 @@ export default class TeamService {
             abbreviation: data.abbrev,
             img_url: data.img_url,
             country: 'USA',
-            budget: {
-                scouting: {
-                    amount: data.budget.scouting.amount,
-                    rank: data.budget.scouting.rank,
-                },
-                coaching: {
-                    rank: data.budget.coaching.rank,
-                    amount: data.budget.coaching.amount,
-                },
-                health: {
-                    rank: data.budget.health.rank,
-                    amount: data.budget.health.amount,
-                },
-                facilities: {
-                    rank: data.budget.facilities.rank,
-                    amount: data.budget.facilities.amount,
-                }
-            },
             strategy: data.strategy,
             population: data.pop,
-            stadium_capacity: data.stadiumCapacity,
-            seasons: data.seasons,
-            head_coach: staff.head_coach,
-            offensive_coordinator: staff.offensive_coordinator,
-            defensive_coordinator: staff.defensive_coordinator,
-            qb_coach: staff.qb_coach,
-            rb_coach: staff.rb_coach,
-            te_coach: staff.te_coach,
-            wr_coach: staff.wr_coach,
-            oline_coach: staff.oline_coach,
-            dline_coach: staff.dline_coach,
-            linebacker_coach: staff.linebacker_coach,
-            secondary_coach: staff.secondary_coach,
-            special_teams_coach: staff.special_teams_coach,
-            strength_coach: staff.strength_coach,
-            coach: [staff.coach],
-            owner: staff.owner,
-            chief_executive_officer: staff.chief_executive_officer,
-            president: staff.president,
-            general_manager: staff.general_manager,
-            director_pro_scouting: staff.director_pro_scouting,
-            director_college_scouting: staff.director_college_scouting,
-            scout: [staff.scout],
-            sports_medicine_director: staff.sports_medicine_director,
-            doctor: [staff.doctor],
-            trainer: [staff.trainer],
-            players: players
+            stadium_capacity: data.stadiumCapacity
         }
+    }
+
+    generateBudgetForTeam(teamId: number, data: any) {
+        this.modelRepo.budget.save([
+            {
+                team_id: teamId,
+                type: 'scouting',
+                amount: data.budget.scouting.amount,
+            },
+            {
+                team_id: teamId,
+                type: 'coaching',
+                amount: data.budget.coaching.amount,
+            },
+            {
+                team_id: teamId,
+                type: 'health',
+                amount: data.budget.health.amount,
+            },
+            {
+                team_id: teamId,
+                type: 'facilities',
+                amount: data.budget.facilities.amount,
+            }
+        ])
     }
 
     getPosition(currentPositionCounts: any) {
@@ -211,7 +166,7 @@ export default class TeamService {
             role: role,
             contract: {
                 amount: faker.datatype.number({min: 100000, max: 1000000}),
-                expires: faker.datatype.number({ min: 2025, max: 2030 }),
+                expires: faker.datatype.number({ min: 2025, max: 2030 })
             },
             leadership: faker.datatype.number({min: 10, max: 20}),
             adaptability: faker.datatype.number({min: 10, max: 20}),
@@ -696,25 +651,17 @@ export default class TeamService {
     }
 
     handleGetDefaultTeams() {
-        const teams: Team[] = Team.all().map(team => {
-            const newTeam = new Team();
-            Object.assign(newTeam, team, {
-                budget: {
-                    scouting: { amount: team.budget.scouting.amount, rank: team.budget.scouting.rank },
-                    coaching: { amount: team.budget.coaching.amount, rank: team.budget.coaching.rank },
-                    health: { amount: team.budget.health.amount, rank: team.budget.health.rank },
-                    facilities: { amount: team.budget.facilities.amount, rank: team.budget.facilities.rank },
-                },
-                coach: { ...team.coach },
-            });
-            return newTeam;
+        const teamRepo = useRepo(Team);
+        const teams: Team[] = teamRepo.all().map(team => {
+            return team;
         });
 
         return teams;
     }
 
-    public async evaluateTeamPerformance(teamId: number, ratingsMap: Map<number, Ratings>): Promise<number> {
-        const team = Team.query().with('players').where('id', teamId).first();
+    public async evaluateTeamPerformance(teamId: number): Promise<number> {
+        const teamsRepo = useRepo(Team);
+        const team = teamsRepo.query().with('players', query => query.with('ratings')).where('id', teamId).first();
 
         if (!team) {
             throw new Error(`Team with id ${teamId} not found`);
@@ -722,21 +669,18 @@ export default class TeamService {
 
         let totalPlayerRating = 0;
 
-        team.players.forEach((player: Player) => {
-            const playerRating = ratingsMap.get(player.pid);
-            if (playerRating) {
-                totalPlayerRating += playerRating.overall;
-            }
+        team.players?.forEach((player: Player) => {
+            totalPlayerRating += player.ratings.overall_rating;
         });
 
-        const averagePlayerRating = totalPlayerRating / team.players.length;
+        const averagePlayerRating = totalPlayerRating / (team.players?.length ?? 0);
         
         return averagePlayerRating;
     }
 
     async handleSetInitialTeamDepthChart(team: ITeam) {
-        let depthChart = [];
-    
+        let depthChart: any[] = [];
+
         // Sort players by position
         let sortedPlayers = team.players.sort((a, b) => {
             // If players have the same position, sort by overall rating
@@ -746,27 +690,45 @@ export default class TeamService {
             // Otherwise, sort by position
             return a.ratings.position.localeCompare(b.ratings.position);
         });
-    
-        // Create depth chart
+
+        // Create a map to store the top 5 players for each position
+        let positionMap = new Map();
+
+        // Populate the position map with the top 5 players for each position
         for (let player of sortedPlayers) {
             let playerPositions = POSITION_MAPPING[player.ratings.position];
             playerPositions.forEach(position => {
+                if (!positionMap.has(position)) {
+                    positionMap.set(position, []);
+                }
+                let positionPlayers = positionMap.get(position);
+                if (positionPlayers.length < 5) {
+                    positionPlayers.push(player);
+                }
+            });
+        }
+
+        // Create depth chart from the position map
+        positionMap.forEach((players, position) => {
+            players.forEach((player, index) => {
                 depthChart.push({
                     team_id: team.id,
                     player_id: player.id,
                     position: position,
-                    rank: team.players.filter(p => POSITION_MAPPING[p.ratings.position].includes(position)).indexOf(player) + 1
+                    rank: index + 1
                 });
             });
-        }
-    
+        });
+
+        const depth_chart = useRepo(DepthChart);
         // Save depth chart to the database
-        await DepthChart.insertOrUpdate({ data: depthChart });
+        await depth_chart.save([...depthChart]);
     }
 
     async handleUpdateTeamDepthChart(arr: DepthChart[]) {
         console.log(arr);
-        await DepthChart.insertOrUpdate({ data: arr });
+        const depth_chart = useRepo(DepthChart);
+        await depth_chart.update(arr);
     }
 
     debugGeneratedPlayers(teams: Team[]) {

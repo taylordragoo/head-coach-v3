@@ -1,7 +1,7 @@
-import { Model } from '@vuex-orm/core'
+import { Model } from 'pinia-orm'
 
-class Potentials extends Model {
-    static entity = 'potentials'
+export default class Potentials extends Model {
+    static entity: string = 'potentials'
     static fields () {
         return {
             id: this.uid(),
@@ -20,19 +20,21 @@ class Potentials extends Model {
         }
     }
 
-    id!: number
-    rating_id!: number
-    QB!: number
-    RB!: number
-    WR!: number
-    TE!: number
-    OL!: number
-    DL!: number
-    LB!: number
-    CB!: number
-    S!: number
-    K!: number
-    P!: number
-}
+    static piniaOptions = {
+        persist: true
+    }
 
-export default Potentials
+    declare id: number
+    declare rating_id: number
+    declare QB: number
+    declare RB: number
+    declare WR: number
+    declare TE: number
+    declare OL: number
+    declare DL: number
+    declare LB: number
+    declare CB: number
+    declare S: number
+    declare K: number
+    declare P: number
+}

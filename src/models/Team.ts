@@ -1,10 +1,10 @@
-import { Model } from '@vuex-orm/core'
+import { Model } from 'pinia-orm'
 import Season from '@/models/Season';
 import Stat from '@/models/Stat';
 import Player from '@/models/Player';
 import League from "@/models/League";
 import Staff from '@/models/Staff';
-import Contract from '@/models/Contract';
+import Budget from '@/models/Budget';
 import DepthChart from '@/models/DepthChart';
 
 export default class Team extends Model {
@@ -24,36 +24,16 @@ export default class Team extends Model {
             population: this.attr(0),
             stadium_capacity: this.attr(0),
             retired_numbers: this.attr(''),
-            budget: this.attr({
-                scouting: {
-                    amount: 0,
-                    rank: 0,
-                },
-                coaching: {
-                    amount: 0,
-                    rank: 0,
-                },
-                health: {
-                    amount: 0,
-                    rank: 0,
-                },
-                facilities: {
-                    amount: 0,
-                    rank: 0,
-                },
-            }),
             strategy: this.attr(''),
 
             // Data
+            budget: this.hasMany(Budget, 'team_id'),
             seasons: this.hasMany(Season, 'tid'),
             stats: this.hasMany(Stat, 'tid'),
             depthChart: this.hasMany(DepthChart, 'team_id'),
             
             // Players
             players: this.hasMany(Player, 'team_id'),
-
-            // League
-            league: this.belongsTo(League, 'lid'),
 
             // Coaching Staff
             head_coach: this.hasOne(Staff, 'team_id'),
@@ -87,63 +67,51 @@ export default class Team extends Model {
         };
     }
 
-    id!: number
-    tid!: number
-    lid!: number
-    cid!: number
-    name!: string | null
-    img_url!: string | null
-    region!: string | null
-    abbreviation!: string | null
-    country!: string | null
-    population!: number | null
-    stadium_capacity!: number | null
-    retired_numbers!: string | null
-    budget!: {
-        scouting: {
-            amount: number | null
-            rank: number | null
-        },
-        coaching: {
-            amount: number | null
-            rank: number | null
-        },
-        health: {
-            amount: number | null
-            rank: number | null
-        },
-        facilities: {
-            amount: number | null
-            rank: number | null
-        },
+    static piniaOptions = {
+        persist: true
     }
-    strategy!: string | null
-    seasons!: Season[] | null
-    stats!: Stat[] | null
-    players!: Player[]
-    league!: League
-    head_coach!: Staff | null
-    offensive_coordinator!: Staff | null
-    defensive_coordinator!: Staff | null
-    qb_coach!: Staff | null
-    rb_coach!: Staff | null
-    wr_coach!: Staff | null
-    te_coach!: Staff | null
-    oline_coach!: Staff | null
-    dline_coach!: Staff | null
-    secondary_coach!: Staff | null
-    special_teams_coach!: Staff | null
-    strength_coach!: Staff | null
-    coach!: Staff[] | null
-    owner!: Staff | null
-    president!: Staff | null
-    chief_executive_officer!: Staff | null
-    general_manager!: Staff | null
-    director_of_scouting!: Staff | null
-    director_pro_scouting!: Staff | null
-    director_college_scouting!: Staff | null
-    scout!: Staff[] | null
-    sports_medicine_director!: Staff | null
-    physio!: Staff[] | null
-    trainer!: Staff[] | null
+
+    declare id: number
+    declare tid: number
+    declare lid: number
+    declare cid: number
+    declare name: string | null
+    declare img_url: string | null
+    declare region: string | null
+    declare abbreviation: string | null
+    declare country: string | null
+    declare population: number | null
+    declare stadium_capacity: number | null
+    declare retired_numbers: string | null
+    declare budget: Budget | null
+    declare strategy: string | null
+    declare seasons: Season[] | null
+    declare stats: Stat[] | null
+    declare players: Player[] | null
+    declare league: League | null
+    declare depthChart: DepthChart[] | null
+    declare head_coach: Staff | null
+    declare offensive_coordinator: Staff | null
+    declare defensive_coordinator: Staff | null
+    declare qb_coach: Staff | null
+    declare rb_coach: Staff | null
+    declare wr_coach: Staff | null
+    declare te_coach: Staff | null
+    declare oline_coach: Staff | null
+    declare dline_coach: Staff | null
+    declare secondary_coach: Staff | null
+    declare special_teams_coach: Staff | null
+    declare strength_coach: Staff | null
+    declare coach: Staff[] | null
+    declare owner: Staff | null
+    declare president: Staff | null
+    declare chief_executive_officer: Staff | null
+    declare general_manager: Staff | null
+    declare director_of_scouting: Staff | null
+    declare director_pro_scouting: Staff | null
+    declare director_college_scouting: Staff | null
+    declare scout: Staff[] | null
+    declare sports_medicine_director: Staff | null
+    declare physio: Staff[] | null
+    declare trainer: Staff[] | null
 }

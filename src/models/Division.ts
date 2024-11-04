@@ -1,11 +1,11 @@
-import { Model } from '@vuex-orm/core'
+import { Model } from 'pinia-orm'
 import Team from '@/models/Team';
 
 export default class Division extends Model {
     static entity = 'division'
     static fields () {
         return {
-            id: this.attr(null),
+            id: this.uid(),
             lid: this.number(null),
             did: this.number(null),
             cid: this.number(null),
@@ -13,4 +13,15 @@ export default class Division extends Model {
             name: this.attr('')
         }
     }
+
+    static piniaOptions = {
+        persist: true
+    }
+
+    declare id: number
+    declare lid: number
+    declare did: number
+    declare cid: number
+    declare teams: Team[] | null
+    declare name: string
 }

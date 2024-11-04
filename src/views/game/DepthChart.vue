@@ -1,54 +1,35 @@
 <template>
     <div class="grid">
         <div class="col-12">
-            <div class="grid grid-nogutter align-items-center mb-2">
-                <div
-                    class="col h-3rem border-1 border-300 text-900 inline-flex justify-content-center align-items-center flex-shrink-0 border-round mr-1 cursor-pointer hover:surface-100 transition-duration-150 transition-colors"
-                    :class="{ 'border-primary border-2 text-primary': chart === 'offense' }"
-                    @click="setDepthChart('offense')"
-                >
-                    Offense
-                </div>
-                <div
-                    class="col h-3rem border-1 border-300 text-900 inline-flex justify-content-center align-items-center flex-shrink-0 border-round ml-2 mr-2 cursor-pointer hover:surface-100 transition-duration-150 transition-colors"
-                    :class="{ 'border-primary border-2 text-primary': chart === 'defense' }"
-                    @click="setDepthChart('defense')"
-                >
-                    Defense
-                </div>
-                <div
-                    class="col h-3rem border-1 border-300 text-900 inline-flex justify-content-center align-items-center flex-shrink-0 border-round ml-1 cursor-pointer hover:surface-100 transition-duration-150 transition-colors"
-                    :class="{ 'border-primary border-2 text-primary': chart === 'special' }"
-                    @click="setDepthChart('special')"
-                >
-                    Special Teams
-                </div>
+
+            <div class="flex justify-center mb-4 w-full px-4 text-lg">
+                <SelectButton v-model="size" :options="sizeOptions" optionLabel="label" class="border text-xl" dataKey="label" />
             </div>
 
             <CustomTabPanel contentClass="w-1/2">
-                <div v-if="chart === 'defense'" class="surface-ground pt-3">
+                <div v-if="size.value === 'defense'" class="surface-ground pt-3">
 
                     <!-- #region Midfield Defense -->
                     <div class="grid grid-nogutter justify-content-center mb-4">
                         <div class="col-2 px-2">
                             <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
+                                <div class="flex justify-between mb-3">
                                     <div>
                                         <span class="block text-900 text-xl font-medium mt-2">FS</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
                                 </div>
                                 <hr />
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
@@ -58,23 +39,23 @@
                         </div>
                         <div class="col-2 px-2">
                             <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
+                                <div class="flex justify-between mb-3">
                                     <div>
                                         <span class="block text-900 text-xl font-medium mt-2">LOLB</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
                                 </div>
                                 <hr />
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
@@ -84,23 +65,23 @@
                         </div>
                         <div class="col-2 px-2">
                             <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
+                                <div class="flex justify-between mb-3">
                                     <div>
                                         <span class="block text-900 text-xl font-medium mt-2">MLB1</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
                                 </div>
                                 <hr />
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
@@ -110,23 +91,23 @@
                         </div>
                         <div class="col-2 px-2">
                             <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
+                                <div class="flex justify-between mb-3">
                                     <div>
                                         <span class="block text-900 text-xl font-medium mt-2">MLB2</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
                                 </div>
                                 <hr />
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
@@ -136,23 +117,23 @@
                         </div>
                         <div class="col-2 px-2">
                             <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
+                                <div class="flex justify-between mb-3">
                                     <div>
                                         <span class="block text-900 text-xl font-medium mt-2">ROLB</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
                                 </div>
                                 <hr />
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
@@ -162,23 +143,23 @@
                         </div>
                         <div class="col-2 px-2">
                             <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
+                                <div class="flex justify-between mb-3">
                                     <div>
                                         <span class="block text-900 text-xl font-medium mt-2">SS</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
                                 </div>
                                 <hr />
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
@@ -193,23 +174,23 @@
                     <div class="grid grid-nogutter justify-content-center mb-4">
                         <div class="col-2 px-2">
                             <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
+                                <div class="flex justify-between mb-3">
                                     <div>
                                         <span class="block text-900 text-xl font-medium mt-2">CB2</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
                                 </div>
                                 <hr />
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
@@ -219,23 +200,23 @@
                         </div>
                         <div class="col-2 px-2">
                             <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
+                                <div class="flex justify-between mb-3">
                                     <div>
                                         <span class="block text-900 text-xl font-medium mt-2">LE</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
                                 </div>
                                 <hr />
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
@@ -245,23 +226,23 @@
                         </div>
                         <div class="col-2 px-2">
                             <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
+                                <div class="flex justify-between mb-3">
                                     <div>
                                         <span class="block text-900 text-xl font-medium mt-2">DT</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
                                 </div>
                                 <hr />
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
@@ -271,23 +252,23 @@
                         </div>
                         <div class="col-2 px-2">
                             <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
+                                <div class="flex justify-between mb-3">
                                     <div>
                                         <span class="block text-900 text-xl font-medium mt-2">RE</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
                                 </div>
                                 <hr />
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
@@ -297,23 +278,23 @@
                         </div>
                         <div class="col-2 px-2">
                             <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
+                                <div class="flex justify-between mb-3">
                                     <div>
                                         <span class="block text-900 text-xl font-medium mt-2">CB3</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
                                 </div>
                                 <hr />
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
@@ -323,23 +304,23 @@
                         </div>
                         <div class="col-2 px-2">
                             <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
+                                <div class="flex justify-between mb-3">
                                     <div>
                                         <span class="block text-900 text-xl font-medium mt-2">CB1</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
                                 </div>
                                 <hr />
                                 <div>
-                                    <div class="flex flex-row justify-content-between">
+                                    <div class="flex flex-row justify-between">
                                         <div class="text-900 font-medium text-sm">F. LastName</div>
                                         <div class="text-900 font-medium text-sm">72</div>
                                     </div>
@@ -351,179 +332,221 @@
                     <!-- #endregion -->
                 </div>
 
-                <div v-if="chart === 'offense'" class="surface-ground pt-3">
+                <div v-if="size.value === 'offense'" class="surface-ground pt-3">
 
                     <!-- #region Frontline Offense -->
-                    <div class="grid grid-nogutter justify-content-center mb-4">
-                        <div class="col-2 px-2">
-                            <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
-                                    <div>
-                                        <span class="block text-900 text-xl font-medium mt-2">LT</span>
+                    <div class="flex flex-row w-full justify-center mb-4">
+                        <div class="col-2 px-2 w-full">
+                            <div class="card shadow-2 px-3 py-2 border-round-xl">
+                                <div class="flex w-full inline-flex justify-between border-b surface-border">
+                                    <div class="pt-1 pb-2 px-1">
+                                        <span class="block text-900 text-xl font-medium mt-1">LT</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
-                                        <i class="pi pi-unlock text-500 text-xl"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex flex-row justify-content-between">
-                                        <div class="text-900 font-medium text-sm">F. LastName</div>
-                                        <div class="text-900 font-medium text-sm">72</div>
+                                    <div class="flex items-center justify-center border-round" style="width:3rem;height:3rem">
+                                        <i class="pi pi-unlock text-500 text-3xl"></i>
                                     </div>
                                 </div>
-                                <hr />
-                                <div>
-                                    <div class="flex flex-row justify-content-between">
-                                        <div class="text-900 font-medium text-sm">F. LastName</div>
-                                        <div class="text-900 font-medium text-sm">72</div>
+                                <VueDraggable
+                                    v-model="depthChartObject.lt"
+                                    animation="150"
+                                    ghostClass="ghost"
+                                    chosenClass="chosen"
+                                    class="container"
+                                    @end="onEnd"
+                                >
+                                    <div v-for="(item, index) in depthChartObject.lt.slice(0,5)" :key="item.id" draggable class="p-2 justify-between border-b surface-border">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-900 font-medium text-md">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
+                                            <span class="text-900 text-md ml-3">{{ item.player.ratings.overall_rating}}</span>
+                                        </div>
+                                        <span class="text-600 text-sm">{{ item.player.ratings.position_archetype_name}}</span>
+                                    </div>
+                                </VueDraggable>
+                                <div v-show="depthChartObject.lt.length < 5" class="py-2 justify-between surface-border">
+                                    <div class="flex items-center justify-between">
+                                        <Button icon="pi pi-plus" label="Add Player" class="w-full"/>
                                     </div>
                                 </div>
-                                <hr />
                             </div>
                         </div>
-                        <div class="col-2 px-2">
-                            <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
-                                    <div>
-                                        <span class="block text-900 text-xl font-medium mt-2">LG</span>
+                        <div class="col-2 px-2 w-full">
+                            <div class="card shadow-2 px-3 py-2 border-round-xl">
+                                <div class="flex w-full inline-flex justify-between border-b surface-border">
+                                    <div class="pt-1 pb-2 px-1">
+                                        <span class="block text-900 text-xl font-medium mt-1">LG</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-center border-round" style="width:3rem;height:3rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="flex flex-row justify-content-between">
-                                        <div class="text-900 font-medium text-sm">F. LastName</div>
-                                        <div class="text-900 font-medium text-sm">72</div>
+                                <VueDraggable
+                                    v-model="depthChartObject.lg"
+                                    animation="150"
+                                    ghostClass="ghost"
+                                    chosenClass="chosen"
+                                    class="container"
+                                    @end="onEnd"
+                                >
+                                    <div v-for="(item, index) in depthChartObject.lg" :key="item.id" draggable class="p-2 justify-between border-b surface-border">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-900 font-medium text-md">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
+                                            <span class="text-900 text-md ml-3">{{ item.player.ratings.overall_rating}}</span>
+                                        </div>
+                                        <span class="text-600 text-sm">{{ item.player.ratings.position_archetype_name}}</span>
+                                    </div>
+                                </VueDraggable>
+                                <div v-show="depthChartObject.lg.length < 5" class="py-2 justify-between surface-border">
+                                    <div class="flex items-center justify-between">
+                                        <Button icon="pi pi-plus" label="Add Player" class="w-full"/>
                                     </div>
                                 </div>
-                                <hr />
-                                <div>
-                                    <div class="flex flex-row justify-content-between">
-                                        <div class="text-900 font-medium text-sm">F. LastName</div>
-                                        <div class="text-900 font-medium text-sm">72</div>
-                                    </div>
-                                </div>
-                                <hr />
                             </div>
                         </div>
-                        <div class="col-2 px-2">
-                            <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
-                                    <div>
-                                        <span class="block text-900 text-xl font-medium mt-2">C</span>
+                        <div class="col-2 px-2 w-full">
+                            <div class="card shadow-2 px-3 py-2 border-round-xl">
+                                <div class="flex w-full inline-flex justify-between border-b surface-border">
+                                    <div class="pt-1 pb-2 px-1">
+                                        <span class="block text-900 text-xl font-medium mt-1">C</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-center border-round" style="width:3rem;height:3rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="flex flex-row justify-content-between">
-                                        <div class="text-900 font-medium text-sm">F. LastName</div>
-                                        <div class="text-900 font-medium text-sm">72</div>
+                                <VueDraggable
+                                    v-model="depthChartObject.c"
+                                    animation="150"
+                                    ghostClass="ghost"
+                                    chosenClass="chosen"
+                                    class="container"
+                                    @end="onEnd"
+                                >
+                                    <div v-for="(item, index) in depthChartObject.c" :key="item.id" draggable class="p-2 justify-between border-b surface-border">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-900 font-medium text-md">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
+                                            <span class="text-900 text-md ml-3">{{ item.player.ratings.overall_rating}}</span>
+                                        </div>
+                                        <span class="text-600 text-sm">{{ item.player.ratings.position_archetype_name}}</span>
+                                    </div>
+                                </VueDraggable>
+                                <div v-show="depthChartObject.c.length < 5" class="py-2 justify-between surface-border">
+                                    <div class="flex items-center justify-between">
+                                        <Button icon="pi pi-plus" label="Add Player" class="w-full"/>
                                     </div>
                                 </div>
-                                <hr />
-                                <div>
-                                    <div class="flex flex-row justify-content-between">
-                                        <div class="text-900 font-medium text-sm">F. LastName</div>
-                                        <div class="text-900 font-medium text-sm">72</div>
-                                    </div>
-                                </div>
-                                <hr />
                             </div>
                         </div>
-                        <div class="col-2 px-2">
-                            <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
-                                    <div>
-                                        <span class="block text-900 text-xl font-medium mt-2">RG</span>
+                        <div class="col-2 px-2 w-full">
+                            <div class="card shadow-2 px-3 py-2 border-round-xl">
+                                <div class="flex w-full inline-flex justify-between border-b surface-border">
+                                    <div class="pt-1 pb-2 px-1">
+                                        <span class="block text-900 text-xl font-medium mt-1">RG</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-center border-round" style="width:3rem;height:3rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="flex flex-row justify-content-between">
-                                        <div class="text-900 font-medium text-sm">F. LastName</div>
-                                        <div class="text-900 font-medium text-sm">72</div>
+                                <VueDraggable
+                                    v-model="depthChartObject.rg"
+                                    animation="150"
+                                    ghostClass="ghost"
+                                    chosenClass="chosen"
+                                    class="container"
+                                    @end="onEnd"
+                                >
+                                    <div v-for="(item, index) in depthChartObject.rg" :key="item.id" draggable class="p-2 justify-between border-b surface-border">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-900 font-medium text-md">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
+                                            <span class="text-900 text-md ml-3">{{ item.player.ratings.overall_rating}}</span>
+                                        </div>
+                                        <span class="text-600 text-sm">{{ item.player.ratings.position_archetype_name}}</span>
+                                    </div>
+                                </VueDraggable>
+                                <div v-show="depthChartObject.rg.length < 5" class="py-2 justify-between surface-border">
+                                    <div class="flex items-center justify-between">
+                                        <Button icon="pi pi-plus" label="Add Player" class="w-full"/>
                                     </div>
                                 </div>
-                                <hr />
-                                <div>
-                                    <div class="flex flex-row justify-content-between">
-                                        <div class="text-900 font-medium text-sm">F. LastName</div>
-                                        <div class="text-900 font-medium text-sm">72</div>
-                                    </div>
-                                </div>
-                                <hr />
                             </div>
                         </div>
-                        <div class="col-2 px-2">
-                            <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
-                                    <div>
-                                        <span class="block text-900 text-xl font-medium mt-2">RT</span>
+                        <div class="col-2 px-2 w-full">
+                            <div class="card shadow-2 px-3 py-2 border-round-xl">
+                                <div class="flex w-full inline-flex justify-between border-b surface-border">
+                                    <div class="pt-1 pb-2 px-1">
+                                        <span class="block text-900 text-xl font-medium mt-1">RT</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-center border-round" style="width:3rem;height:3rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="flex flex-row justify-content-between">
-                                        <div class="text-900 font-medium text-sm">F. LastName</div>
-                                        <div class="text-900 font-medium text-sm">72</div>
+                                <VueDraggable
+                                    v-model="depthChartObject.rt"
+                                    animation="150"
+                                    ghostClass="ghost"
+                                    chosenClass="chosen"
+                                    class="container"
+                                    @end="onEnd"
+                                >
+                                    <div v-for="(item, index) in depthChartObject.rt" :key="item.id" draggable class="p-2 justify-between border-b surface-border">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-900 font-medium text-md">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
+                                            <span class="text-900 text-md ml-3">{{ item.player.ratings.overall_rating}}</span>
+                                        </div>
+                                        <span class="text-600 text-sm">{{ item.player.ratings.position_archetype_name}}</span>
+                                    </div>
+                                </VueDraggable>
+                                <div v-show="depthChartObject.rt.length < 5" class="py-2 justify-between surface-border">
+                                    <div class="flex items-center justify-between">
+                                        <Button icon="pi pi-plus" label="Add Player" class="w-full"/>
                                     </div>
                                 </div>
-                                <hr />
-                                <div>
-                                    <div class="flex flex-row justify-content-between">
-                                        <div class="text-900 font-medium text-sm">F. LastName</div>
-                                        <div class="text-900 font-medium text-sm">72</div>
-                                    </div>
-                                </div>
-                                <hr />
                             </div>
                         </div>
-                        <div class="col-2 px-2">
-                            <div class="surface-card shadow-2 p-3 border-round-xl">
-                                <div class="flex justify-content-between mb-3">
-                                    <div>
-                                        <span class="block text-900 text-xl font-medium mt-2">TE</span>
+                        <div class="col-2 px-2 w-full">
+                            <div class="card shadow-2 px-3 py-2 border-round-xl">
+                                <div class="flex w-full inline-flex justify-between border-b surface-border">
+                                    <div class="pt-1 pb-2 px-1">
+                                        <span class="block text-900 text-xl font-medium mt-1">TE</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem;height:2.5rem">
+                                    <div class="flex items-center justify-center border-round" style="width:3rem;height:3rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="flex flex-row justify-content-between">
-                                        <div class="text-900 font-medium text-sm">F. LastName</div>
-                                        <div class="text-900 font-medium text-sm">72</div>
+                                <VueDraggable
+                                    v-model="depthChartObject.te"
+                                    animation="150"
+                                    ghostClass="ghost"
+                                    chosenClass="chosen"
+                                    class="container"
+                                    @end="onEnd"
+                                >
+                                    <div v-for="(item, index) in depthChartObject.te" :key="item.id" draggable class="p-2 justify-between border-b surface-border">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-900 font-medium text-md">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
+                                            <span class="text-900 text-md ml-3">{{ item.player.ratings.overall_rating}}</span>
+                                        </div>
+                                        <span class="text-600 text-sm">{{ item.player.ratings.position_archetype_name}}</span>
+                                    </div>
+                                </VueDraggable>
+                                <div v-show="depthChartObject.te.length < 5" class="py-2 justify-between">
+                                    <div class="flex items-center justify-between">
+                                        <Button icon="pi pi-plus" label="Add Player" class="w-full"/>
                                     </div>
                                 </div>
-                                <hr />
-                                <div>
-                                    <div class="flex flex-row justify-content-between">
-                                        <div class="text-900 font-medium text-sm">F. LastName</div>
-                                        <div class="text-900 font-medium text-sm">72</div>
-                                    </div>
-                                </div>
-                                <hr />
                             </div>
                         </div>
                     </div>
                     <!-- #endregion -->
 
                     <!-- #region Backline Offense -->
-                    <div class="grid grid-nogutter justify-content-center">
-                        <div class="col-2 px-2">
-                            <div class="surface-card shadow-2 px-3 py-2 border-round-xl">
-                                <div class="flex w-full inline-flex justify-content-between border-bottom-1 surface-border">
+                    <div class="flex flex-row w-full justify-center mb-4">
+                        <div class="col-2 px-2 w-full">
+                            <div class="card shadow-2 px-3 py-2 border-round-xl">
+                                <div class="flex w-full inline-flex justify-between border-b surface-border">
                                     <div class="pt-1 pb-2 px-1">
                                         <span class="block text-900 text-xl font-medium mt-1">WR2</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:3rem;height:3rem">
-                                        <i class="pi pi-unlock text-500 text-xl"></i>
+                                    <div class="flex items-center justify-center border-round" style="width:3rem;height:3rem">
+                                        <i class="pi pi-unlock text-500 text-3xl"></i>
                                     </div>
                                 </div>
                                 <VueDraggable
@@ -534,61 +557,61 @@
                                     class="container"
                                     @end="onEnd"
                                 >
-                                    <div v-for="(item, index) in depthChartObject.wr2" :key="item.id" draggable class="p-2 justify-content-between border-bottom-1 surface-border">
-                                        <div class="flex align-items-center justify-content-between">
-                                            <span class="text-900 font-medium text-md">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
+                                    <div v-for="(item, index) in depthChartObject.wr2.slice(0,5)" :key="item.id" draggable class="p-2 justify-between border-b surface-border">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-900 font-medium text-md hover:underline">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
                                             <span class="text-900 text-md ml-3">{{ item.player.ratings.overall_rating}}</span>
                                         </div>
                                         <span class="text-600 text-sm">{{ item.player.ratings.position_archetype_name}}</span>
                                     </div>
                                 </VueDraggable>
-                                <div v-show="depthChartObject.wr2.length < 9" class="p-2 justify-content-between surface-border">
-                                    <div class="flex align-items-center justify-content-between">
+                                <div v-show="depthChartObject.wr2.length < 5" class="py-2 mb-2 justify-between surface-border">
+                                    <div class="flex items-center justify-between">
                                         <Button icon="pi pi-plus" label="Add Player" class="w-full"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-2 px-2">
-                            <div class="surface-card shadow-2 px-3 py-2 border-round-xl">
-                                <div class="flex w-full inline-flex justify-content-between border-bottom-1 surface-border">
+                        <div class="col-2 px-2 w-full">
+                            <div class="card shadow-2 px-3 py-2 border-round-xl">
+                                <div class="flex w-full inline-flex justify-between border-b surface-border">
                                     <div class="pt-1 pb-2 px-1">
                                         <span class="block text-900 text-xl font-medium mt-1">FB</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:3rem;height:3rem">
+                                    <div class="flex items-center justify-center border-round" style="width:3rem;height:3rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <VueDraggable
-                                    v-model="depthChartObject.rb"
+                                    v-model="depthChartObject.fb"
                                     animation="150"
                                     ghostClass="ghost"
                                     chosenClass="chosen"
                                     class="container"
                                     @end="onEnd"
                                 >
-                                    <div v-for="(item, index) in depthChartObject.rb" :key="item.id" draggable class="p-2 justify-content-between border-bottom-1 surface-border">
-                                        <div class="flex align-items-center justify-content-between">
-                                            <span class="text-900 font-medium text-md">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
+                                    <div v-for="(item, index) in depthChartObject.fb" :key="item.id" draggable class="p-2 justify-between border-b surface-border">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-900 font-medium text-md hover:underline">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
                                             <span class="text-900 text-md ml-3">{{ item.player.ratings.overall_rating}}</span>
                                         </div>
                                         <span class="text-600 text-sm">{{ item.player.ratings.position_archetype_name}}</span>
                                     </div>
                                 </VueDraggable>
-                                <div v-show="depthChartObject.rb.length < 9" class="p-2 justify-content-between surface-border">
-                                    <div class="flex align-items-center justify-content-between">
-                                        <Button icon="pi pi-plus" label="Add FB" class="w-full"/>
+                                <div v-show="depthChartObject.fb.length < 5" class="py-2 mb-2 justify-between surface-border">
+                                    <div class="flex items-center justify-between">
+                                        <Button icon="pi pi-plus" label="Add Player" class="w-full"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-2 px-2">
-                            <div class="surface-card shadow-2 px-3 py-2 border-round-xl">
-                                <div class="flex w-full inline-flex justify-content-between border-bottom-1 surface-border">
+                        <div class="col-2 px-2 w-full">
+                            <div class="card shadow-2 px-3 py-2 border-round-xl">
+                                <div class="flex w-full inline-flex justify-between border-b surface-border">
                                     <div class="pt-1 pb-2 px-1">
                                         <span class="block text-900 text-xl font-medium mt-1">QB</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:3rem;height:3rem">
+                                    <div class="flex items-center justify-center border-round" style="width:3rem;height:3rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
@@ -600,29 +623,29 @@
                                     class="container"
                                     @end="onEnd"
                                 >
-                                    <div v-for="(item, index) in depthChartObject.qb" :key="item.id" draggable @contextmenu="onQuarterbackRightClick($event, item)" class="p-2 justify-content-between border-bottom-1 surface-border">
-                                        <div class="flex align-items-center justify-content-between">
-                                            <span class="text-900 font-medium text-md">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
+                                    <div v-for="(item, index) in depthChartObject.qb" :key="item.id" draggable @contextmenu="onQuarterbackRightClick($event, item)" class="p-2 justify-between border-b surface-border">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-900 font-medium text-md hover:underline">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
                                             <span class="text-900 text-md ml-3">{{ item.player.ratings.overall_rating}}</span>
                                         </div>
                                         <span class="text-600 text-sm">{{ item.player.ratings.position_archetype_name}}</span>
                                     </div>
                                 </VueDraggable>
-                                <div v-show="depthChartObject.qb.length < 9" class="p-2 justify-content-between surface-border">
-                                    <div class="flex align-items-center justify-content-between">
-                                        <Button icon="pi pi-plus" label="Add QB" class="w-full"/>
+                                <div v-show="depthChartObject.qb.length < 5" class="py-2 mb-2 justify-between surface-border">
+                                    <div class="flex items-center justify-between">
+                                        <Button icon="pi pi-plus" label="Add Player" class="w-full"/>
                                     </div>
                                 </div>
                                 <ContextMenu ref="menu" :model="menuItems" />
                             </div>
                         </div>
-                        <div class="col-2 px-2">
-                            <div class="surface-card shadow-2 px-3 py-2 border-round-xl">
-                                <div class="flex w-full inline-flex justify-content-between border-bottom-1 surface-border">
+                        <div class="col-2 px-2 w-full">
+                            <div class="card shadow-2 px-3 py-2 border-round-xl">
+                                <div class="flex w-full inline-flex justify-between border-b surface-border">
                                     <div class="pt-1 pb-2 px-1">
                                         <span class="block text-900 text-xl font-medium mt-1">RB</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:3rem;height:3rem">
+                                    <div class="flex items-center justify-center border-round" style="width:3rem;height:3rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
@@ -634,28 +657,28 @@
                                     class="container"
                                     @end="onEnd"
                                 >
-                                    <div v-for="(item, index) in depthChartObject.rb" :key="item.id" draggable class="p-2 justify-content-between border-bottom-1 surface-border">
-                                        <div class="flex align-items-center justify-content-between">
-                                            <span class="text-900 font-medium text-md">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
+                                    <div v-for="(item, index) in depthChartObject.rb" :key="item.id" draggable class="p-2 justify-between border-b surface-border">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-900 font-medium text-md  hover:underline">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
                                             <span class="text-900 text-md ml-3">{{ item.player.ratings.overall_rating}}</span>
                                         </div>
                                         <span class="text-600 text-sm">{{ item.player.ratings.position_archetype_name}}</span>
                                     </div>
                                 </VueDraggable>
-                                <div v-show="depthChartObject.rb.length < 9" class="p-2 justify-content-between surface-border">
-                                    <div class="flex align-items-center justify-content-between">
-                                        <Button icon="pi pi-plus" label="Add RB" class="w-full"/>
+                                <div v-show="depthChartObject.rb.length < 5" class="py-2 mb-2 justify-between surface-border">
+                                    <div class="flex items-center justify-between">
+                                        <Button icon="pi pi-plus" label="Add Player" class="w-full"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-2 px-2">
-                            <div class="surface-card shadow-2 px-3 py-2 border-round-xl">
-                                <div class="flex w-full inline-flex justify-content-between border-bottom-1 surface-border">
+                        <div class="col-2 px-2 w-full">
+                            <div class="card shadow-2 px-3 py-2 border-round-xl">
+                                <div class="flex w-full inline-flex justify-between border-b surface-border">
                                     <div class="pt-1 pb-2 px-1">
                                         <span class="block text-900 text-xl font-medium mt-1">WR3</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:3rem;height:3rem">
+                                    <div class="flex items-center justify-center border-round" style="width:3rem;height:3rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
@@ -667,28 +690,39 @@
                                     class="container"
                                     @end="onEnd"
                                 >
-                                    <div v-for="(item, index) in depthChartObject.wr3" :key="item.id" draggable class="p-2 justify-content-between border-bottom-1 surface-border">
-                                        <div class="flex align-items-center justify-content-between">
-                                            <span class="text-900 font-medium text-md">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
+                                    <div v-for="(item, index) in depthChartObject.wr3" :key="item.id" draggable class="p-2 justify-between border-b surface-border">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-900 font-medium text-md hover:underline">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
                                             <span class="text-900 text-md ml-3">{{ item.player.ratings.overall_rating}}</span>
                                         </div>
                                         <span class="text-600 text-sm">{{ item.player.ratings.position_archetype_name}}</span>
                                     </div>
                                 </VueDraggable>
-                                <div v-show="depthChartObject.wr3.length < 9" class="p-2 justify-content-between surface-border">
-                                    <div class="flex align-items-center justify-content-between">
-                                        <Button icon="pi pi-plus" label="Add WR3" class="w-full"/>
+                                <div v-show="depthChartObject.wr3.length < 5" class="py-2 mb-2 justify-between surface-border">
+                                    <div class="flex items-center justify-between">
+                                        <Button icon="pi pi-plus" label="Add Player" class="w-full"/>
                                     </div>
                                 </div>
+                                <ContextMenu ref="menu" :model="menuItems" @hide="selectedId = null">
+                                    <template #item="{ item, props }">
+                                        <a v-ripple class="flex items-center" v-bind="props.action">
+                                            <!-- <span :class="item.icon" /> -->
+                                            <!-- <span class="ml-2">{{ item.label }}</span> -->
+                                            <!-- <Badge v-if="item.badge" class="ml-auto" :value="item.badge" /> -->
+                                            <!-- <span v-if="item.shortcut" class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span> -->
+                                            <!-- <i v-if="item.items" class="pi pi-angle-right ml-auto"></i> -->
+                                        </a>
+                                    </template>
+                                </ContextMenu>
                             </div>
                         </div>
-                        <div class="col-2 px-2">
-                            <div class="surface-card shadow-2 px-3 py-2 border-round-xl">
-                                <div class="flex w-full inline-flex justify-content-between border-bottom-1 surface-border">
+                        <div class="col-2 px-2 w-full">
+                            <div class="card shadow-2 px-3 py-2 border-round-xl">
+                                <div class="flex w-full inline-flex justify-between border-b surface-border">
                                     <div class="pt-1 pb-2 px-1">
-                                        <span class="block text-900 text-xl font-medium mt-1">WR1</span>
+                                        <span class="block text-900 text-xl font-medium mt-1">WR</span>
                                     </div>
-                                    <div class="flex align-items-center justify-content-center border-round" style="width:3rem;height:3rem">
+                                    <div class="flex items-center justify-center border-round" style="width:3rem;height:3rem">
                                         <i class="pi pi-unlock text-500 text-xl"></i>
                                     </div>
                                 </div>
@@ -700,19 +734,30 @@
                                     class="container"
                                     @end="onEnd"
                                 >
-                                    <div v-for="(item, index) in depthChartObject.wr" :key="item.id" draggable class="p-2 justify-content-between border-bottom-1 surface-border">
-                                        <div class="flex align-items-center justify-content-between">
-                                            <span class="text-900 font-medium text-md">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
+                                    <div v-for="(item, index) in depthChartObject.wr" :key="item.id" draggable class="p-2 justify-between border-b surface-border">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-900 font-medium text-md hover:underline">{{ index + 1 }}. {{ item.player.first_name }} {{ item.player.last_name }}</span>
                                             <span class="text-900 text-md ml-3">{{ item.player.ratings.overall_rating}}</span>
                                         </div>
                                         <span class="text-600 text-sm">{{ item.player.ratings.position_archetype_name}}</span>
                                     </div>
                                 </VueDraggable>
-                                <div v-show="depthChartObject.wr.length < 9" class="p-2 justify-content-between surface-border">
-                                    <div class="flex align-items-center justify-content-between">
-                                        <Button icon="pi pi-plus" label="Add WR1" class="w-full"/>
+                                <div v-show="depthChartObject.wr.length < 5" class="py-2 mb-2 justify-between surface-border">
+                                    <div class="flex items-center justify-between">
+                                        <Button icon="pi pi-plus" label="Add Player" class="w-full"/>
                                     </div>
                                 </div>
+                                <ContextMenu ref="menu" :model="menuItems" @hide="selectedId = null">
+                                    <template #item="{ item, props }">
+                                        <a v-ripple class="flex items-center" v-bind="props.action">
+                                            <!-- <span :class="item.icon" /> -->
+                                            <!-- <span class="ml-2">{{ item.label }}</span> -->
+                                            <!-- <Badge v-if="item.badge" class="ml-auto" :value="item.badge" /> -->
+                                            <!-- <span v-if="item.shortcut" class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span> -->
+                                            <!-- <i v-if="item.items" class="pi pi-angle-right ml-auto"></i> -->
+                                        </a>
+                                    </template>
+                                </ContextMenu>
                             </div>
                         </div>
                     </div>
@@ -726,6 +771,7 @@
 </template>
 
 <script>
+import { useRepo } from 'pinia-orm'
 import OrganizationChart from 'primevue/organizationchart';
 import CustomTabView from '@/components/CustomTabView.vue';
 import CustomTabPanel from '@/components/CustomTabPanel.vue';
@@ -761,6 +807,12 @@ export default {
             quarterbacks: [],
             runningbacks: [],
             depthChartObject: {},
+            size: { label: 'Offense', value: 'offense' },
+            sizeOptions: [
+                { label: 'Offense', value: 'offense' },
+                { label: 'Defense', value: 'defense' },
+                { label: 'Special Teams', value: 'special' }
+            ],
             menuItems: [
                 { label: 'Copy', icon: 'pi pi-copy' },
                 { label: 'Remove', icon: 'pi pi-trash' }
@@ -830,7 +882,7 @@ export default {
             this.depthChartObject[position].forEach((player, index) => {
                 player.rank = index + 1;
             });
-            if(event.newIndex !== event.oldIndex) {
+            if (event.newIndex !== event.oldIndex) {
                 await this.saveDepthChart(position);
             }
         },
@@ -880,49 +932,39 @@ export default {
     },
     computed: {
         user: {
-            /* By default get() is used */
             get() {
-                return User.query().with('team.depthChart.player.*').first()
+                const userRepo = useRepo(User);
+                return userRepo.query().withAllRecursive().first()
             },
-            /* We add a setter */
-            set(value) {
-                this.$store.commit('updateUser', value)
-            }
         },
         world: {
-            /* By default get() is used */
             get() {
-            return World.query().first()
-            },
-            /* We add a setter */
-            set(value) {
-                this.$store.commit('updateWorld', value)
+                const worldRepo = useRepo(World);
+                return worldRepo.withAll().get();
             }
         },
         teams: {
-            /* By default get() is used */
             get() {
-                return Team.query().with('depthChart.player.*').orderBy('name').all()
+                const teamRepo = useRepo(Team);
+                return teamRepo.query().withAllRecursive().orderBy('name').get()
             },
-            /* We add a setter */
-            set(value) {
-                this.$store.commit('updateTeams', value)
-            }
         },
         players: {
-            /* By default get() is used */
             get() {
-                return Player.query().with('team').all();
-            },
-            /* We add a setter */
-            set(value) {
-                this.$store.commit('updatePlayers', value)
+                const playerRepo = useRepo(Player);
+                return playerRepo.query().withAll().get();
             }
         },
         teamDepthChart() {
             if (this.user.team) {
                 if (this.filtered_positions.length === 0) {
-                    return this.user.team.depthChart;
+                    return this.user.team.depthChart.map(depthChartObj => {
+                        const player = this.players.find(p => p.id === depthChartObj.player_id);
+                        return {
+                            ...depthChartObj,
+                            player: player
+                        };
+                    });
                 } 
             }
             return [];

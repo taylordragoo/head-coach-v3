@@ -1,17 +1,11 @@
-import { Model } from '@vuex-orm/core'
-import Season from '@/models/Season';
-import Stat from '@/models/Stat';
-import Player from '@/models/Player';
-import League from "@/models/League";
-import Staff from '@/models/Staff';
-import Contract from '@/models/Contract';
+import { Model } from 'pinia-orm'
 
 export default class TeamInfo extends Model {
     static entity: string = 'teamInfo'
 
     static fields() {
         return {
-            id: this.attr(null),
+            id: this.uid(),
             tid: this.attr(null),
             name: this.attr(''),
             abbreviation: this.attr(''),
@@ -22,11 +16,15 @@ export default class TeamInfo extends Model {
         };
     }
 
-    id!: number
-    tid!: number
-    name!: string | null
-    abbreviation!: string | null
-    country!: string | null
-    population!: number | null
-    stadium_capacity!: number | null
+    static piniaOptions = {
+        persist: true
+    }
+
+    declare id: number
+    declare tid: number
+    declare name: string | null
+    declare abbreviation: string | null
+    declare country: string | null
+    declare population: number | null
+    declare stadium_capacity: number | null
 }

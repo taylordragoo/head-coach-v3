@@ -1,0 +1,19 @@
+The codebase is built using Vue.js 3, Vite, Pinia, Pinia-ORM, Tailwind CSS, Tauri, and TypeScript. The game is centered around an American football management simulation where the player takes on the role of a general manager.
+
+The core data models are structured in a hierarchy: World -> League -> Team -> Player. Each model has a corresponding service class (e.g., WorldService, LeagueService, TeamService, PlayerService) that handles the logic and operations related to that model.
+
+Time Progression:
+- The game progresses through time when the user clicks a "continue" button, which advances the 'date' value on the 'World' object.
+- The 'handleSetPhaseBasedOnWeek' function in 'CareerService' is responsible for updating the current phase for each league based on the new 'date' and the predefined 'DEFAULT_SCHEDULE'.
+
+Phase Management:
+- The game is divided into distinct phases (e.g., FREE_AGENCY, DRAFT, ROOKIE_MINICAMP) defined in the 'DEFAULT_SCHEDULE' constant.
+- The 'CareerService' acts as a central orchestrator, managing the overall phase transitions and daily state updates.
+- Phase-specific logic and events can be handled by separate modules or services (e.g., 'FreeAgencyModule', 'DraftModule') that communicate with 'CareerService' to signal phase completion or trigger phase-specific actions.
+
+Daily State Updates:
+- The 'handleUpdateDailyState' function in 'CareerService' is called when time progresses.
+- It fetches all player ratings, retrieves all teams, and creates an array of promises for team performance evaluations (using 'TeamService').
+- After all team performance evaluations are complete, it logs the performance of each team.
+
+This architecture follows an event-driven approach, where the "continue" button acts as the trigger for time progression, and 'CareerService' coordinates the necessary updates and actions based on the new date and phase. Additional phase-specific modules or services can be introduced to handle phase-specific events or actions, maintaining a clear separation of concerns.

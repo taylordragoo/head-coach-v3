@@ -1,11 +1,11 @@
-import { Model } from "@vuex-orm/core";
+import { Model } from 'pinia-orm'
 
 export default class Season extends Model {
     static entity = 'seasons'
 
     static fields () {
         return {
-            id: this.attr(null),
+            id: this.uid(),
             tid: this.attr(null),
             cid: this.attr(null),
             did: this.attr(null),
@@ -54,4 +54,56 @@ export default class Season extends Model {
             rid: this.attr(null)
         }
     }
+
+    static piniaOptions = {
+        persist: true
+    }
+
+    declare id: number
+    declare tid: number
+    declare cid: number
+    declare did: number
+    declare region: string
+    declare name: string
+    declare abbrev: string
+    declare imgURL: string
+    declare colors: string
+    declare jersey: string
+    declare season: number
+    declare gp: number
+    declare gpHome: number
+    declare att: number
+    declare cash: number
+    declare won: number
+    declare lost: number
+    declare tied: number
+    declare otl: number
+    declare wonHome: number
+    declare lostHome: number
+    declare tiedHome: number
+    declare otlHome: number
+    declare wonAway: number
+    declare lostAway: number
+    declare tiedAway: number
+    declare otlAway: number
+    declare wonDiv: number
+    declare lostDiv: number
+    declare tiedDiv: number
+    declare otlDiv: number
+    declare wonConf: number 
+    declare lostConf: number
+    declare tiedConf: number
+    declare otlConf: number
+    declare lastTen: string
+    declare streak: number
+    declare playoffRoundsWon: number
+    declare hype: number
+    declare pop: number
+    declare stadiumCapacity: number
+    declare revenues: number
+    declare expenses: number
+    declare jeopardyEndOfSeason: number
+    declare ownerMood: number
+    declare numPlayersTradedAway: number    
+    declare rid: number
 }

@@ -1,7 +1,7 @@
-import { Model } from '@vuex-orm/core'
+import { Model } from 'pinia-orm'
 
-class Overalls extends Model {
-    static entity = 'overalls'
+export default class Overalls extends Model {
+    static entity: string = 'overalls'
 
     static fields () {
         return {
@@ -21,19 +21,21 @@ class Overalls extends Model {
         }
     }
 
-    id!: number
-    rating_id!: number
-    QB!: number
-    RB!: number
-    WR!: number
-    TE!: number
-    OL!: number
-    DL!: number
-    LB!: number
-    CB!: number
-    S!: number
-    K!: number
-    P!: number
-}
+    static piniaOptions = {
+        persist: true
+    }
 
-export default Overalls
+    declare id: number
+    declare rating_id: number
+    declare QB: number
+    declare RB: number
+    declare WR: number
+    declare TE: number
+    declare OL: number
+    declare DL: number
+    declare LB: number
+    declare CB: number
+    declare S: number
+    declare K: number
+    declare P: number
+}

@@ -1,11 +1,11 @@
-import {Model} from "@vuex-orm/core";
+import { Model } from 'pinia-orm'
 
 export default class TrainingSchedule extends Model {
     static entity: string = 'trainingschedule';
 
     static fields() {
         return {
-            id: this.attr(null),
+            id: this.uid(),
             playerId: this.attr(null),
             activityId: this.attr(null),
             session: this.string(''), // 'morning', 'afternoon', or 'evening'
@@ -13,4 +13,15 @@ export default class TrainingSchedule extends Model {
             improvement: this.attr(null),
         }
     }
+
+    static piniaOptions = {
+        persist: true
+    }
+
+    declare id: number
+    declare playerId: number
+    declare activityId: number
+    declare session: string
+    declare dayOfWeek: string
+    declare improvement: number
 }

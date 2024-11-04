@@ -38,6 +38,4 @@ export default interface ITeam {
     }
     seasons: any;
     stats: any;
-    players: Player[];
-    league: League;
 }

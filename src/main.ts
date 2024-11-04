@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
+import { setActivePinia } from 'pinia'
 
 import BlockViewer from '@/components/BlockViewer.vue';
 import Aura from '@primevue/themes/aura';
@@ -52,6 +53,7 @@ app.component('BlockViewer', BlockViewer);
 const storeController = StoreController.getInstance();
 const store = storeController.getStore()
 app.use(store);
+setActivePinia(store)
 
 moment.updateLocale('en', {
     week: {

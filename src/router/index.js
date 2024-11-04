@@ -20,16 +20,25 @@ const routes = [
             {
                 path: '/game/roster',
                 name: 'roster',
+                meta: {
+                    breadcrumb: ['Roster']
+                },
                 component: () => import('@/views/game/TeamRoster.vue'),
             },
             {
                 path: '/game/depth-chart',
                 name: 'depth-chart',
+                meta: {
+                    breadcrumb: ['Depth Chart']
+                },
                 component: () => import('@/views/game/DepthChart.vue'),
             },
             {
                 path: '/game/staff',
                 name: 'staff',
+                meta: {
+                    breadcrumb: ['Staff']
+                },
                 component: () => import('@/views/game/TeamStaff.vue'),
             },
             {

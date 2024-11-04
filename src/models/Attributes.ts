@@ -1,4 +1,4 @@
-import { Model } from '@vuex-orm/core'
+import { Model } from 'pinia-orm'
 
 export default class Attributes extends Model {
     static entity = 'attributes'
@@ -30,4 +30,33 @@ export default class Attributes extends Model {
             potential: this.number(null)
         }
     }
+
+    static piniaOptions = {
+        persist: true
+    }
+
+    declare id: number
+    declare pid: number
+    declare strength: number
+    declare speed: number
+    declare jump: number
+    declare stamina: number
+    declare throw_power: number
+    declare throw_acc: number
+    declare ball_sec: number
+    declare elusiveness: number
+    declare route_run: number
+    declare catching: number
+    declare run_block: number
+    declare pass_block: number
+    declare pass_cov: number
+    declare tackling: number
+    declare pass_rush: number
+    declare run_stop: number
+    declare kick_power: number
+    declare kick_acc: number
+    declare punt_power: number
+    declare punt_acc: number
+    declare overall: number
+    declare potential: number
 }

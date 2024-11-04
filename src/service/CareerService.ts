@@ -1,3 +1,4 @@
+import { useRepo } from 'pinia-orm'
 import {Dexie} from "dexie";
 import DatabaseController from "@/controllers/DatabaseController";
 import WorldController from "@/controllers/WorldController";
@@ -32,12 +33,12 @@ import Phase from "@/models/Phase";
 import Season from "@/models/Season";
 import Staff from "@/models/Staff";
 import StaffContract from "@/models/StaffContract";
-import { DEFAULT_SCHEDULE, PHASE, getModelConfig, tableNames } from "@/data/constants";
+import { DEFAULT_SCHEDULE, PHASE, getModelRepo, tableNames } from "@/data/constants";
 
 class CareerService {
     private static instance: CareerService;
     private teamService = new TeamService();
-    public modelConfig = getModelConfig();
+    public modelConfig = getModelRepo();
 
     private constructor() {}
 
@@ -63,31 +64,16 @@ class CareerService {
     };
 
     public handleGetDefaultData: any = () => {
-        const teams: Team[] = Team.all().map(team => {
-            const newTeam = new Team();
-            Object.assign(newTeam, team, {
-                budget: {
-                    scouting: { amount: team.budget.scouting.amount, rank: team.budget.scouting.rank },
-                    coaching: { amount: team.budget.coaching.amount, rank: team.budget.coaching.rank },
-                    health: { amount: team.budget.health.amount, rank: team.budget.health.rank },
-                    facilities: { amount: team.budget.facilities.amount, rank: team.budget.facilities.rank },
-                },
-                coach: { ...team.coach },
-            });
-            return newTeam;
-        });
-
         const defaultData: any = {
             type: "default",
-            db_name: 'default',
-            teams: teams,
+            db_name: 'default'
         };
 
         for (const tableName of Object.keys(this.modelConfig)) {
-            if (tableName !== 'teams' && tableName !== 'season') {
-                defaultData[tableName] = this.modelConfig[tableName].all();
-            }
+            defaultData[tableName] = this.modelConfig[tableName].all();
         }
+
+        console.log(defaultData);
 
         return defaultData;
     }
@@ -110,7 +96,7 @@ class CareerService {
             for (const tableName of Object.keys(this.modelConfig)) {
                 if (request[tableName] && request[tableName].length > 0) {
                     console.log(`Populate DB: ${tableName}`);
-                    await this.modelConfig[tableName].insert({ data: request[tableName] });
+                    await this.modelConfig[tableName].insert(request[tableName]);
                 }
             }
         } catch (err) {
@@ -149,47 +135,46 @@ class CareerService {
         console.log("Continue Career");
     }
 
-    /**
-     * Handle the update of daily state by setting phase based on week, fetching all ratings and storing them in a Map,
-     * getting all teams, creating an array of promises for each team's performance evaluation, waiting for all team
-     * performance evaluations to complete, and logging the performance of each team.
-     *
-     * @return {Promise<void>} Promise that resolves once the daily state update is handled
-     */
     public async handleUpdateDailyState(): Promise<void> {
         this.handleSetPhaseBasedOnWeek();
     
         // Fetch all ratings and store them in a Map
-        const ratings = Ratings.all();
+        const ratingsRepo = useRepo(Ratings);
+        const ratings = ratingsRepo.all();
         const ratingsMap = new Map(ratings.map(rating => [rating.pid, rating]));
 
-        const teams = Team.all();
+        const teamsRepo = useRepo(Team);
+        const teams = teamsRepo.all();
 
         // Create an array of promises for each team's performance evaluation
         const teamPerformancePromises = teams.map((team: Team) => 
-            this.teamService.evaluateTeamPerformance(team.id, ratingsMap)
+            this.teamService.evaluateTeamPerformance(team.id)
         );
 
         // Wait for all team performance evaluations to complete
         const teamPerformances = await Promise.all(teamPerformancePromises);
 
+        // Sort teamPerformances and teams in descending order based on performance
+        const sortedTeamsAndPerformances = teamPerformances
+            .map((performance, index) => ({ performance, team: teams[index] }))
+            .sort((a, b) => b.performance - a.performance);
+
         // Log the performance of each team
-        teams.forEach((team: Team, index: number) => {
-            console.log(`Team ${team.name} performance: ${teamPerformances[index]}`);
+        sortedTeamsAndPerformances.forEach(({ team, performance }) => {
+            console.log(`Team ${team.name} performance: ${performance}`);
         });
     }
 
-    /**
-     * Handle setting the phase based on the current week.
-     */ 
     public handleSetPhaseBasedOnWeek(): void {
         console.log("Set Phase Based On Week");
-        const worlds = World.all();
+        const worldsRepo = useRepo(World);
+        const worlds = worldsRepo.all();
         const world = worlds[0];
         let leagues: League[] = [];
+        const leaguesRepo = useRepo(League);
         // Get all leagues in the world
         if(world) {
-            leagues = League.query().where('wid', world.id).get();
+            leagues = leaguesRepo.query().where('wid', world.id).get();
         }
 
         // Iterate through each league
@@ -206,7 +191,7 @@ class CareerService {
                     // Update the league's current phase if it's different from the current phase
                     if (leg.phase !== phase.id) {
                         leg.phase = phase.id;
-                        leg.$save();
+                        leaguesRepo.save(leg);
                         console.log(`Updated ${leg.name} phase to ${phase.name} on week ${world.currentWeek} on day ${world.currentDayOfWeek}`);
                     }
                     break;

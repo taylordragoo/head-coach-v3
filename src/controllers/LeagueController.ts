@@ -21,6 +21,7 @@ export default class LeagueController {
 
     createDefaultLeagues() {
         return this.leagueService.handleCreateDefaultLeagues();
-        // this.leagueService.generateSchedule(1);
     }
+
+    
 }

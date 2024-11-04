@@ -1,4 +1,4 @@
-import { Model } from '@vuex-orm/core'
+import { Model } from 'pinia-orm'
 import Team from '@/models/Team'
 import World from '@/models/World';
 import Mail from '@/models/Mail';
@@ -9,7 +9,7 @@ export default class User extends Model {
 
     static fields () {
         return {
-            id: this.attr(null),
+            id: this.uid(),
             first: this.string(''),
             last: this.string(''),
             age: this.number(0),
@@ -23,27 +23,23 @@ export default class User extends Model {
         }
     }
 
-    id!: number
-    first!: string
-    last!: string
-    age!: number
-    exp!: string
-    skill!: string
-    team!: Team
-    team_id!: number
-    world!: World
-    mail!: Mail
-    contract!: Contract
+    static piniaOptions = {
+        persist: true
+    }
+
+    declare id: number
+    declare first: string
+    declare last: string
+    declare age: number
+    declare exp: string
+    declare skill: string
+    declare team: Team
+    declare team_id: number
+    declare world: World
+    declare mail: Mail
+    declare contract: Contract
 
     get full_name () {
         return `${this.first} ${this.last}`
-    }
-
-    get team_obj() {
-        return Team.find(this.team_id);
-    }
-
-    get team_league() {
-        return this.team_obj?.league;
     }
 }
