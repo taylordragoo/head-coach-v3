@@ -1,16 +1,37 @@
 import Dexie from "dexie";
-import { useRepo } from 'pinia-orm'
 import CareerController from "@/controllers/CareerController";
+import { getModelConfig, tableNames, ModelTypes } from "@/data/constants";
+
 import User from '@/models/User';
-import { getModelConfig, getModelRepo, tableNames } from "@/data/constants";
+import World from '@/models/World';
+import League from '@/models/League';
+import Team from '@/models/Team';
+import Player from '@/models/Player';
+import Match from "@/models/Match";
+import Born from "@/models/Born";
+import College from "@/models/College";
+import Draft from "@/models/Draft";
+import DepthChart from "@/models/DepthChart";
+import Ratings from "@/models/Ratings";
+import Health from "@/models/Health";
+import Injury from "@/models/Injury";
+import Salary from "@/models/Salary";
+import Stat from "@/models/Stat";
+import Overalls from "@/models/Overalls";
+import Potentials from "@/models/Potentials";
+import Phase from "@/models/Phase";
+import Contract from "@/models/Contract";
+import Conference from "@/models/Conference";
+import Division from "@/models/Division";
+import Staff from "@/models/Staff";
+import StaffContract from "@/models/StaffContract";
 
 class DatabaseService {
     private static instance: DatabaseService;
     public db: Dexie;
     public dbTemplate: Dexie;
     public db_name: string;
-    public modelConfig = getModelConfig();
-    public modelRepo = getModelRepo();
+    public modelConfig: ModelTypes = getModelConfig();
 
     private constructor(name: string = 'default') {
         this.db = new Dexie(name);
@@ -28,32 +49,29 @@ class DatabaseService {
         return DatabaseService.instance;
     }
 
+    public handleGetName() {
+        return this.db.name;
+    }
+
+    public handleGetTables() {
+        return this.db.tables;
+    }
+
     public async handleGetAllDatabases() {
         return Dexie.getDatabaseNames();
     }
 
     async initialize() {
-        console.log("Initialize function called");
-        try {
-            console.log("Initialize DB: " + this.dbTemplate.name);
-            this.initDB(this.dbTemplate);
-        } catch (error) {
-            console.error("Error in initDB: ", error);
-            return;
-        }
+        await this.initDB(this.dbTemplate);
         const count = await this.dbTemplate.world.count();
-        console.log("Count: " + count);
         if (count === 0) {
-            // generate default data and then insert into vuex/pinia
             const data = await this.generateData();
-            console.log("Initialize: " + data);
+            console.log("Initialize: " + JSON.stringify(data));
             if(data !== undefined) {
-                // This is where the newly created default data is saved to indexedDB
                 await this.populateDB(data);
             }
             return data;
         } else {
-            console.log("Initialize 2: ");
             return await this.handleGetCareerDataFromDatabase(this.dbTemplate);
         }
     }
@@ -61,16 +79,17 @@ class DatabaseService {
     async initDB(db: Dexie) {
         const schema = {};
         Object.keys(this.modelConfig).forEach(modelName => {
-            console.log("Init Table: " + modelName);
+            console.log("Init DB: " + modelName);
             schema[modelName] = 'id';
         });
-        console.log(schema);
-        await db.version(1).stores(schema);
-        console.log("Opening DB: " + db.name);
-        console.log("Database is open: ", db.isOpen());
+    
+        db.version(1).stores(schema);
+        await db.open().catch((error) => {
+            console.error("Failed to open db: ", error);
+        });
     }
 
-    async populateDB(request) {
+    async populateDB(request: any) {
         console.log(request);
         for (const tableName of Object.keys(this.modelConfig)) {
             try {
@@ -95,28 +114,30 @@ class DatabaseService {
         await this.initDB(this.db);
         await this.copyDB(this.dbTemplate, this.db);
     
-        const userRepo = useRepo(User);
-        userRepo.insert({
-            id: 0,
-            first: request.first,
-            last: request.last,
-            age: request.age,
-            exp: request.exp,
-            skill: request.skill,
-            team_id: request.team_id
+        await User.insert({
+            data: {
+                id: 0,
+                first: request.first,
+                last: request.last,
+                age: request.age,
+                exp: 'None',
+                skill: 'Team Builder',
+                team_id: request.team_id
+            }
         });
     
         for (const [tableName, model] of Object.entries(this.modelConfig)) {
             console.log("New Game: " + tableName);
             const data = await this.db.table(tableName).toArray();
-            await this.modelRepo[tableName].insert(data);
+            await model.insert({ data });
         }
 
         await this.handleSaveCareer();
+    
         await this.handleCloseDatabase(this.dbTemplate);
     }
 
-    async copyDB(dbFrom: Dexie, dbTo) {
+    async copyDB(dbFrom: Dexie, dbTo: any) {
         for (const tableName of Object.keys(this.modelConfig)) {
             console.log("Copy DB: " + tableName);
             const data = await dbFrom.table(tableName).toArray();
@@ -128,26 +149,9 @@ class DatabaseService {
         try {
             const db_name = "default";
     
-            // spreading the team object here because vuexy does not support deep merge
-            // const t = Team.all().map(team => {
-            //     return {
-            //         ...team,
-            //         budget: {
-            //             scouting: {...team.budget.scouting},
-            //             coaching: {...team.budget.coaching},
-            //             health: {...team.budget.health},
-            //             facilities: {...team.budget.facilities},
-            //         },
-            //         coach: {...team.coach},
-            //     };
-            // });
-    
             const request = Object.keys(this.modelConfig).reduce((acc, modelName) => {
-                // if (modelName === 'teams') {
-                //     acc[modelName] = t;
-                // } else {
-                    acc[modelName] = this.modelConfig[modelName].all();
-                // }
+                const Model = this.modelConfig[modelName as keyof ModelTypes];
+                acc[modelName] = Model.all();
                 return acc;
             }, {type: "save", db: db_name});
     
@@ -159,6 +163,7 @@ class DatabaseService {
                 console.log(db)
                 for (const modelName of Object.keys(this.modelConfig)) {
                     console.log("Save Model: " + modelName);
+                    // const Model = this.modelConfig[modelName as keyof ModelTypes];
                     const modelData = request[modelName];
                     if (modelData && modelData.length > 0) {
                         const table = db.table(modelName);
@@ -173,32 +178,13 @@ class DatabaseService {
 
     async handleSaveCareer() {
         try {
-            const userRepo = useRepo(User);
-            let u: User[] = userRepo.all();
-            u = u[0];
-            console.log(u);
-            const db_name = "fbgm_" + u.first + "_" + u.last;
-    
-            // spreading the team object here because vuexy does not support deep merge
-            // const t = Team.all().map(team => {
-            //     return {
-            //         ...team,
-            //         budget: {
-            //             scouting: {...team.budget.scouting},
-            //             coaching: {...team.budget.coaching},
-            //             health: {...team.budget.health},
-            //             facilities: {...team.budget.facilities},
-            //         },
-            //         coach: {...team.coach},
-            //     };
-            // });
+            let users: User[] = User.all();
+            let user = users[0];
+            console.log(user);
+            const db_name = "fbgm_" + user.first + "_" + user.last;
     
             const request = Object.keys(this.modelConfig).reduce((acc, modelName) => {
-                // if (modelName === 'teams') {
-                //     acc[modelName] = t;
-                // } else {
-                acc[modelName] = this.modelRepo[modelName].all();
-                // }
+                acc[modelName] = this.modelConfig[modelName].all();
                 return acc;
             }, {type: "save", db: db_name});
     
@@ -311,10 +297,10 @@ class DatabaseService {
         }
     }
 
-    public async handleTableOperation(table: any, data: any) {
+    public async handleTableOperation(table, data) {
         if (table) {
             const operation = Array.isArray(data) ? table.bulkPut : table.put;
-            await operation(data).then(function(lastKey: any) {
+            await operation(data).then(function(lastKey) {
                 console.log(`Last ${table.name}'s id was: ${lastKey ?? 'N/A'}`);
             }).catch(Dexie.BulkError, function(e) {
                 console.error(`Some ${table.name}s did not succeed. However, ${100000 - e.failures.length} ${table.name}s was added successfully`);
@@ -322,12 +308,11 @@ class DatabaseService {
         }
     };
 
-    async handleBulkPutOperation(dbTable: any, items: any, modelName: string) {
-        console.log(`Bulk Put: ${modelName}`);
-        console.log("Number of items: ", items.length);
-        console.log("First item: ", items[0]);
+    async handleBulkPutOperation(db, items, modelName) {
+        console.log(items)
         try {
-            await dbTable.bulkPut(items);
+            console.log(`Bulk Put: ${modelName}`);
+            await db.bulkPut(items);
             console.log(`Bulk put operation successful for ${modelName}`);
         } catch (error) {
             console.error(`Error in bulk put operation for ${modelName}: `, error);

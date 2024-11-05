@@ -1,5 +1,5 @@
 <script setup>
-import { FilterMatchMode } from 'primevue/api';
+// import { FilterMatchMode } from 'primevue/api';
 import { ref, onMounted, onBeforeMount, computed, watch } from 'vue';
 import TreeTable from 'primevue/treetable';
 import { POSITIONS, POSITION_ARCHETYPES, POSITION_ARCHETYPES_DISPLAY_NAMES } from '@/data/constants.ts'
@@ -416,7 +416,7 @@ const deleteSelectedProducts = () => {
 
 const initFilters = () => {
     filters.value = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        global: { value: null },
     };
 };
 

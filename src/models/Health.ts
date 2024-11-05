@@ -1,4 +1,4 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core'
 
 export default class Health extends Model {
 	static entity = 'health'
@@ -9,10 +9,6 @@ export default class Health extends Model {
 			status: this.string('')
 		}
 	}
-
-    static piniaOptions = {
-        persist: true
-    }
 
     declare id: number  
     declare pid: number

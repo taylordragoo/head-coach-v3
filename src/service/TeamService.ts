@@ -1,4 +1,10 @@
-import { useRepo } from 'pinia-orm'
+import * as faker from 'faker';
+import team_data from '@/data/teams.json';
+import player_data from '@/data/players.json';
+import utils from '@/utils/utilities';
+import PlayerService from '@/service/PlayerService';
+import { MIN_POSITION_COUNTS, MAX_POSITION_COUNTS, POSITIONS, POSITION_MAPPING } from '@/data/constants';
+
 import Team from '@/models/Team';
 import League from '@/models/League';
 import Player from '@/models/Player';
@@ -8,18 +14,11 @@ import Overalls from '@/models/Overalls';
 import Potentials from '@/models/Potentials';
 import DepthChart from '@/models/DepthChart';
 import Budget from '@/models/Budget';
-import * as faker from 'faker';
 import ITeam from '@/interfaces/ITeam';
-import utils from '@/utils/utilities';
-import PlayerService from '@/service/PlayerService';
-import team_data from '@/data/teams.json';
-import player_data from '@/data/newPlayers.json';
-import { MIN_POSITION_COUNTS, MAX_POSITION_COUNTS, POSITIONS, POSITION_MAPPING, getModelRepo } from '@/data/constants';
 
 export default class TeamService {
     private static instance: TeamService;
     public playerService: PlayerService;
-    public modelRepo = getModelRepo();
 
     constructor() {
         this.playerService = PlayerService.getInstance();
@@ -36,36 +35,29 @@ export default class TeamService {
     async handleCreateNewTeams(teams: ITeam[])
     {
         const _teams = await Promise.all(teams.map(team => this.handleGenerateTeam(team)));
+        console.log(_teams);
+        let new_teams = await Team.insert({
+            data: _teams
+        })
 
         let p: Player[] = player_data.players;
         const _players: Player[] = await Promise.all(p.map(player => {
             return this.playerService.handleGeneratePlayer(player);
         }));
 
-        await this.modelRepo.teams.save(_teams)
+        await Player.insert({
+            data: _players
+        })
         
-        let all_teams = this.modelRepo.teams.with('players', (query) => {
-            query.with('ratings');
-        }).get();
-
-        console.log(all_teams)
-        
-        // const playersRepo = useRepo(Player);
-        // await playersRepo.save(_players);
-
-        // for (let team of all_teams) {
-        //     await this.handleSetInitialTeamDepthChart(team);
-        // }
-        
-        return "Teams and Players created"
+        return "Teams created"
     }
 
     async handleGenerateTeam(data: any) {
-        const staff = this.generateStaffForTeam(data.tid + 1);
-        const staffArray = Object.values(staff);
-        await this.modelRepo.staff.save(staffArray)
-
-        this.generateBudgetForTeam(data.tid + 1, data);
+        const staff = await this.generateStaffForTeam(data.tid + 1);
+        await Staff.insert({
+            data: staff
+        });
+        await this.generateBudgetForTeam(data.tid + 1, data);
 
         return {
             id: data.tid + 1,
@@ -82,31 +74,33 @@ export default class TeamService {
             population: data.pop,
             stadium_capacity: data.stadiumCapacity
         }
-    }
+    }    
 
-    generateBudgetForTeam(teamId: number, data: any) {
-        this.modelRepo.budget.save([
-            {
-                team_id: teamId,
-                type: 'scouting',
-                amount: data.budget.scouting.amount,
-            },
-            {
-                team_id: teamId,
-                type: 'coaching',
-                amount: data.budget.coaching.amount,
-            },
-            {
-                team_id: teamId,
-                type: 'health',
-                amount: data.budget.health.amount,
-            },
-            {
-                team_id: teamId,
-                type: 'facilities',
-                amount: data.budget.facilities.amount,
-            }
-        ])
+    async generateBudgetForTeam(teamId: number, data: any) {
+        await Budget.insert({
+            data: [
+                {
+                    team_id: teamId,
+                    type: 'scouting',
+                    amount: data.budget.scouting.amount,
+                },
+                {
+                    team_id: teamId,
+                    type: 'coaching',
+                    amount: data.budget.coaching.amount,
+                },
+                {
+                    team_id: teamId,
+                    type: 'health',
+                    amount: data.budget.health.amount,
+                },
+                {
+                    team_id: teamId,
+                    type: 'facilities',
+                    amount: data.budget.facilities.amount,
+                }
+            ]
+        })
     }
 
     getPosition(currentPositionCounts: any) {
@@ -129,36 +123,42 @@ export default class TeamService {
         return selectedPosition;
     }
 
-    generateStaffForTeam(teamId: number) {
+    async generateStaffForTeam(teamId: number) {
+        const staffMemberObjects = await this.generateStaffMemberObjects(teamId);
+        const staff = Object.values(staffMemberObjects);
+        return staff;
+    }
+
+    async generateStaffMemberObjects(teamId: number) {
         return {
-            head_coach: this.generateStaffMember(teamId, 'Head Coach'),
-            offensive_coordinator: this.generateStaffMember(teamId, 'Offensive Coordinator'),
-            defensive_coordinator: this.generateStaffMember(teamId, 'Defensive Coordinator'),
-            qb_coach: this.generateStaffMember(teamId, 'QB Coach'),
-            rb_coach: this.generateStaffMember(teamId, 'RB Coach'),
-            te_coach: this.generateStaffMember(teamId, 'TE Coach'),
-            wr_coach: this.generateStaffMember(teamId, 'WR Coach'),
-            oline_coach: this.generateStaffMember(teamId, 'OLine Coach'),
-            dline_coach: this.generateStaffMember(teamId, 'DLine Coach'),
-            linebacker_coach: this.generateStaffMember(teamId, 'Linebacker Coach'),
-            secondary_coach: this.generateStaffMember(teamId, 'Secondary Coach'),
-            special_teams_coach: this.generateStaffMember(teamId, 'Special Teams Coach'),
-            strength_coach: this.generateStaffMember(teamId, 'Strength Coach'),
-            coach: this.generateStaffMember(teamId, 'Coach'),
-            owner: this.generateStaffMember(teamId, 'Owner'),
-            president: this.generateStaffMember(teamId, 'President'),
-            chief_executive_officer: this.generateStaffMember(teamId, 'Chief Executive Officer'),
-            general_manager: this.generateStaffMember(teamId, 'General Manager'),
-            director_pro_scouting: this.generateStaffMember(teamId, 'Director of Pro Scouting'),
-            director_college_scouting: this.generateStaffMember(teamId, 'Director of College Scouting'),
-            scout: this.generateStaffMember(teamId, 'Scout'),
-            sports_medicine_director: this.generateStaffMember(teamId, 'Sports Medicine Director'),
-            doctor: this.generateStaffMember(teamId, 'Doctor'),
-            trainer: this.generateStaffMember(teamId, 'Trainer'),
+            head_coach: await this.generateStaffMember(teamId, 'Head Coach'),
+            offensive_coordinator: await this.generateStaffMember(teamId, 'Offensive Coordinator'),
+            defensive_coordinator: await this.generateStaffMember(teamId, 'Defensive Coordinator'),
+            qb_coach: await this.generateStaffMember(teamId, 'QB Coach'),
+            rb_coach: await this.generateStaffMember(teamId, 'RB Coach'),
+            te_coach: await this.generateStaffMember(teamId, 'TE Coach'),
+            wr_coach: await this.generateStaffMember(teamId, 'WR Coach'),
+            oline_coach: await this.generateStaffMember(teamId, 'OLine Coach'),
+            dline_coach: await this.generateStaffMember(teamId, 'DLine Coach'),
+            linebacker_coach: await this.generateStaffMember(teamId, 'Linebacker Coach'),
+            secondary_coach: await this.generateStaffMember(teamId, 'Secondary Coach'),
+            special_teams_coach: await this.generateStaffMember(teamId, 'Special Teams Coach'),
+            strength_coach: await this.generateStaffMember(teamId, 'Strength Coach'),
+            coach: await this.generateStaffMember(teamId, 'Coach'),
+            owner: await this.generateStaffMember(teamId, 'Owner'),
+            president: await this.generateStaffMember(teamId, 'President'),
+            chief_executive_officer: await this.generateStaffMember(teamId, 'Chief Executive Officer'),
+            general_manager: await this.generateStaffMember(teamId, 'General Manager'),
+            director_pro_scouting: await this.generateStaffMember(teamId, 'Director of Pro Scouting'),
+            director_college_scouting: await this.generateStaffMember(teamId, 'Director of College Scouting'),
+            scout: await this.generateStaffMember(teamId, 'Scout'),
+            sports_medicine_director: await this.generateStaffMember(teamId, 'Sports Medicine Director'),
+            doctor: await this.generateStaffMember(teamId, 'Doctor'),
+            trainer: await this.generateStaffMember(teamId, 'Trainer'),
         }
     }
     
-    generateStaffMember(teamId: number, role: string) {
+    async generateStaffMember(teamId: number, role: string) {
         const baseSkills = {
             team_id: teamId,
             first_name: faker.name.firstName(),
@@ -651,17 +651,25 @@ export default class TeamService {
     }
 
     handleGetDefaultTeams() {
-        const teamRepo = useRepo(Team);
-        const teams: Team[] = teamRepo.all().map(team => {
-            return team;
+        const teams: Team[] = Team.all().map(team => {
+            const newTeam = new Team();
+            Object.assign(newTeam, team, {
+                budget: {
+                    scouting: { amount: team.budget.scouting.amount, rank: team.budget.scouting.rank },
+                    coaching: { amount: team.budget.coaching.amount, rank: team.budget.coaching.rank },
+                    health: { amount: team.budget.health.amount, rank: team.budget.health.rank },
+                    facilities: { amount: team.budget.facilities.amount, rank: team.budget.facilities.rank },
+                },
+                coach: { ...team.coach },
+            });
+            return newTeam;
         });
 
         return teams;
     }
 
-    public async evaluateTeamPerformance(teamId: number): Promise<number> {
-        const teamsRepo = useRepo(Team);
-        const team = teamsRepo.query().with('players', query => query.with('ratings')).where('id', teamId).first();
+    public async evaluateTeamPerformance(teamId: number, ratingsMap: Map<number, Ratings>): Promise<number> {
+        const team = Team.query().with('players').where('id', teamId).first();
 
         if (!team) {
             throw new Error(`Team with id ${teamId} not found`);
@@ -669,11 +677,14 @@ export default class TeamService {
 
         let totalPlayerRating = 0;
 
-        team.players?.forEach((player: Player) => {
-            totalPlayerRating += player.ratings.overall_rating;
+        team.players.forEach((player: Player) => {
+            const playerRating = ratingsMap.get(player.pid);
+            if (playerRating) {
+                totalPlayerRating += playerRating.overall;
+            }
         });
 
-        const averagePlayerRating = totalPlayerRating / (team.players?.length ?? 0);
+        const averagePlayerRating = totalPlayerRating / team.players.length;
         
         return averagePlayerRating;
     }
@@ -720,15 +731,9 @@ export default class TeamService {
             });
         });
 
-        const depth_chart = useRepo(DepthChart);
+        // const depth_chart = useRepo(DepthChart);
         // Save depth chart to the database
-        await depth_chart.save([...depthChart]);
-    }
-
-    async handleUpdateTeamDepthChart(arr: DepthChart[]) {
-        console.log(arr);
-        const depth_chart = useRepo(DepthChart);
-        await depth_chart.update(arr);
+        // await depth_chart.save([...depthChart]);
     }
 
     debugGeneratedPlayers(teams: Team[]) {

@@ -1,4 +1,4 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core'
 import Team from '@/models/Team';
 import Match from '@/models/Match';
 import { DEFAULT_SCHEDULE } from '@/data/constants';
@@ -8,20 +8,16 @@ export default class League extends Model {
 
     static fields () {
         return {
-            id: this.uid(),
-            abbrev: this.attr(''),
-            name: this.attr(''),
-            country: this.string(''),
+            id: this.attr(null),
             wid: this.attr(null),
-            teams: this.hasMany(Team, 'lid'),
+            abbrev: this.string(''),
+            name: this.string(''),
+            country: this.string(''),
             phase: this.number(0),
             tier: this.number(0),
+            teams: this.hasMany(Team, 'lid'),
             matches: this.hasMany(Match, 'leagueId')
         }
-    }
-
-    static piniaOptions = {
-        persist: true
     }
 
     declare id: number

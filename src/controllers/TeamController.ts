@@ -36,8 +36,4 @@ export default class TeamController {
     delete() {
 
     }
-
-    async updateTeamDepthChart(arr: DepthChart[]) {
-        this.teamService.handleUpdateTeamDepthChart(arr);
-    }
 }

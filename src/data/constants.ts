@@ -1,12 +1,9 @@
-import { useRepo, Model } from 'pinia-orm'
 import User from '@/models/User';
 import World from '@/models/World';
 import League from '@/models/League';
 import Team from '@/models/Team';
 import Player from '@/models/Player';
 import Match from "@/models/Match";
-import TrainingSchedule from "@/models/TrainingSchedule";
-import Activity from "@/models/Activity";
 import Born from "@/models/Born";
 import Budget from '@/models/Budget';
 import College from "@/models/College";
@@ -18,126 +15,91 @@ import Draft from "@/models/Draft";
 import Ratings from "@/models/Ratings";
 import Health from "@/models/Health";
 import Injury from "@/models/Injury";
-import Relative from "@/models/Relative";
 import Salary from "@/models/Salary";
 import Stat from "@/models/Stat";
-import Transaction from "@/models/Transaction";
-import Award from "@/models/Award";
 import Overalls from "@/models/Overalls";
 import Potentials from "@/models/Potentials";
-import Skill from "@/models/Skill";
 import Phase from "@/models/Phase";
-import Season from "@/models/Season";
 import Staff from "@/models/Staff";
 import StaffContract from "@/models/StaffContract";
 import Position from '@/models/Position';
 
-export function getModelConfig() {
-    return {
-        'user': User,
-        'players': Player,
-        'teams': Team,
-        'matches': Match,
-        'awards': Award,
-        'transactions': Transaction,
-        'draft': Draft,
-        'health': Health,
-        'born': Born,
-        'ratings': Ratings,
-        'college': College,
-        'salaries': Salary,
-        'stats': Stat,
-        'injuries': Injury,
-        'contracts': Contract,
-        'staff_contracts': StaffContract,
-        'relatives': Relative,
-        'overalls': Overalls,
-        'potentials': Potentials,
-        'skills': Skill,
-        'phases': Phase,
-        'training_schedules': TrainingSchedule,
-        'activities': Activity,
-        'conference': Conference,
-        'division': Division,
-        'season': Season,
-        'staff': Staff,
-        'leagues': League,
-        'world': World,
-        'depthChart': DepthChart,
-        'position': Position,
-        'budget': Budget
-    }
-}
+export type ModelTypes = {
+    world: typeof World;
+    leagues: typeof League;
+    teams: typeof Team;
+    players: typeof Player;
+    draft: typeof Draft;
+    health: typeof Health;
+    born: typeof Born;
+    ratings: typeof Ratings;
+    college: typeof College;
+    salaries: typeof Salary;
+    contracts: typeof Contract;
+    staff_contracts: typeof StaffContract;
+    overalls: typeof Overalls;
+    potentials: typeof Potentials;
+    conference: typeof Conference;
+    division: typeof Division;
+    staff: typeof Staff;
+    budget: typeof Budget;
+    user: typeof User;
+    position: typeof Position;
+    stats: typeof Stat;
+    injuries: typeof Injury;
+    depthChart: typeof DepthChart;
+};
 
-export function getModelRepo(): any {
-    return {
-        'user': useRepo(User),
-        'players': useRepo(Player),
-        'teams': useRepo(Team),
-        'matches': useRepo(Match),
-        'awards': useRepo(Award),
-        'transactions': useRepo(Transaction),
-        'draft': useRepo(Draft),
-        'health': useRepo(Health),
-        'born': useRepo(Born),
-        'ratings': useRepo(Ratings),
-        'college': useRepo(College),
-        'salaries': useRepo(Salary),
-        'stats': useRepo(Stat),
-        'injuries': useRepo(Injury),
-        'contracts': useRepo(Contract),
-        'staff_contracts': useRepo(StaffContract),
-        'relatives': useRepo(Relative),
-        'overalls': useRepo(Overalls),
-        'potentials': useRepo(Potentials),
-        'skills': useRepo(Skill),
-        'phases': useRepo(Phase),
-        'training_schedules': useRepo(TrainingSchedule),
-        'activities': useRepo(Activity),
-        'conference': useRepo(Conference),
-        'division': useRepo(Division),
-        'season': useRepo(Season),
-        'staff': useRepo(Staff),
-        'leagues': useRepo(League),
-        'world': useRepo(World),
-        'depthChart': useRepo(DepthChart),
-        'position': useRepo(Position),
-        'budget': useRepo(Budget)
-    }
-}
+export const getModelConfig = (): ModelTypes => ({
+    world: World,
+    leagues: League,
+    teams: Team,
+    players: Player,
+    draft: Draft,
+    health: Health,
+    born: Born,
+    ratings: Ratings,
+    college: College,
+    salaries: Salary,
+    contracts: Contract,
+    staff_contracts: StaffContract,
+    overalls: Overalls,
+    potentials: Potentials,
+    conference: Conference,
+    division: Division,
+    staff: Staff,
+    budget: Budget,
+    user: User,
+    position: Position,
+    stats: Stat,
+    injuries: Injury,
+    depthChart: DepthChart,
+});
 
 export const tableNames: string[] = [
-    'user',
-    'players',
+    'world',
+    'leagues',
     'teams',
-    'matches',
-    'awards',
-    'transactions',
+    'players',
     'draft',
     'health',
     'born',
     'ratings',
     'college',
     'salaries',
-    'stats',
-    'injuries',
     'contracts',
     'staff_contracts',
-    'relatives',
     'overalls',
     'potentials',
-    'skills',
-    'phases',
-    'training_schedules',
-    'activities',
     'conference',
     'division',
-    'season',
     'staff',
-    'world',
-    'leagues',
+    'budget',
+    'user',
+    'position',
+    'stats',
+    'injuries',
     'depthChart',
-    'position'
 ];
 
 export const DIFFICULTY = {
@@ -219,10 +181,12 @@ export type GAME = {
 
 export const DEFAULT_CONFS = [
     {
+        "lid": 0,
         "cid": 0,
         "name": "American Conference",
     },
     {
+        "lid": 0,
         "cid": 1,
         "name": "National Conference",
     },
@@ -231,41 +195,49 @@ export const DEFAULT_CONFS = [
 
 export const DEFAULT_DIVS = [
     {
+        "lid": 0,
         "did": 0,
         "cid": 0,
         "name": "East",
     },
     {
+        "lid": 0,
         "did": 1,
         "cid": 0,
         "name": "North",
     },
     {
+        "lid": 0,
         "did": 2,
         "cid": 0,
         "name": "South",
     },
     {
+        "lid": 0,
         "did": 3,
         "cid": 0,
         "name": "West",
     },
     {
+        "lid": 0,
         "did": 4,
         "cid": 1,
         "name": "East",
     },
     {
+        "lid": 0,
         "did": 5,
         "cid": 1,
         "name": "North",
     },
     {
+        "lid": 0,
         "did": 6,
         "cid": 1,
         "name": "South",
     },
     {
+        "lid": 0,
         "did": 7,
         "cid": 1,
         "name": "West",
@@ -377,6 +349,20 @@ export const POSITION_MAPPING = {
     "S": ["FS", "SS"],
     "K": ["K"],
     "P": ["P"],
+};
+
+export const SECONDARY_POSITION_MAPPING: Record<string, string[]> = {
+    "QB": ["QB"],
+    "RB": ["RB", "FB", "WR"],
+    "WR": ["WR", "RB"],
+    "TE": ["TE", "WR", "FB"],
+    "OL": ["LT", "LG", "C", "RG", "RT"],
+    "DL": ["LE", "RE", "DT"],
+    "LB": ["MLB", "OLB"],
+    "CB": ["CB"],
+    "S": ["FS", "SS"],
+    "K": ["K"],
+    "P": ["P"]
 };
 
 export const OFF_POSITIONS = [

@@ -1,4 +1,4 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core'
 
 export default class Draft extends Model {
     static entity = 'draft'
@@ -13,10 +13,6 @@ export default class Draft extends Model {
             ovr: this.number(null),
             orig_team_id: this.number(null),
         }
-    }
-
-    static piniaOptions = {
-        persist: true
     }
 
     declare id: number

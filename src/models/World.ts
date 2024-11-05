@@ -1,22 +1,19 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core'
 import League from '@/models/League';
 import moment from 'moment';
 
 export default class World extends Model {
-    static entity: string = 'world'
+    static entity = 'world'
 
     static fields () {
         return {
-            id: this.uid(),
-            date: this.attr(''),
-            season: this.number(null),
+            id: this.attr(null),
+            date: this.attr(null),
+            season: this.attr(null),
             user_id: this.attr(null),
+            phase: this.attr(null),
             leagues: this.hasMany(League, 'wid'),
         }
-    }
-
-    static piniaOptions = {
-        persist: true
     }
 
     declare id: number

@@ -18,8 +18,8 @@ class WorldController {
         return WorldController.instance;
     }
 
-    public createWorld() {
-        return this.worldService.handleCreateNewWorld();
+    public async createWorld() {
+        return await this.worldService.handleCreateNewWorld();
     }
 }
 

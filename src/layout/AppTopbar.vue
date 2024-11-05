@@ -3,7 +3,6 @@ import { computed, watch } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-import { useRepo } from 'pinia-orm'
 import moment from 'moment';
 import AppBreadcrumb from './AppBreadcrumb.vue';
 import World from "../models/World";
@@ -116,16 +115,14 @@ const goForward = () => {
     router.go(1);
 };
 const user = computed(() => {
-    const userRepo = useRepo(User);
-    return userRepo.query().with('team', (query) => {
+    return User.query().with('team', (query) => {
         query.with('players', (query) => {
             query.with('ratings');
         })
     }).first();
 })
 const world = computed(() => {
-    const worldRepo = useRepo(World);
-    return worldRepo.query().with('leagues', (query) => {
+    return World.query().with('leagues', (query) => {
         query.with('teams', (query) => {
             query
                 .with('head_coach')
@@ -173,10 +170,8 @@ watch(value1, (newValue) => {
     console.log("Loading over");
   }
 });
-const league_phase = computed(() => {
-    const leagueRepo = useRepo(League);
-    const league = leagueRepo.query().where('id', 0).first();
-    return league?.phase_name || 'Unknown';
+const league = computed(() => {
+    return League.query().where('id', 1).first();
 });
 const onTopbarContMenuButtonClick = async (event) => {
     openContinue();
@@ -189,8 +184,7 @@ const continueToTomorrow = (date) => {
     console.log(date);
     const new_date = getHumanDate(getTomorrow(date))
     console.log(new_date);
-    const worldRepo = useRepo(World);
-    worldRepo.where('id', 0).update({date: new_date});
+    World.where('id', 0).update({date: new_date});
 }
 const getHumanDate = (date) => {
     return moment(date).format('MM/DD/YYYY');
@@ -349,7 +343,7 @@ const saveData = () => {
                 <li>
                     <div class="flex items-center gap-2">
                         <div class="flex-1">
-                            <div class="label-small text-left text-surface-950 dark:text-surface-0">{{ league_phase }}</div>
+                            <div class="label-small text-left text-surface-950 dark:text-surface-0">{{ league?.phase_name }}</div>
                             <time class="mt-1 body-xsmall">{{ world?.date }}</time>
                         </div>
                         <div class="flex flex-col items-center">
@@ -365,7 +359,7 @@ const saveData = () => {
                                     }
                                 }"
                             />
-                            <span class="mt-1 body-xsmall text-center">{{ user.full_name }}</span>
+                            <span class="mt-1 body-xsmall text-center">{{ user?.first }} {{ user?.last }}</span>
                         </div>
                     </div>
                 </li>

@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "@primevue/themes": "^4.1.0",
+        "@vuex-orm/core": "^0.36.4",
         "chart.js": "^4.3.0",
         "chartjs-adapter-date-fns": "^3.0.0",
         "dexie": "^3.2.4",
@@ -20,9 +21,7 @@
         "localforage": "^1.10.0",
         "lodash": "^4.17.21",
         "moment": "^2.29.4",
-        "pinia": "^2.2.4",
-        "pinia-orm": "^1.9.2",
-        "pinia-plugin-persistedstate": "^4.1.1",
+        "pouchdb-utils": "^8.0.1",
         "primeicons": "^7.0.0",
         "primevue": "^4.1.0",
         "quill": "^1.3.7",
@@ -30,7 +29,10 @@
         "uuid-random": "^1.3.2",
         "vue": "^3.4.29",
         "vue-draggable-plus": "^0.5.3",
-        "vue-router": "^4.3.3"
+        "vue-router": "^4.3.3",
+        "vuex": "^4.1.0",
+        "vuex-orm": "^0.15.0",
+        "vuex-persist": "^3.1.3"
     },
     "devDependencies": {
         "@primevue/auto-import-resolver": "^4.0.1",

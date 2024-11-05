@@ -1,4 +1,4 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core'
 
 export default class Mail extends Model {
     static entity = 'mail'
@@ -12,15 +12,4 @@ export default class Mail extends Model {
             body: this.string(''),
         }
     }
-
-    static piniaOptions = {
-        persist: true
-    }
-
-    declare id: number
-    declare user_id: string
-    declare from: string
-    declare to: string
-    declare subject: string
-    declare body: string
 }

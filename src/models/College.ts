@@ -1,11 +1,11 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core'
 
 export default class College extends Model {
 	static entity = 'colleges'
 
 	static fields () {
 		return {
-			id: this.uid(),
+			id: this.attr(null),
 			tid: this.attr(0),
 			college_id: this.attr(0),
 			did: this.attr(0),
@@ -19,10 +19,6 @@ export default class College extends Model {
 			longitude: this.attr(0),
 		}
 	}
-
-    static piniaOptions = {
-        persist: true
-    }
 
     declare id: number
     declare tid: number

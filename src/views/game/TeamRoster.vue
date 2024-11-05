@@ -250,7 +250,7 @@ import League from "../../models/League";
 import User from "../../models/User";
 import Team from "../../models/Team";
 import Player from "../../models/Player";
-import {POSITIONS, OFF_POSITIONS, DEF_POSITIONS, getModelRepo } from '@/data/constants';
+import {POSITIONS, OFF_POSITIONS, DEF_POSITIONS, getModelConfig } from '@/data/constants';
 
 export default {
     components: {},
@@ -259,7 +259,7 @@ export default {
             POSITIONS,
             OFF_POSITIONS,
             DEF_POSITIONS,
-            modelRepo: getModelRepo(),
+            modelRepo: getModelConfig(),
             selected_team_id: 1,
             loading: true,
             filtered_positions: [],
@@ -310,12 +310,67 @@ export default {
         }
     },
     computed: {
+        user: {
+            /* By default get() is used */
+            get() {
+                return User.query().with('team.players.*').first()
+            },
+            /* We add a setter */
+            set(value) {
+                this.$store.commit('updateUser', value)
+            }
+        },
+        world: {
+            /* By default get() is used */
+            get() {
+            return World.query().first()
+            },
+            /* We add a setter */
+            set(value) {
+            this.$store.commit('updateWorld', value)
+            }
+        },
+        teams: {
+            /* By default get() is used */
+            get() {
+                return Team.query().with('players.*').orderBy('name').all()
+            },
+            /* We add a setter */
+            set(value) {
+                this.$store.commit('updateTeams', value)
+            }
+        },
+        players: {
+            /* By default get() is used */
+            get() {
+                return Player.query().with('team').all();
+            },
+            /* We add a setter */
+            set(value) {
+                this.$store.commit('updatePlayers', value)
+            }
+        },
+        filteredPlayers() {
+            if(this.selectedTeam != null) {
+                if (this.filtered_positions.length === 0) {
+                    return this.selectedTeam.players;
+                } else {
+                    return this.selectedTeam.players.filter(player =>
+                        this.filtered_positions.includes(player.position)
+                    );
+                }
+            } else {
+                return this.user.team?.players;
+            }
+
+            return [];
+        },
         team: {
             get() {
-                const team = this.modelRepo.teams.whereId(this.selected_team_id).with('players', query => {
+                const team = Team.query().where('id',this.selected_team_id).with('players', query => {
                     if(this.filtered_positions.length > 0) {
                         query.whereHas('ratings', (query) => {
-                            query.where('season', 2024).whereIn('position', this.filtered_positions)
+                            query.where('season', 2024).where('position', this.filtered_positions)
                         }).with('ratings')
                     } else {
                         query.with('contract')
@@ -330,18 +385,14 @@ export default {
                         )
                     }
                 }).first();
-                for (const player of team.players) {
-                    player.ratings = player.ratings[0];
+                if(team) {
+                    for (const player of team?.players) {
+                        player.ratings = player?.ratings[0];
+                    }
                 }
                 return team
             }
-        },
-        teams: {
-            get() {
-                const teams = this.modelRepo.teams.all();
-                return teams
-            }
-        },
+        }
     }
 }
 </script>

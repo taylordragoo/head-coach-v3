@@ -4,32 +4,22 @@ export default interface IPlayer {
     team_id: number;
     first_name: string;
     last_name: string;
-    img_url: string;
     height: number;
     weight: number;
     college_id: number;
-    days_until_can_trade: number;
-    retired_year: number;
-    roster_order: number;
-    years_free_agent: number;
     value: number;
     value_no_pot: number;
     value_fuzz: number;
     value_no_pot_fuzz: number;
-    position: string;
-    position_archetype: string;
-    mental_archetype: string;
-    base_rating: number;
+    
     born: object;
     college: object;
     contract: object;
     draft: object;
     ratings: object;
     health: object;
+    position: object[];
     injuries: object[];
-    relatives: object[];
     salaries: object[];
     stats: object[];
-    transactions: object[];
-    awards: object[];
 }

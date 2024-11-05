@@ -1,14 +1,14 @@
 import * as faker from 'faker';
-import players from '@/data/newPlayers.json';
 import colleges from '@/data/colleges.json';
 import Utilities from '@/utils/utilities';
-import { MIN_POSITION_COUNTS, MAX_POSITION_COUNTS, POSITIONS, POSITION_ARCHETYPES, TECHNICAL_ARCHETYPES, MENTAL_ARCHETYPES, POSITION_MAPPING, getModelRepo } from '@/data/constants';
+
+import IPlayer from '@/interfaces/IPlayer';
+import Ratings from "@/models/Ratings";
+
+import { MIN_POSITION_COUNTS, MAX_POSITION_COUNTS, POSITIONS, POSITION_ARCHETYPES, TECHNICAL_ARCHETYPES, MENTAL_ARCHETYPES, POSITION_MAPPING, SECONDARY_POSITION_MAPPING } from '@/data/constants';
 
 export default class PlayerService {
     private static instance: PlayerService;
-    public modelRepo = getModelRepo();
-
-    constructor() {}
 
     public static getInstance(): PlayerService {
         if (!PlayerService.instance) {
@@ -18,15 +18,10 @@ export default class PlayerService {
         return PlayerService.instance;
     }
 
-    handleCreatePlayers() {
-        const _players = players.players.map(player => {
-            return this.handleGeneratePlayer(player);
-        })
-    }
-
     async handleGeneratePlayer(p: any) {
+        console.log(p);
         let college = colleges.colleges.find((c) => c.region === p.college) || {"tid": 0, "id": 0, "did": 1, "region": "Duke", "name": "Blue Devils", "abbrev": "DUKE", "pop": 320, "city": "Durham ", "state": "NC", "latitude": 35.988, "longitude": -78.907};
-        let player = {
+        let player: IPlayer = {
             id: p.pid,
             pid: p.pid,
             team_id: p.tid >= 0 ? (p.tid + 1) : p.tid,
@@ -38,141 +33,140 @@ export default class PlayerService {
             value_no_pot: p.valueNoPot,
             value_fuzz: p.valueFuzz,
             value_no_pot_fuzz: p.valueNoPotFuzz,
-            college_id: college.id
-        }
-        player = await this.modelRepo.players.save(player);
-        let health = {
-            pid: p.pid,
-            status: p.injury.type
-        }
-        health = await this.modelRepo.health.save(health);
-        let born = {
-            pid: p.pid,
-            year: p.born.year,
-            location: p.born.loc
-        }
-        born = await this.modelRepo.born.save(born);
-        let contract = {
-            player_id: p.pid,
-            amount: p.contract.amount,
-            expires: p.contract.exp
-        }
-        contract = await this.modelRepo.contracts.save(contract);
-        let draft = {
-            pid: p.pid,
-            round: p.draft.round,
-            pick: p.draft.pick,
-            year: p.draft.year,
-            pot: p.draft.pot,
-            ovr: p.draft.ovr,
-            orig_team_id: p.draft.tid
-        }
-        draft = await this.modelRepo.draft.save(draft);
-        let ratings = p.ratings.map((rating: any) => ({
-            pid: p.pid,
-            position: rating.pos,
-            // fuzz: rating.fuzz,
-            // overall: rating.ovr,
-            // potential: rating.pot,
-            season: rating.season,
-            position_archetype: this.getArchetypeByPosition(rating.pos),
-            mental_archetype: this.getMentalArchetype(),
-            // Mental
-            // aggresion: this.initialRating(),
-            // aniticipation: this.initialRating(),
-            // bravery: this.initialRating(),
-            // composure: this.initialRating(),
-            // concentration: this.initialRating(),
-            // decisions: this.initialRating(),
-            // determination: this.initialRating(),
-            // flair: this.initialRating(),
-            // leadership: this.initialRating(),
-            // off_the_ball: this.initialRating(),
-            // positioning: this.initialRating(),
-            // teamwork: this.initialRating(),
-            // vision: this.initialRating(),
-            // work_rate: this.initialRating(),
-            // Physical
-            speed: rating.spd,
-            acceleration: rating.spd,
-            // agility: rating.elu,
-            strength: rating.stre,
-            // vertical: rating.elu,
-            stamina: rating.endu,
-            // Throwing
-            throw_power: rating.thp,
-            throw_accuracy_short: rating.tha,
-            // throw_accuracy_mid: rating.tha,
-            // throw_accuracy_deep: rating.tha,
-            // throw_on_the_run: rating.thv,
-            play_action: rating.thv,
-            // Ballcarrier
-            carrying: rating.bsc,
-            break_tackle: rating.elu,
-            // stiff_arm: rating.elu,
-            // spin_move: rating.elu,
-            // trucking: rating.elu,
-            // juking: rating.elu,
-            // Receiving
-            short_route_running: rating.rtr,
-            // medium_route_running: rating.rtr,
-            // deep_route_running: rating.rtr,
-            catching: rating.hnd,
-            release: rating.rtr,
-            // catch_in_traffic: rating.rtr,
-            // Blocking
-            run_blocking: rating.rbk,
-            pass_blocking: rating.pbk,
-            // run_block_power: rating.rbk,
-            // pass_block_power: rating.pbk,
-            // run_block_finesse: rating.rbk,
-            // pass_block_finesse: rating.pbk,
-            // Defensive
-            shed_block: rating.rns,
-            tackle: rating.tck,
-            // hit_power: rating.prs,
-            // play_recognition: rating.tck,
-            // pursuit: rating.tck,
-            man_coverage: rating.pcv,
-            zone_coverage: rating.pcv,
-            press: rating.prs,
-            // Kicking
-            kick_power: rating.kpw,
-            kick_accuracy: rating.kac,
-            punt_power: rating.ppw,
-            punt_accuracy: rating.pac,
-            // overalls: {
-            //     QB: rating.ovrs.QB,
-            //     RB: rating.ovrs.RB,
-            //     WR: rating.ovrs.WR,
-            //     TE: rating.ovrs.TE,
-            //     OL: rating.ovrs.OL,
-            //     DL: rating.ovrs.DL,
-            //     LB: rating.ovrs.LB,
-            //     CB: rating.ovrs.CB,
-            //     S: rating.ovrs.S,
-            //     K: rating.ovrs.K,
-            //     P: rating.ovrs.P
-            // },
-            // potentials: {
-            //     QB: rating.pots.QB,
-            //     RB: rating.pots.RB,
-            //     WR: rating.pots.WR,
-            //     TE: rating.pots.TE,
-            //     OL: rating.pots.OL,
-            //     DL: rating.pots.DL,
-            //     LB: rating.pots.LB,
-            //     CB: rating.pots.CB,
-            //     S: rating.pots.S,
-            //     K: rating.pots.K,
-            //     P: rating.pots.P
-            // }
-        }));
-        ratings = await this.modelRepo.ratings.save(ratings);
-        // let salaries = p.salaries[0];
-        // salaries = await this.modelRepo.salaries.save(salaries);
+            college_id: college.id,
+            college: college,
+            health: {
+                pid: p.pid,
+                status: p.injury.type
+            },
+            born: {
+                pid: p.pid,
+                year: p.born.year,
+                location: p.born.loc
+            },
+            contract: {
+                player_id: p.pid,
+                amount: p.contract.amount,
+                expires: p.contract.exp
+            },
+            draft: {
+                pid: p.pid,
+                round: p.draft.round,
+                pick: p.draft.pick,
+                year: p.draft.year,
+                pot: p.draft.pot,
+                ovr: p.draft.ovr,
+                orig_team_id: p.draft.tid
+            },
+            position: await Promise.all(SECONDARY_POSITION_MAPPING[p.pos || "QB"].map(pos => ({
+                player_id: p.pid,
+                position: pos
+            }))),
+            ratings: await Promise.all(p.ratings.map((rating: any) => {
+                const mappedRating = {
+                    pid: p.pid,
+                    position: rating.pos,
+                    fuzz: rating.fuzz,
+                    overall: rating.ovr,
+                    potential: rating.pot,
+                    season: rating.season,
+                    position_archetype: this.getArchetypeByPosition(rating.pos),
+                    mental_archetype: this.getMentalArchetype(),
+                    // Mental Attrs
+                    aniticipation: this.initialRating(),
+                    composure: this.initialRating(),
+                    concentration: this.initialRating(),
+                    decisions: this.initialRating(),
+                    determination: this.initialRating(),
+                    leadership: this.initialRating(),
+                    teamwork: this.initialRating(),
+                    work_rate: this.initialRating(),
+                    // Physical Attrs
+                    speed: rating.spd,
+                    acceleration: rating.spd,
+                    agility: rating.spd,
+                    strength: rating.stre,
+                    vertical: rating.stre,
+                    stamina: rating.endu,
+                    // Throwing Attrs
+                    throw_power: rating.thp,
+                    throw_accuracy_short: rating.tha,
+                    throw_accuracy_mid: rating.tha,
+                    throw_accuracy_deep: rating.tha,
+                    throw_on_the_run: rating.thv,
+                    play_action: rating.thv,
+                    // Ballcarrier Attrs
+                    carrying: rating.bsc,
+                    break_tackle: rating.elu,
+                    stiff_arm: rating.elu,
+                    spin_move: rating.elu,
+                    trucking: rating.elu,
+                    juking: rating.elu,
+                    // Receiving Attrs
+                    short_route_running: rating.rtr,
+                    medium_route_running: rating.rtr,
+                    deep_route_running: rating.rtr,
+                    catching: rating.hnd,
+                    release: rating.hnd,
+                    catch_in_traffic: rating.hnd,
+                    // Blocking Attrs
+                    run_blocking: rating.rbk,
+                    pass_blocking: rating.pbk,
+                    run_block_power: rating.rbk,
+                    pass_block_power: rating.pbk,
+                    run_block_finesse: rating.rbk,
+                    pass_block_finesse: rating.pbk,
+                    // Defensive Attrs
+                    shed_block: rating.rns,
+                    tackle: rating.tck,
+                    hit_power: rating.prs,
+                    play_recognition: rating.tck,
+                    pursuit: rating.tck,
+                    man_coverage: rating.pcv,
+                    zone_coverage: rating.pcv,
+                    press: rating.prs,
+                    // Kicking Attrs
+                    kick_power: rating.kpw,
+                    kick_accuracy: rating.kac,
+                    punt_power: rating.ppw,
+                    punt_accuracy: rating.pac,
+                    overalls: {
+                        QB: rating.ovrs.QB,
+                        RB: rating.ovrs.RB,
+                        WR: rating.ovrs.WR,
+                        TE: rating.ovrs.TE,
+                        OL: rating.ovrs.OL,
+                        DL: rating.ovrs.DL,
+                        LB: rating.ovrs.LB,
+                        CB: rating.ovrs.CB,
+                        S: rating.ovrs.S,
+                        K: rating.ovrs.K,
+                        P: rating.ovrs.P
+                    },
+                    potentials: {
+                        QB: rating.pots.QB,
+                        RB: rating.pots.RB,
+                        WR: rating.pots.WR,
+                        TE: rating.pots.TE,
+                        OL: rating.pots.OL,
+                        DL: rating.pots.DL,
+                        LB: rating.pots.LB,
+                        CB: rating.pots.CB,
+                        S: rating.pots.S,
+                        K: rating.pots.K,
+                        P: rating.pots.P
+                    }
+                };
+                return mappedRating;
+            })),
+            salaries: await Promise.all(p.salaries.map((salary: any) => ({
+                player_id: p.pid,
+                season: salary.season,
+                amount: salary.amount
+            })))
+        };
 
-        return this.modelRepo.players.find(p.pid);
+        return player;
     }
 
     generateRatings(p: any) {

@@ -1,19 +1,15 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core'
 
 export default class Budget extends Model {
     static entity = 'budgets'
 
-    static fields() {
+static fields () {
         return {
             id: this.uid(),
             team_id: this.attr(null),
             type: this.attr(''),
-            amount: this.attr(null),
+            amount: this.attr(0),
         }
-    }
-
-    static piniaOptions = {
-        persist: true
     }
 
     declare id: number

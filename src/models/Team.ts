@@ -1,10 +1,10 @@
-import { Model } from 'pinia-orm'
-import Season from '@/models/Season';
+import { Model } from '@vuex-orm/core'
+import Budget from '@/models/Budget';
 import Stat from '@/models/Stat';
 import Player from '@/models/Player';
 import League from "@/models/League";
 import Staff from '@/models/Staff';
-import Budget from '@/models/Budget';
+import Contract from '@/models/Contract';
 import DepthChart from '@/models/DepthChart';
 
 export default class Team extends Model {
@@ -27,13 +27,15 @@ export default class Team extends Model {
             strategy: this.attr(''),
 
             // Data
-            budget: this.hasMany(Budget, 'team_id'),
-            seasons: this.hasMany(Season, 'tid'),
             stats: this.hasMany(Stat, 'tid'),
             depthChart: this.hasMany(DepthChart, 'team_id'),
+            budget: this.hasMany(Budget, 'team_id'),
             
             // Players
             players: this.hasMany(Player, 'team_id'),
+
+            // League
+            league: this.belongsTo(League, 'lid'),
 
             // Coaching Staff
             head_coach: this.hasOne(Staff, 'team_id'),
@@ -67,10 +69,6 @@ export default class Team extends Model {
         };
     }
 
-    static piniaOptions = {
-        persist: true
-    }
-
     declare id: number
     declare tid: number
     declare lid: number
@@ -85,7 +83,6 @@ export default class Team extends Model {
     declare retired_numbers: string | null
     declare budget: Budget | null
     declare strategy: string | null
-    declare seasons: Season[] | null
     declare stats: Stat[] | null
     declare players: Player[] | null
     declare league: League | null

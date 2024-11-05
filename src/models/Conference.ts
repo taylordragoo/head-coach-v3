@@ -1,4 +1,4 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core'
 import Division from '@/models/Division';
 import Team from '@/models/Team';
 
@@ -9,20 +9,9 @@ export default class Conference extends Model {
             id: this.uid(),
             lid: this.number(null),
             cid: this.number(null),
+            name: this.string(null),
             divisions: this.hasMany(Division, 'cid'),
-            teams: this.hasMany(Team, 'cid'),
-            name: this.attr('')
+            teams: this.hasMany(Team, 'cid')
         }
     }
-
-    static piniaOptions = {
-        persist: true
-    }
-
-    declare id: number
-    declare lid: number
-    declare cid: number
-    declare name: string
-    declare teams: Team[] | null
-    declare divisions: Division[] | null
 }

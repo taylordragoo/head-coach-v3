@@ -1,5 +1,6 @@
-import { useRepo } from 'pinia-orm'
 import League from '@/models/League';
+import Conference from '@/models/Conference';
+import Division from '@/models/Division';
 import Team from "@/models/Team";
 import TeamService from '@/service/TeamService';
 import Match from "@/models/Match";
@@ -26,20 +27,29 @@ export default class LeagueService {
 
     async handleCreateDefaultLeagues()
     {
-        const league = useRepo(League);
-        league.save({
-            id: 1,
-            name: "National Football Association",
-            abbrev: "NFL",
-            country: "North America",
-            wid: 0,
-            phase: 0,
-            tier: 1,
-            scheduleType: 'DEFAULT'
-        });
+        await League.insert({
+            data: {
+                id: 1,
+                name: "National Football Association",
+                abbrev: "NFL",
+                country: "North America",
+                wid: 0,
+                phase: 0,
+                tier: 1,
+                scheduleType: 'DEFAULT'
+            },
+        })
+
+        await Conference.insert({
+            data: DEFAULT_CONFS
+        })
+
+        await Division.insert({
+            data: DEFAULT_DIVS
+        })
 
         await this.teamService.handleCreateNewTeams(team_data.teams);
         return "Default league and teams created";
-    } 
+    }
 
 }

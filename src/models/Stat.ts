@@ -1,11 +1,11 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core'
 
 class Stat extends Model {
     static entity = 'stats'
 
     static fields () {
         return {
-            id: this.uid(),
+            id: this.attr(null),
             playoffs: this.attr(false),
             season: this.attr(0),
             teamId: this.attr(0),
@@ -86,90 +86,6 @@ class Stat extends Model {
             puntsMade: this.attr(0)
         }
     }
-
-    static piniaOptions = {
-        persist: true
-    }
-
-    declare id: number
-    declare playoffs: boolean
-    declare season: number
-    declare teamId: number
-    declare yearsWithTeam: number
-    declare av: number
-    declare qbWin: number
-    declare qbLoss: number
-    declare qbTie: number
-    declare qbOTL: number
-    declare gamesPlayed: number
-    declare gamesStarted: number
-    declare minutes: number
-    declare fumble: number
-    declare fumbleLost: number
-    declare passCompletion: number
-    declare passAttempts: number
-    declare passYards: number
-    declare passTouchdowns: number
-    declare passInterceptions: number
-    declare passLongest: number
-    declare passSacked: number
-    declare passSackedYards: number
-    declare rushAttempts: number
-    declare rushYards: number
-    declare rushTouchdowns: number
-    declare rushLongest: number 
-    declare target: number
-    declare reception: number    
-    declare receptionYards: number
-    declare receptionTouchdowns: number
-    declare receptionLongest: number
-    declare puntReturn: number
-    declare puntReturnYards: number
-    declare puntReturnTouchdowns: number
-    declare puntReturnLongest: number
-    declare kickReturn: number
-    declare kickReturnYards: number
-    declare kickReturnTouchdowns: number
-    declare kickReturnLongest: number
-    declare defenseInterception: number
-    declare defenseInterceptionYards: number
-    declare defenseInterceptionTouchdowns: number
-    declare defenseInterceptionLongest: number
-    declare defensePassDefended: number
-    declare defenseFumbleForced: number
-    declare defenseFumbleRecovered: number
-    declare defenseFumbleYards: number
-    declare defenseFumbleTouchdowns: number
-    declare defenseFumbleLongest: number    
-    declare defenseSacked: number
-    declare defenseTacklesSolo: number
-    declare defenseTacklesAssisted: number
-    declare defenseTacklesLoss: number
-    declare defenseSafety: number
-    declare fieldGoal0: number
-    declare fieldGoalAttempts0: number
-    declare fieldGoal20: number
-    declare fieldGoalAttempts20: number
-    declare fieldGoal30: number
-    declare fieldGoalAttempts30: number
-    declare fieldGoal40: number
-    declare fieldGoalAttempts40: number
-    declare fieldGoal50: number
-    declare fieldGoalAttempts50: number
-    declare fieldGoalLongest: number
-    declare extraPoints: number
-    declare extraPointAttempts: number
-    declare punt: number
-    declare puntYards: number
-    declare puntLongest: number
-    declare puntTouchbacks: number
-    declare puntInside20: number
-    declare puntBlocked: number
-    declare penalties: number
-    declare penaltyYards: number
-    declare jerseyNumber: string
-    declare blockedAttempts: number
-    declare puntsMade: number
 }
 
 export default Stat

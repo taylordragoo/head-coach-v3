@@ -1,20 +1,16 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core'
 
 export default class Coach extends Model {
     static entity = 'coach'
 
-    static fields() {
+static fields() {
         return {
-            id: this.uid(),
+            id: this.attr(null),
             name: this.attr(''),
             position: this.attr(''),
             image: this.attr(''),
             bio: this.attr('')
         }
-    }
-
-    static piniaOptions = {
-        persist: true
     }
 
     declare id: number

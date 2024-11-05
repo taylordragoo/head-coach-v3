@@ -771,7 +771,6 @@
 </template>
 
 <script>
-import { useRepo } from 'pinia-orm'
 import OrganizationChart from 'primevue/organizationchart';
 import CustomTabView from '@/components/CustomTabView.vue';
 import CustomTabPanel from '@/components/CustomTabPanel.vue';
@@ -932,40 +931,54 @@ export default {
     },
     computed: {
         user: {
+            /* By default get() is used */
             get() {
-                const userRepo = useRepo(User);
-                return userRepo.query().withAllRecursive().first()
+                return User.query().with('team.players.*').first()
             },
+            /* We add a setter */
+            set(value) {
+                this.$store.commit('updateUser', value)
+            }
         },
         world: {
+            /* By default get() is used */
             get() {
-                const worldRepo = useRepo(World);
-                return worldRepo.withAll().get();
+            return World.query().first()
+            },
+            /* We add a setter */
+            set(value) {
+            this.$store.commit('updateWorld', value)
             }
         },
         teams: {
+            /* By default get() is used */
             get() {
-                const teamRepo = useRepo(Team);
-                return teamRepo.query().withAllRecursive().orderBy('name').get()
+                return Team.query().with('players.*').orderBy('name').all()
             },
-        },
-        players: {
-            get() {
-                const playerRepo = useRepo(Player);
-                return playerRepo.query().withAll().get();
+            /* We add a setter */
+            set(value) {
+                this.$store.commit('updateTeams', value)
             }
         },
-        teamDepthChart() {
+        players: {
+            /* By default get() is used */
+            get() {
+                return Player.query().with('team').all();
+            },
+            /* We add a setter */
+            set(value) {
+                this.$store.commit('updatePlayers', value)
+            }
+        },
+        filteredPlayers() {
             if (this.user.team) {
                 if (this.filtered_positions.length === 0) {
-                    return this.user.team.depthChart.map(depthChartObj => {
-                        const player = this.players.find(p => p.id === depthChartObj.player_id);
-                        return {
-                            ...depthChartObj,
-                            player: player
-                        };
-                    });
-                } 
+                    return this.user.team.players;
+                } else {
+                    return this.user.team.players.filter(player =>
+                        this.filtered_positions.includes(player.ratings.position)
+                    );
+                }
             }
             return [];
         }

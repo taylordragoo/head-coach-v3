@@ -16,10 +16,6 @@ export default class PlayerController {
         return PlayerController.instance;
     }
 
-    create() {
-        this.playerService.handleCreatePlayers()
-    }
-
     generate() {
         let player = {}
         this.playerService.handleGeneratePlayer(player)

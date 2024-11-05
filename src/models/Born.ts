@@ -1,4 +1,4 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core'
 
 export default class Born extends Model {
     static entity = 'born'
@@ -9,10 +9,6 @@ export default class Born extends Model {
             year: this.number(null),
             location: this.string('')
         }
-    }
-
-    static piniaOptions = {
-        persist: true
     }
 
     declare id: number

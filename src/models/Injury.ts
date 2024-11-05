@@ -1,4 +1,4 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core'
 
 export default class Injury extends Model {
     static entity = 'injury'
@@ -10,13 +10,4 @@ export default class Injury extends Model {
             daysRemaining: this.attr(null)
         }
     }
-
-    static piniaOptions = {
-        persist: true
-    }
-
-    declare id: number
-    declare pid: number
-    declare type: string
-    declare daysRemaining: number
 }

@@ -1,23 +1,19 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core';
 
 export default class Position extends Model {
     static entity: string = 'position';
 
     static fields() {
         return {
-            id: this.uid(),
-            position: this.attr(''),
+            id: this.attr(null),
             player_id: this.attr(null),
-            experience: this.attr(0),
+            position: this.string(''),
+            experience: this.number(0),
         }
     }
 
-    static piniaOptions = {
-        persist: true
-    }
-
-    declare id: number
-    declare position: string
-    declare player_id: number
-    declare experience: number
+    declare id: number;
+    declare player_id: number;
+    declare position: string;
+    declare experience: number;
 }

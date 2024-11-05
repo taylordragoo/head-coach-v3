@@ -1,4 +1,4 @@
-import { Model } from 'pinia-orm'
+import { Model } from '@vuex-orm/core'
 
 export default class StaffContract extends Model {
     static entity = 'staff_contract'
@@ -10,13 +10,4 @@ export default class StaffContract extends Model {
             expires: this.number(null)
         }
     }
-
-    static piniaOptions = {
-        persist: true
-    }
-
-    declare id: number
-    declare staff_id: number
-    declare amount: number
-    declare expires: number
 }
