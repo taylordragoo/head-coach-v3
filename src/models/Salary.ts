@@ -5,9 +5,14 @@ export default class Salary extends Model {
     static fields () {
         return {
             id: this.uid(),
-            player_id: this.attr(null),
             amount: this.number(null),
-            season: this.number(null)
+            season: this.number(null),
+            option: this.string('').nullable()
         }
     }
+
+    declare id: number
+    declare amount: number
+    declare season: number
+    declare option: string
 }

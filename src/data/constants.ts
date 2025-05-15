@@ -21,8 +21,9 @@ import Overalls from "@/models/Overalls";
 import Potentials from "@/models/Potentials";
 import Phase from "@/models/Phase";
 import Staff from "@/models/Staff";
-import StaffContract from "@/models/StaffContract";
+import Option from "@/models/Option";
 import Position from '@/models/Position';
+import Person from '@/models/Person';
 
 export type ModelTypes = {
     world: typeof World;
@@ -36,7 +37,7 @@ export type ModelTypes = {
     college: typeof College;
     salaries: typeof Salary;
     contracts: typeof Contract;
-    staff_contracts: typeof StaffContract;
+    option: typeof Option;
     overalls: typeof Overalls;
     potentials: typeof Potentials;
     conference: typeof Conference;
@@ -48,6 +49,7 @@ export type ModelTypes = {
     stats: typeof Stat;
     injuries: typeof Injury;
     depthChart: typeof DepthChart;
+    person: typeof Person;
 };
 
 export const getModelConfig = (): ModelTypes => ({
@@ -62,7 +64,7 @@ export const getModelConfig = (): ModelTypes => ({
     college: College,
     salaries: Salary,
     contracts: Contract,
-    staff_contracts: StaffContract,
+    option: Option,
     overalls: Overalls,
     potentials: Potentials,
     conference: Conference,
@@ -74,6 +76,7 @@ export const getModelConfig = (): ModelTypes => ({
     stats: Stat,
     injuries: Injury,
     depthChart: DepthChart,
+    person: Person
 });
 
 export const tableNames: string[] = [
@@ -100,7 +103,44 @@ export const tableNames: string[] = [
     'stats',
     'injuries',
     'depthChart',
+    'person'
 ];
+
+export const TEAM_MAPPING = {
+    "Arizona Cardinals": 0,
+    "Atlanta Falcons": 1,
+    "Baltimore Ravens": 2,
+    "Buffalo Bills": 3,
+    "Carolina Panthers": 4,
+    "Chicago Bears": 5,
+    "Cincinnati Bengals": 6,
+    "Cleveland Browns": 7,
+    "Dallas Cowboys": 8,
+    "Denver Broncos": 9,
+    "Detroit Lions": 10,
+    "Green Bay Packers": 11,
+    "Houston Texans": 12,
+    "Indianapolis Colts": 13,
+    "Jacksonville Jaguars": 14,
+    "Kansas City Chiefs": 15,
+    "Las Vegas Raiders": 16,
+    "Los Angeles Chargers": 17,
+    "Los Angeles Rams": 18,
+    "Miami Dolphins": 19,
+    "Minnesota Vikings": 20,
+    "New England Patriots": 21,
+    "New Orleans Saints": 22,
+    "NY Giants": 23,
+    "NY Jets": 24,
+    "Philadelphia Eagles": 25,
+    "Pittsburgh Steelers": 26,
+    "San Francisco 49ers": 27,
+    "Seattle Seahawks": 28,
+    "Tampa Bay Buccaneers": 29,
+    "Tennessee Titans": 30,
+    "Washington Commanders": 31
+
+}
 
 export const DIFFICULTY = {
     Easy: -0.25,
@@ -285,23 +325,25 @@ export const SPORTS_MED_ROLES = [
 
 export const POSITIONS = [
     "QB",
-    "RB",
+    "HB",
     "WR",
     "TE",
-    "OT",
-    "OG",
+    "LT",
+    "LG",
     "C",
-    "DE",
+    "RG",
+    "RT",
+    "LE",
+    "RE",
     "DT",
-    "OLB",
+    "LOLB",
     "MLB",
+    "ROLB",
     "CB",
-    "S",
+    "FS",
+    "SS",
     "K",
-    "P",
-    "OL",
-    "DL",
-    "LB",
+    "P"
 ];
 
 export const DEPTH_CHART_POSITIONS = [
@@ -508,7 +550,12 @@ export const POSITION_ARCHETYPES: Record<string, string[]> = {
         "scrambler",
         "improviser"
     ],
-    "RB": [
+    "HB": [
+        "eluvisve",
+        "power",
+        "receiving"
+    ],
+    "FB": [
         "eluvisve",
         "power",
         "receiving"
@@ -524,12 +571,22 @@ export const POSITION_ARCHETYPES: Record<string, string[]> = {
         "posession",
         "blocking"
     ],
-    "OT": [
+    "LT": [
         "agile",
         "power",
         "pass_protector"
     ],
-    "OG": [
+    "RT": [
+        "agile",
+        "power",
+        "pass_protector"
+    ],
+    "LG": [
+        "agile",
+        "power",
+        "pass_protector"
+    ],
+    "RG": [
         "agile",
         "power",
         "pass_protector"
@@ -539,7 +596,12 @@ export const POSITION_ARCHETYPES: Record<string, string[]> = {
         "power",
         "pass_protector"
     ],
-    "DE": [
+    "LE": [
+        "speed_rusher",
+        "power_rusher",
+        "run_stopper"
+    ],
+    "RE": [
         "speed_rusher",
         "power_rusher",
         "run_stopper"
@@ -549,7 +611,7 @@ export const POSITION_ARCHETYPES: Record<string, string[]> = {
         "power_rusher",
         "run_stopper"
     ],
-    "OLB": [
+    "LOLB": [
         "speed_rusher",
         "power_rusher",
         "run_stopper",
@@ -560,12 +622,23 @@ export const POSITION_ARCHETYPES: Record<string, string[]> = {
         "pass_coverage",
         "run_stopper"
     ],
+    "ROLB": [
+        "speed_rusher",
+        "power_rusher",
+        "run_stopper",
+        "pass_coverage"
+    ],
     "CB": [
         "zone",
         "man",
         "slot"
     ],
-    "S": [
+    "SS": [
+        "zone",
+        "hybrid",
+        "physical"
+    ],
+    "FS": [
         "zone",
         "hybrid",
         "physical"
@@ -575,22 +648,7 @@ export const POSITION_ARCHETYPES: Record<string, string[]> = {
     ],
     "P": [
         "physical"
-    ],
-    "OL": [
-        "agile",
-        "power",
-        "pass_protector"
-    ],
-    "DL": [
-        "speed_rusher",
-        "power_rusher",
-        "run_stopper"
-    ],
-    "LB": [
-        "defensive_leader",
-        "pass_coverage",
-        "run_stopper"
-    ],
+    ]
 }
 
 export const TECHNICAL_ARCHETYPES: {[key: string]: {[key: string]: number}} = {

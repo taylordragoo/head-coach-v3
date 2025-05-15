@@ -9,6 +9,8 @@ import College from "@/models/College";
 import Born from "@/models/Born";
 import Health from "@/models/Health";
 import Position from '@/models/Position';
+import Person from '@/models/Person';
+import Team from '@/models/Team';
 
 export default class Player extends Model {
     static entity: string = 'player';
@@ -17,62 +19,40 @@ export default class Player extends Model {
         return {
             // Attributes
             id: this.attr(null),
-            pid: this.attr(0),
+            person_id: this.attr(0),
             team_id: this.attr(0),
-            first_name: this.attr(''),
-            last_name: this.attr(''),
-            height: this.attr(0),
-            weight: this.attr(0),
             college_id: this.attr(0),
-            value: this.attr(0),
-            value_no_pot: this.attr(0),
-            value_fuzz: this.attr(0),
-            value_no_pot_fuzz: this.attr(0),
 
             // Relationships
-            position: this.hasMany(Position, 'player_id'),
-            born: this.hasOne(Born, 'pid'),
+            person: this.belongsTo(Person, 'person_id'),
             college: this.belongsTo(College, 'college_id'),
-            contract: this.hasOne(Contract, 'pid'),
-            draft: this.hasOne(Draft, 'pid'),
-            ratings: this.hasMany(Ratings, 'pid'),
-            health: this.hasOne(Health, 'pid'),
-            injuries: this.hasMany(Injury, 'pid'),
-            salaries: this.hasMany(Salary, 'player_id'),
-            stats: this.hasMany(Stat, 'pid'),
+            contract: this.hasOne(Contract, 'person_id'),
+            draft: this.hasOne(Draft, 'player_id'),
+            ratings: this.hasMany(Ratings, 'player_id'),
+            health: this.hasOne(Health, 'player_id'),
+            injuries: this.hasMany(Injury, 'player_id'),
+
+            stats: this.hasMany(Stat, 'player_id'),
+            team: this.belongsTo(Team, 'team_id')
         }
     }
 
     declare id: number;
-    declare pid: number;
+    declare person_id: number;
     declare team_id: number;
-    declare first_name: string;
-    declare last_name: string;
-    declare height: number;
-    declare weight: number;
     declare college_id: number;
-    declare value: number;
-    declare value_no_pot: number;
-    declare value_fuzz: number;
-    declare value_no_pot_fuzz: number;
     
-    declare position: Position[];
-    declare born: Born;
     declare college: College;
     declare contract: Contract;
     declare draft: Draft;
-    declare ratings: Ratings[];
+    declare ratings: Ratings;
     declare health: Health;
     declare injuries: Injury[];
     declare salaries: Salary[];
     declare stats: Stat[];
 
-    get full_name () {
-        return `${this.first_name} ${this.last_name}`
-    }
-
     get player_exp () {
-        let draft = Draft.query().where('pid', this.pid).first();
+        let draft = Draft.query().where('id', this.id).first();
         return draft ? (2024 - draft.year) : 0;
     }
 }

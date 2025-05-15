@@ -1,5 +1,5 @@
 import { Model } from '@vuex-orm/core'
-import StaffContract from '@/models/StaffContract';
+import Contract from '@/models/Contract';
 
 export default class Staff extends Model {
     static entity = 'staff'
@@ -49,7 +49,7 @@ export default class Staff extends Model {
             athletic_training: this.number(null),
             medical_training: this.number(null),
             
-            contract: this.hasOne(StaffContract, 'staff_id'),
+            contract: this.hasOne(Contract, 'staff_id'),
         }
     }
 }

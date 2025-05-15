@@ -801,7 +801,8 @@ export default {
             OFF_POSITIONS,
             DEF_POSITIONS,
             DEPTH_CHART_POSITIONS,
-            selectedTeam: 0,
+            selected_team_id: 1,
+            teamDepthChart: [],
             filtered_positions: [],
             quarterbacks: [],
             runningbacks: [],
@@ -853,9 +854,29 @@ export default {
         };
     },
     created() {
-        this.teamController = new TeamController()
+        this.teamController = new TeamController();
+        this.loadDepthChart();
     },
     methods: {
+        async loadDepthChart() {
+            try {
+                // Try to load existing depth chart from database/API
+                const depthChart = await this.teamController.getTeamDepthChart(this.selected_team_id);
+                
+                if (depthChart && depthChart.length > 0) {
+                    // If we have a saved depth chart, use it
+                    this.teamDepthChart = depthChart;
+                } else {
+                    // Otherwise, initialize with filteredPlayers
+                    this.teamDepthChart = [];
+                    // This will create a new depth chart from players
+                }
+                
+                this.updatePositions();
+            } catch (error) {
+                console.error("Error loading depth chart:", error);
+            }
+        },
         togglePosition(pos) {
             const index = this.filtered_positions.indexOf(pos);
             if (index > -1) {
@@ -895,15 +916,53 @@ export default {
         updatePositions() {
             this.depthChartObject = {};
             DEPTH_CHART_POSITIONS.forEach(depthChartPosition => {
-                this.depthChartObject[depthChartPosition.toLowerCase()] = this.teamDepthChart
+                // First check if we already have depth chart entries for this position
+                const existingEntries = this.teamDepthChart
                     .filter(obj => obj.position === depthChartPosition)
                     .sort((a, b) => a.rank - b.rank);
+                    
+                if (existingEntries.length > 0) {
+                    this.depthChartObject[depthChartPosition.toLowerCase()] = existingEntries;
+                } else {
+                    // If no existing entries, create new ones from players with matching positions
+                    const positionPlayers = this.team?.players
+                        ?.filter(player => this.getPlayerDepthChartPosition(player) === depthChartPosition)
+                        ?.map((player, index) => ({
+                            id: player.id,
+                            player: player,
+                            position: depthChartPosition,
+                            rank: index + 1,
+                            team_id: this.selected_team_id
+                        })) || [];
+                        
+                    this.depthChartObject[depthChartPosition.toLowerCase()] = positionPlayers;
+                }
             });
         },
         onQuarterbackRightClick(event, item) {
             console.log(item);
             this.$refs.menu.show(event);
-        }
+        },
+        getPlayerDepthChartPosition(player) {
+            // Map player's position to a depth chart position
+            // This is a simple implementation - you might need more complex logic
+            const position = player.ratings?.position;
+            
+            // Direct mapping for common positions
+            if (DEPTH_CHART_POSITIONS.includes(position)) {
+                return position;
+            }
+            
+            // For positions that need special mapping
+            // Example: Maybe WRs get distributed to WR, WR2, WR3 based on ratings
+            if (position === "WR") {
+                // You could implement logic to decide which WR slot
+                return "WR";
+            }
+            
+            // Default return if no mapping is found
+            return null;
+        },
     },
     watch: {
         filteredQuarterbacks: {
@@ -960,6 +1019,35 @@ export default {
                 this.$store.commit('updateTeams', value)
             }
         },
+        team: {
+            get() {
+                const team = Team.query().where('id',this.selected_team_id).with('players', query => {
+                    if(this.filtered_positions.length > 0) {
+                        query.whereHas('ratings', (query) => {
+                            query.where('season', 2024).where('position', this.filtered_positions)
+                        }).with('ratings')
+                    } else {
+                        query.with('contract')
+                            .with('salaries')
+                            .with('draft')
+                            .with('college')
+                            .with('born')
+                            .with('position')
+                            .with('ratings', (query) => {
+                                query.where('season', 2025)
+                            }
+                        )
+                    }
+                }).first();
+                if(team) {
+                    for (const player of team?.players) {
+                        player.ratings = player?.ratings[0];
+                        player.position = player?.ratings.position;
+                    }
+                }
+                return team
+            }
+        },
         players: {
             /* By default get() is used */
             get() {
@@ -971,12 +1059,12 @@ export default {
             }
         },
         filteredPlayers() {
-            if (this.user.team) {
+            if (this.team) {
                 if (this.filtered_positions.length === 0) {
-                    return this.user.team.players;
+                    return this.team?.players;
                 } else {
-                    return this.user.team.players.filter(player =>
-                        this.filtered_positions.includes(player.ratings.position)
+                    return this.team?.players?.filter(player =>
+                        this.filtered_positions.includes(player.ratings?.position)
                     );
                 }
             }

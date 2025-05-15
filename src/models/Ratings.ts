@@ -1,7 +1,6 @@
 import { Model } from '@vuex-orm/core'
 import { POSITION_ARCHETYPES_DISPLAY_NAMES, MENTAL_ARCHETYPES_DISPLAY_NAMES } from '@/data/constants';
-import Overalls from '@/models/Overalls';
-import Potentials from '@/models/Potentials';
+import Player from '@/models/Player';
 
 // Physical
 // "hgt"
@@ -37,8 +36,8 @@ export default class Ratings extends Model {
 
 	static fields () {
 		return {
-			id: this.uid(),
-			pid: this.number(null),
+			id: this.attr(null),
+			player_id: this.attr(null),
 			position: this.string(''),
 			position_archetype: this.string(''),
 			mental_archetype: this.string(''),
@@ -105,19 +104,20 @@ export default class Ratings extends Model {
 			punt_accuracy: this.number(null),
 			punt_power: this.number(null),
 
-            overalls: this.hasOne(Overalls, 'rating_id'),
-            potentials: this.hasOne(Potentials, 'rating_id'),
+            // player: this.belongsTo(Player, 'player_id')
 		}
 	}
 
-    declare id: number
-	declare pid: number
+    declare id: string
+	declare player_id: string
 	declare position: string
 	declare position_archetype: string
 	declare mental_archetype: string
 	declare season: string
-    declare overalls: Overalls
-    declare potentials: Potentials
+
+    declare overall: number
+    declare potential: number
+    declare fuzz: number
 
     // // Mental
     declare aggression: number

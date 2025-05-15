@@ -20,7 +20,7 @@ import Overalls from "./Overalls";
 import Potentials from "./Potentials";
 import Phase from "./Phase";
 import Staff from "./Staff";
-import StaffContract from "./StaffContract";
+import Option from "./Option";
 import Position from "./Position";
 
 export default {
@@ -47,5 +47,5 @@ export default {
     Salary,
     Stat,
     Staff,
-    StaffContract,
+    Option,
 }

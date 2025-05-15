@@ -18,7 +18,7 @@ import Team from "../../models/Team";
 import Player from "../../models/Player";
 import Staff from "../../models/Staff";
 import { useLayout } from '@/layout/composables/layout';
-import EditorTopBar from '../../layout/EditorTopBar.vue';
+// import EditorTopBar from '../../layout/EditorTopBar.vue';
 
 // *********** OLD SHIT ****************
 const toast = useToast();
@@ -31,7 +31,7 @@ const selectedProducts = ref(null);
 const dt = ref(null);
 const filters = ref({});
 const submitted = ref(false);
-const productService = new ProductService();
+// const productService = new ProductService();
 const countries = ref([
     { name: 'Australia', code: 'AU' },
     { name: 'Brazil', code: 'BR' },
@@ -45,8 +45,8 @@ const countries = ref([
     { name: 'United States', code: 'USA' }
 ]);
 const selectedCountry = ref(null);
-const nodeService = new NodeService();
-const curtomerService = new CustomerService();
+// const nodeService = new NodeService();
+// const curtomerService = new CustomerService();
 const customers = ref([]);
 // ************************************
 
@@ -75,8 +75,8 @@ onBeforeMount(() => {
     initFilters();
 });
 onMounted(async () => {
-    productService.getProducts().then((data) => (products.value = data));
-    customers.value = await curtomerService.getCustomersLarge();
+    ProductService.getProducts().then((data) => (products.value = data));
+    customers.value = await CustomerService.getCustomersLarge();
     await getDefaultDatabase().then(() => {
         selected_team.value = teams.value[0];
     });
@@ -85,17 +85,26 @@ const getDefaultDatabase = async () => {
     console.log('default');
     await careerController.loadSelectedCareer('default');
     players.value = Player.all();
-    teams.value = Team.query().with('players.*').all();
+    teams.value = Team.query().with('players', (query) => {
+        query.with('contract.salaries')
+        .with('person.born')
+        .with('draft')
+        .with('college')
+        .with('ratings', (query) => {
+            query.where('season', 2025).first()
+        })
+    }).all();
     leagues.value = League.all();
     world.value = World.query().with('leagues.teams.players.*').first()
 }
 const positionArchetypes = computed(() => {
-    return playerEditObject.value && playerEditObject.value.position 
-        ? POSITION_ARCHETYPES[playerEditObject.value.position].map(archetype => ({
-            value: archetype,
-            label: POSITION_ARCHETYPES_DISPLAY_NAMES[archetype]
-          }))
-        : [];
+    console.log(playerEditObject.value);
+    // return playerEditObject.value && playerEditObject.value.position 
+    //     ? POSITION_ARCHETYPES[playerEditObject.value.position].map(archetype => ({
+    //         value: archetype,
+    //         label: POSITION_ARCHETYPES_DISPLAY_NAMES[archetype]
+    //       }))
+    //     : [];
 })
 const mentalArchetypes = computed(() => {
     return RAW_MENTAL_ARCHETYPES.map(archetype => ({
@@ -435,9 +444,9 @@ const getBadgeSeverity = (status) => {
 <template>
     <div class="layout-wrapper" :class="containerClass">
         <div class="layout-content-wrapper">
-            <div class="layout-topbar-menu-section">
+            <!-- <div class="layout-topbar-menu-section">
                 <EditorTopBar ref="topbarRef"></EditorTopBar>
-            </div>
+            </div> -->
             <div class="layout-content">
                 <div class="grid">
                     <div class="col-12">
@@ -445,8 +454,8 @@ const getBadgeSeverity = (status) => {
                             <Toolbar class="mb-4">
                                 <template v-slot:start>
                                     <div class="flex my-2">
-                                        <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" />
-                                        <Button label="Export" icon="pi pi-download" class="p-button-help mr-2" @click="exportCSV($event)" />
+                                        <!-- <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" /> -->
+                                        <!-- <Button label="Export" icon="pi pi-download" class="p-button-help mr-2" @click="exportCSV($event)" /> -->
                                     </div>
                                 </template>
 
@@ -580,14 +589,14 @@ const getBadgeSeverity = (status) => {
                                         </div>
                                     </template>
                                 </Column>
-                                <Column field="first_name" header="First Name" sortable :headerStyle="{ minWidth: '10rem' }">
+                                <Column field="person.first_name" header="First Name" sortable :headerStyle="{ minWidth: '10rem' }">
                                     <template #body="{ data }">
                                         <div class="flex align-items-center uppercase">
                                             <span>{{ data.first_name ?? '' }}</span>
                                         </div>
                                     </template>
                                 </Column>
-                                <Column field="last_name" header="Last Name" sortable :headerStyle="{ minWidth: '10rem' }">
+                                <Column field="person.last_name" header="Last Name" sortable :headerStyle="{ minWidth: '10rem' }">
                                     <template #body="{ data }">
                                         <div class="flex align-items-center uppercase">
                                             <span>{{ data.last_name ?? '' }}</span>
@@ -869,9 +878,9 @@ const getBadgeSeverity = (status) => {
                                 </template>
                             </Dialog>
 
-                            <Dialog v-model:visible="playerDialog" header="Player Details" :draggable="false" :modal="true" class="p-fluid w-6">
+                            <Dialog v-model:visible="playerDialog" header="Player Details" :draggable="false" :modal="true" class="w-1/2">
 
-                                <div class="formgrid grid">
+                                <div class="flex flex-row gap-2">
                                     <div class="field col-6">
                                         <label for="First Name" class="mb-1">First Name</label>
                                         <InputText id="first_name" v-model.trim="playerEditObject.first_name" required="true" autofocus :class="{ 'p-invalid': submitted && !playerEditObject.first_name }" />

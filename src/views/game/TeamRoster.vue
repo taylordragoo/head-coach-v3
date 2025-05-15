@@ -5,7 +5,7 @@
                 <Toolbar class="mb-2 w-full flex justify-between">
                     <template #start>
                         <div v-for="(pos, i) in POSITIONS" :key="i" class="w-full" @click="togglePosition(pos)">
-                            <Button :label="pos" icon="pi pi-plus" severity="secondary" :class="['mr-2 px-2 flex align-items-center justify-between cursor-pointer border-round', { 'selected-position': isPositionSelected(pos) }]" @click="openNew" />
+                            <Button :label="pos" severity="secondary" :class="['mr-2 px-5 flex align-items-center justify-between cursor-pointer border-round', { 'selected-position': isPositionSelected(pos) }]" @click="openNew" />
                         </div>
                     </template>
                     <template #end>
@@ -28,14 +28,14 @@
                             </div>
                         </template>
                     </Column>
-                    <Column field="first_name" header="First Name" sortable :headerStyle="{ minWidth: '10rem' }">
+                    <Column field="person.first_name" header="First Name" sortable :headerStyle="{ minWidth: '10rem' }">
                         <template #loading>a
                             <div class="flex items-center" :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }">
                                 <Skeleton width="40%" height="1rem" />
                             </div>
                         </template>
                     </Column>
-                    <Column field="last_name" header="Last Name" sortable :headerStyle="{ minWidth: '10rem' }">
+                    <Column field="person.last_name" header="Last Name" sortable :headerStyle="{ minWidth: '10rem' }">
                         <template #loading>
                             <div class="flex items-center" :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }">
                                 <Skeleton width="30%" height="1rem" />
@@ -56,7 +56,7 @@
                             </div>
                         </template>
                     </Column>
-                    <Column field="ratings.overall_rating" header="OVR" sortable :headerStyle="{ minWidth: '5rem' }">
+                    <Column field="ratings.overall" header="OVR" sortable :headerStyle="{ minWidth: '5rem' }">
                         <template #loading>
                             <div class="flex items-center" :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }">
                                 <Skeleton width="60%" height="1rem" />
@@ -323,11 +323,11 @@ export default {
         world: {
             /* By default get() is used */
             get() {
-            return World.query().first()
+                return World.query().first()
             },
             /* We add a setter */
             set(value) {
-            this.$store.commit('updateWorld', value)
+                this.$store.commit('updateWorld', value)
             }
         },
         teams: {
@@ -343,7 +343,7 @@ export default {
         players: {
             /* By default get() is used */
             get() {
-                return Player.query().with('team').all();
+                return Player.query().all();
             },
             /* We add a setter */
             set(value) {
@@ -370,17 +370,19 @@ export default {
                 const team = Team.query().where('id',this.selected_team_id).with('players', query => {
                     if(this.filtered_positions.length > 0) {
                         query.whereHas('ratings', (query) => {
-                            query.where('season', 2024).where('position', this.filtered_positions)
+                            query.where('season', 2025).where('position', this.filtered_positions)
                         }).with('ratings')
-                    } else {
-                        query.with('contract')
-                            .with('salaries')
+                            .with('contract.salaries')
+                            .with('person.born')
                             .with('draft')
                             .with('college')
-                            .with('born')
-                            .with('position')
+                    } else {
+                        query.with('contract.salaries')
+                            .with('person.born')
+                            .with('draft')
+                            .with('college')
                             .with('ratings', (query) => {
-                                query.where('season', 2024)
+                                query.where('season', 2025)
                             }
                         )
                     }
@@ -388,6 +390,7 @@ export default {
                 if(team) {
                     for (const player of team?.players) {
                         player.ratings = player?.ratings[0];
+                        player.position = player?.ratings.position;
                     }
                 }
                 return team

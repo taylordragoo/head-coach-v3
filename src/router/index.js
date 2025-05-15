@@ -495,8 +495,14 @@ const routes = [
     {
         path: '/editor',
         name: 'editor',
-        component: LandingLayout,
-        component: () => import('@/views/game/DatabaseEditor.vue')
+        component: AppLayout,
+        children: [
+            {
+                path: '',
+                name: 'editor',
+                component: () => import('@/views/game/DatabaseEditor.vue')
+            },
+        ]
     },
 ];
 
